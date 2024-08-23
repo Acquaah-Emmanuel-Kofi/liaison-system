@@ -1,9 +1,12 @@
 import {Component, Input} from '@angular/core';
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'liaison-stat-card',
   standalone: true,
-  imports: [],
+  imports: [
+    NgOptimizedImage
+  ],
   templateUrl: './stat-card.component.html',
   styleUrl: './stat-card.component.scss'
 })

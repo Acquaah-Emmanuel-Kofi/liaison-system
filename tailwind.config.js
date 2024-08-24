@@ -6,7 +6,10 @@ module.exports = {
       colors:{
         'Primary-Blue':'#142965',
         'Border-Blue':'#142965',
-        'Primary-Black':'#333131'
+        'Bright-Blue':'#475C98',
+        'Primary-Black':'#333131',
+        'Lighter-Blue':'#D1D9E2',
+        'Lighter-Gray':'#F9FBFD'
       }
     },
   },

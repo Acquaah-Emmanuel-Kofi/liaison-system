@@ -1,1 +1,10 @@
-<p>sidebar works!</p>
+<div
+  id="sidebar"
+  [style.left]="toggled() ? '0' : '-100%'"
+  class="absolute top-0 z-50 h-screen flex-col duration-500 w-[80%] ease-in md:relative md:flex md:w-64 bg-[#19337E] 2xl:w-72"
+>
+  <div class="hidden py-6 mx-auto md:block">
+    <h1>Brand</h1>
+  </div>
+  <div class="flex flex-1 flex-col overflow-y-auto"></div>
+</div>

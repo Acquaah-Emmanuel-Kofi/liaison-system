@@ -1,0 +1,11 @@
+#header {
+  border-bottom: 1px solid #d1d6e5;
+}
+
+$mobile-breakpoint: 640px;
+
+@media (max-width: $mobile-breakpoint) {
+  #header {
+    width: 100% !important;
+  }
+}

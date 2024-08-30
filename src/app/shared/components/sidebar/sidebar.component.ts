@@ -13,4 +13,8 @@ export class SidebarComponent {
   closeEvent = output<void>();
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();
+
+  closeSidebar() {
+    this.closeEvent.emit();
+  }
 }

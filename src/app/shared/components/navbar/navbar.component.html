@@ -23,5 +23,60 @@
         />
       </svg>
     </button>
+
+    <h1>Searchbar</h1>
+
+  </div>
+  <div class="flex items-center gap-2">
+    <button
+      type="button"
+      class="relative p-1 text-gray-400 hover:text-black focus:outline-none"
+    >
+      <svg
+        width="21"
+        height="23"
+        viewBox="0 0 22 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0.333374 20.1666V17.8333H3.00004V9.66665C3.00004 8.05276 3.5556 6.61873 4.66671 5.36456C5.77782 4.1104 7.22226 3.28887 9.00004 2.89998V2.08331C9.00004 1.5972 9.19448 1.18401 9.58337 0.84373C9.97226 0.503452 10.4445 0.333313 11 0.333313C11.5556 0.333313 12.0278 0.503452 12.4167 0.84373C12.8056 1.18401 13 1.5972 13 2.08331V2.89998C14.7778 3.28887 16.2223 4.1104 17.3334 5.36456C18.4445 6.61873 19 8.05276 19 9.66665V17.8333H21.6667V20.1666H0.333374ZM11 23.6666C10.2667 23.6666 9.63893 23.4382 9.11671 22.9812C8.59448 22.5243 8.33337 21.975 8.33337 21.3333H13.6667C13.6667 21.975 13.4056 22.5243 12.8834 22.9812C12.3612 23.4382 11.7334 23.6666 11 23.6666ZM5.66671 17.8333H16.3334V9.66665C16.3334 8.38331 15.8112 7.2847 14.7667 6.37081C13.7223 5.45692 12.4667 4.99998 11 4.99998C9.53337 4.99998 8.27782 5.45692 7.23337 6.37081C6.18893 7.2847 5.66671 8.38331 5.66671 9.66665V17.8333Z"
+          fill="#19337E"
+        />
+      </svg>
+    </button>
+
+    <div class="relative ml-3">
+      <div>
+        <button
+          type="button"
+          (click)="toggleProfile()"
+          class="relative text-left flex items-center gap-4 focus:outline-none"
+        >
+          <img
+            class="h-10 w-10 rounded-full"
+            src="./assets/icons/avatar.svg"
+            alt="dp"
+          />
+
+          <div class="hidden md:block">
+            <p class="text-sm font-semibold text-black">John Doe</p>
+            <p class="text-sm font-semibold text-[#19337E]">Admin</p>
+          </div>
+
+          <span class="hidden md:block">
+            <svg
+              width="10"
+              height="5"
+              viewBox="0 0 10 5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M5 5L0 0H10L5 5Z" fill="#5F6368" />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
   </div>
 </header>

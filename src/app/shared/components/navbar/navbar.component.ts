@@ -10,7 +10,13 @@ import { ProfileCardComponent } from './components/profile-card/profile-card.com
 })
 export class NavbarComponent {
   toggleSidebar = output<void>();
+  isProfileToggled: boolean = false;
+
   onToggleSidebar() {
     this.toggleSidebar.emit();
+  }
+
+  toggleProfile(): void {
+    this.isProfileToggled = !this.isProfileToggled;
   }
 }

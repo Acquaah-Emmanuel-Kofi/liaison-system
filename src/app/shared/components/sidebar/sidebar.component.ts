@@ -2,11 +2,12 @@ import { Component, inject, input, output, signal } from '@angular/core';
 import { INavLinks } from './sidebar.interface';
 import { Event, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { BrandComponent } from '../brand/brand.component';
 
 @Component({
   selector: 'liaison-sidebar',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, BrandComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })

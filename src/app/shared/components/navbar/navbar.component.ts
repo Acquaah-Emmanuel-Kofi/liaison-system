@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 
 @Component({
@@ -8,4 +8,9 @@ import { ProfileCardComponent } from './components/profile-card/profile-card.com
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
-export class NavbarComponent {}
+export class NavbarComponent {
+  toggleSidebar = output<void>();
+  onToggleSidebar() {
+    this.toggleSidebar.emit();
+  }
+}

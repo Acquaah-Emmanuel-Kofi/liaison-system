@@ -1,0 +1,62 @@
+<div
+  id="sidebar"
+  [style.left]="toggled() ? '0' : '-100%'"
+  class="absolute top-0 z-50 h-screen flex-col duration-500 w-[80%] ease-in md:relative md:flex md:w-64 bg-[#19337E] 2xl:w-72"
+>
+  <div class="hidden py-6 mx-auto md:block">
+    <h1>Brand</h1>
+  </div>
+  <button
+    type="button"
+    (click)="closeSidebar()"
+    class="close-icon absolute right-4 top-4 md:hidden"
+  >
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z"
+        fill="#3D3939"
+      />
+    </svg>
+  </button>
+  <div class="flex flex-1 flex-col overflow-y-auto">
+    <nav class="flex-1 pt-10 md:py-4">
+      <ul class="space-y-3">
+        @for (navLink of links(); track $index) {
+        <li class="hover:border-l-4 hover:border-l-[#FDF2D4]">
+          <a
+            [routerLink]="navLink.routerLink"
+            routerLinkActive="bg-[#DDAC25] text-white font-medium"
+            (click)="closeSidebar()"
+            class="flex pl-5 text-white items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25]"
+          >
+            <div
+              [style]="
+                currentRoute().includes(navLink.routerLink)
+                  ? 'background-color: #fff; -webkit-mask: url(' +
+                    navLink.defaultIconSrc +
+                    ') no-repeat center;'
+                  : 'background-color: #fff; -webkit-mask: url(' +
+                    navLink.defaultIconSrc +
+                    ') no-repeat center;'
+              "
+            >
+              <img
+                [src]="navLink.defaultIconSrc"
+                alt="icon"
+                class="opacity-0"
+              />
+            </div>
+            {{ navLink.title }}
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
+  </div>
+</div>

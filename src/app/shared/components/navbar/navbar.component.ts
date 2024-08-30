@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 
 @Component({
   selector: 'liaison-navbar',
   standalone: true,
-  imports: [],
+  imports: [ProfileCardComponent],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
 })
-export class NavbarComponent {
-
-}
+export class NavbarComponent {}

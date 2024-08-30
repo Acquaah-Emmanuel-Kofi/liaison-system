@@ -16,6 +16,8 @@
   <input
     type="text"
     placeholder="Search"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="handleSearchFilter($event)"
     class="border-none outline-none placeholder:text-[#D1D6E5] placeholder:font-light"
   />
 </div>

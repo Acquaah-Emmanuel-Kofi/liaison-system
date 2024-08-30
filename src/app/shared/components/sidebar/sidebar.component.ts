@@ -1,6 +1,7 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { INavLinks } from './sidebar.interface';
-import { RouterLink } from '@angular/router';
+import { Event, NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'liaison-sidebar',
@@ -14,7 +15,26 @@ export class SidebarComponent {
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();
 
-  closeSidebar() {
+  currentRoute = signal<string>('');
+
+  private _router = inject(Router);
+  private _routerSubscription!: Subscription;
+
+  constructor() {
+    this._routerSubscription = this._router.events
+      .pipe(filter((event: Event) => event instanceof NavigationEnd))
+      .subscribe((event: Event) => {
+        if (event instanceof NavigationEnd) {
+          this.currentRoute.set(event.url);
+        }
+      });
+  }
+
+  public closeSidebar() {
     this.closeEvent.emit();
+  }
+
+  ngOnDestroy(): void {
+    this._routerSubscription.unsubscribe();
   }
 }

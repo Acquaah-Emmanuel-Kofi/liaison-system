@@ -35,6 +35,23 @@
             (click)="closeSidebar()"
             class="flex pl-5 text-white items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25]"
           >
+            <div
+              [style]="
+                currentRoute().includes(navLink.routerLink)
+                  ? 'background-color: #fff; -webkit-mask: url(' +
+                    navLink.defaultIconSrc +
+                    ') no-repeat center;'
+                  : 'background-color: #fff; -webkit-mask: url(' +
+                    navLink.defaultIconSrc +
+                    ') no-repeat center;'
+              "
+            >
+              <img
+                [src]="navLink.defaultIconSrc"
+                alt="icon"
+                class="opacity-0"
+              />
+            </div>
             {{ navLink.title }}
           </a>
         </li>

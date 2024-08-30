@@ -6,7 +6,11 @@
   <div class="hidden py-6 mx-auto md:block">
     <h1>Brand</h1>
   </div>
-  <button type="button" (click)="closeSidebar()"  class="close-icon absolute right-4 top-4 md:hidden">
+  <button
+    type="button"
+    (click)="closeSidebar()"
+    class="close-icon absolute right-4 top-4 md:hidden"
+  >
     <svg
       width="14"
       height="14"
@@ -20,5 +24,22 @@
       />
     </svg>
   </button>
-  <div class="flex flex-1 flex-col overflow-y-auto"></div>
+  <div class="flex flex-1 flex-col overflow-y-auto">
+    <nav class="flex-1 pt-10 md:py-4">
+      <ul class="space-y-3">
+        @for (navLink of links(); track $index) {
+        <li class="hover:border-l-4 hover:border-l-[#FDF2D4]">
+          <a
+            [routerLink]="navLink.routerLink"
+            routerLinkActive="bg-[#DDAC25] text-white font-medium"
+            (click)="closeSidebar()"
+            class="flex pl-5 text-white items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25]"
+          >
+            {{ navLink.title }}
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
+  </div>
 </div>

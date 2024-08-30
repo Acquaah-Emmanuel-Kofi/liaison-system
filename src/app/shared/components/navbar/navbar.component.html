@@ -77,6 +77,10 @@
           </span>
         </button>
       </div>
+
+      @if(isProfileToggled){
+      <liaison-profile-card (emitMenu)="getProfileMenu($event)" />
+      }
     </div>
   </div>
 </header>

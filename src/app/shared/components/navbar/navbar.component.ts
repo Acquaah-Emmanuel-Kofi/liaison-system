@@ -19,4 +19,6 @@ export class NavbarComponent {
   toggleProfile(): void {
     this.isProfileToggled = !this.isProfileToggled;
   }
+
+  getProfileMenu(menu: string): void {}
 }

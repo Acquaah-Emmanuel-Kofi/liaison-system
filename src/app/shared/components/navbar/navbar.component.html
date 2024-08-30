@@ -30,8 +30,8 @@
       [textSize]="16"
       class="pl-4 md:hidden"
     />
-    
-    <h1>Searchbar</h1>
+
+    <liaison-searchbar class="hidden md:block" />
   </div>
   <div class="flex items-center gap-2">
     <button
@@ -39,8 +39,7 @@
       class="relative p-1 text-gray-400 hover:text-black focus:outline-none"
     >
       <svg
-        width="21"
-        height="23"
+        class="w-5"
         viewBox="0 0 22 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -60,17 +59,17 @@
           class="relative text-left flex items-center gap-4 focus:outline-none"
         >
           <img
-            class="h-10 w-10 rounded-full"
+            class="h-8 w-8 rounded-full"
             src="./assets/icons/avatar.svg"
             alt="dp"
           />
 
           <div class="hidden md:block">
-            <p class="text-sm font-semibold text-black">John Doe</p>
-            <p class="text-sm font-semibold text-[#19337E]">Admin</p>
+            <p class="text-xs font-semibold text-black">John Doe</p>
+            <p class="text-xs font-semibold text-[#19337E]">Admin</p>
           </div>
 
-          <span class="hidden md:block">
+          <span class="hidden md:block ml-2">
             <svg
               width="10"
               height="5"

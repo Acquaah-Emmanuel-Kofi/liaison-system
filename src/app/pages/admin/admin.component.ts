@@ -13,11 +13,11 @@ import { ADMIN_NAVLINKS } from '../../shared/helpers/navlinks.helper';
   styleUrl: './admin.component.scss',
 })
 export class AdminComponent {
-  isSidebarVisible = signal<boolean>(false);
+  isSidebarVisible: boolean = true;
 
   links: INavLinks[] = ADMIN_NAVLINKS;
 
   public toggleSidebar() {
-    this.isSidebarVisible.update((prev) => !prev);
+    this.isSidebarVisible = !this.isSidebarVisible;
   }
 }

@@ -1,7 +1,7 @@
 <div class="flex h-screen bg-white">
   <liaison-sidebar
-    [toggled]="true"
-    (closeEvent)="false"
+    [toggled]="isSidebarVisible"
+    (closeEvent)="isSidebarVisible = false"
     [links]="links"
   ></liaison-sidebar>
   <div class="flex flex-1 flex-col">

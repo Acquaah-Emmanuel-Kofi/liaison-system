@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  toggledFilterButton: boolean = false
 
+  toggleFilterButton() {
+    this.toggledFilterButton =!this.toggledFilterButton
+  }
 }

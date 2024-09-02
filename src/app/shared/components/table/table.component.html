@@ -12,12 +12,20 @@
               class="form-checkbox h-4 w-4 text-indigo-600"
             />
           </th>
+          @for (column of columns(); track $index) {
+          <ng-container>
+            <th
+              class="px-6 py-3 text-left text-base font-medium text-gray-500 uppercase tracking-wider"
+            >
+              {{ column.label }}
+            </th>
+          </ng-container>
+
+          }
         </tr>
       </thead>
       <tbody class="bg-[#F9FBFD] divide-[#D1D9E2] divide-y-2">
-   
       </tbody>
     </table>
   </div>
-
 </div>

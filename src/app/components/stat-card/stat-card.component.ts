@@ -14,4 +14,5 @@ export class StatCardComponent {
   @Input() iconSrc: string = '';
   @Input() title: string = '';
   @Input() count: number = 0;
+
 }

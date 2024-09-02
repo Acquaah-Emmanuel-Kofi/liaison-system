@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { TableColumn } from './table.interface';
+import { TableColumn, TableData } from './table.interface';
 import { PreviewPanelComponent } from './components/preview-panel/preview-panel.component';
 
 @Component({
@@ -11,4 +11,5 @@ import { PreviewPanelComponent } from './components/preview-panel/preview-panel.
 })
 export class TableComponent {
   columns = input.required<TableColumn[]>();
+  data = input.required<TableData[]>();
 }

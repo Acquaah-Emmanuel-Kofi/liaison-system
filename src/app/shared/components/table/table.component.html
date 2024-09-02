@@ -25,6 +25,38 @@
         </tr>
       </thead>
       <tbody class="bg-[#F9FBFD] divide-[#D1D9E2] divide-y-2">
+        @for (row of data(); track $index) {
+        <tr class="cursor-pointer">
+          <td class="p-4">
+            <input
+              type="checkbox"
+              class="form-checkbox h-4 w-4 text-indigo-600"
+            />
+          </td>
+          @for (column of columns(); track $index) {
+          <ng-container>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              @if (!column.isAction) {
+              <ng-container>
+                {{ row[column.key] }}
+              </ng-container>
+              } @if (column.isAction) {
+              <ng-container>
+                <button
+                  type="button"
+                  class="text-indigo-600 hover:text-indigo-900 underline"
+                >
+                  View
+                </button>
+              </ng-container>
+
+              }
+            </td>
+          </ng-container>
+
+          }
+        </tr>
+        }
       </tbody>
     </table>
   </div>

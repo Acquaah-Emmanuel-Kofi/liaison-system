@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { StatCardComponent } from '../../shared/components/stat-card/stat-card.component';
-import { startCard } from '../../shared/interfaces/stat-card.interface';
+import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
+import { startCard } from '../../../../shared/interfaces/stat-card.interface';
 import { NgOptimizedImage } from '@angular/common';
 
 @Component({

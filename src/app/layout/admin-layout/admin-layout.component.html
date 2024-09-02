@@ -1,0 +1,13 @@
+<div class="flex h-screen bg-white">
+  <liaison-sidebar
+    [toggled]="true"
+    (closeEvent)="false"
+    [links]="links"
+  ></liaison-sidebar>
+  <div class="flex flex-1 flex-col">
+    <liaison-navbar (toggleSidebar)="toggleSidebar()"></liaison-navbar>
+    <div class="w-full h-screen overflow-y-auto p-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

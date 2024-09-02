@@ -1,18 +1,31 @@
-<div class="pl-5">
-  <div class="flex items-center gap-28 w-[100%] mb-8">
+<div class="pl-5 2xl:pl-10">
+  <div class="flex items-center gap-[45%] 2xl:gap-[67%] w-[100%] mb-8">
     <div class="flex flex-col gap-2">
-      <p class="text-Primary-Black text-[20px] 2xl:text-[22px] font-medium">Welcome back James <img class="absolute left-200 mt-[-25px] ml-[17%] 2xl:ml-[12.5%]" ngSrc="assets/🦆%20emoji%20_waving%20hand%20sign_.svg" width="21" height="21" alt="wave">
+      <p class="text-Primary-Black text-[20px] 2xl:text-[22px] font-medium relative">Welcome back James <img class="absolute left-200 mt-[-25px] ml-[85%] 2xl:ml-[92.5%]" ngSrc="assets/🦆%20emoji%20_waving%20hand%20sign_.svg" width="21" height="21" alt="wave">
       </p>
       <p class="text-Dark-Blue">Here’s an overview of your profile</p>
     </div>
 
     <div class="flex items-center gap-5">
+      <!-- Dropdown for years -->
+      <div class="relative cursor-pointer">
+        <select class="cursor-pointer border border-Dark-Blue rounded-full py-1 px-3 text-Dark-Blue bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+          <option  *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+      </div>
 
+      <!-- Import Data Button -->
+      <button
+        (click)="navigateToUpload()"
+        class="bg-Dark-Blue text-white rounded-full py-1 px-4 flex items-center hover:bg-blue-900">
+        Import Data
+        <span class="ml-1 text-[20px]">+</span>
+      </button>
     </div>
 
   </div>
 
-  <div class="flex gap-[6%] 2xl:gap-[10%] justify-start items-center">
+  <div class="flex gap-[6%] 2xl:gap-[16%] justify-start items-center">
     @for (card of statCard; track $index) {
       <liaison-stat-card
         [iconSrc]="card.iconSrc"
@@ -20,5 +33,26 @@
         [count]="card.number">
       </liaison-stat-card>
     }
+  </div>
+
+
+
+  <div class="mt-10">
+    <liaison-admin-chart>
+
+    </liaison-admin-chart>
+  </div>
+
+  <div class="flex items-center w-[100%] mt-10">
+   <div class="w-[100%]">
+     <p>Top Zones</p>
+     <liaison-table
+       [HideCheckbox] = HideCheckbox
+       [columns]="columns"
+       [data]="data"
+     >
+
+     </liaison-table>
+   </div>
   </div>
 </div>

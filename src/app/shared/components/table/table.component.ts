@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { TableColumn, TableData } from './table.interface';
 import { PreviewPanelComponent } from './components/preview-panel/preview-panel.component';
 
@@ -12,4 +12,12 @@ import { PreviewPanelComponent } from './components/preview-panel/preview-panel.
 export class TableComponent {
   columns = input.required<TableColumn[]>();
   data = input.required<TableData[]>();
+
+  selectedRow: TableData | null = null;
+  actionClicked = output<TableData>();
+
+  onSelectRow(row: TableData) {
+    this.selectedRow = row;
+  }
+
 }

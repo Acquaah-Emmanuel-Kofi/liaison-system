@@ -3,6 +3,7 @@ import { INavLinks } from '../../shared/components/sidebar/sidebar.interface';
 import { SidebarComponent } from '../../shared/components/sidebar/sidebar.component';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { RouterOutlet } from '@angular/router';
+import { ADMIN_NAVLINKS } from '../../shared/helpers/navlinks.helper';
 
 @Component({
   selector: 'liaison-admin',
@@ -14,33 +15,7 @@ import { RouterOutlet } from '@angular/router';
 export class AdminComponent {
   isSidebarVisible = signal<boolean>(false);
 
-  links: INavLinks[] = [
-    {
-      title: 'Dashboard',
-      defaultIconSrc: '/assets/icons/dashboard.svg',
-      routerLink: '/admin/dashboard',
-    },
-    {
-      title: 'Lecturers',
-      defaultIconSrc: '/assets/icons/lecturers.svg',
-      routerLink: 'lecturers',
-    },
-    {
-      title: 'Students',
-      defaultIconSrc: '/assets/icons/students.svg',
-      routerLink: 'students',
-    },
-    {
-      title: 'Internships',
-      defaultIconSrc: '/assets/icons/internships.svg',
-      routerLink: 'internships',
-    },
-    {
-      title: 'Access Control',
-      defaultIconSrc: '/assets/icons/access_control.svg',
-      routerLink: 'access-control',
-    },
-  ];
+  links: INavLinks[] = ADMIN_NAVLINKS;
 
   public toggleSidebar() {
     this.isSidebarVisible.update((prev) => !prev);

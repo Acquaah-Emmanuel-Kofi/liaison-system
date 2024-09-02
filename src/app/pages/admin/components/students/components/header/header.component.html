@@ -1,11 +1,11 @@
-<header class="flex items-center justify-between my-4">
-  <h1>Students</h1>
+<header class="flex md:flex-row flex-col items-center justify-between my-4">
+  <liaison-header-title title="Students" />
 
   <div class="flex items-center gap-2">
     <div class="relative">
       <button
         (click)="toggleFilterButton()"
-        class="text-[#19337E]  border-2 rounded-full border-[#19337E] font-medium text-sm px-6 py-1.5 text-center inline-flex items-center"
+        class="text-[#19337E] border-2 rounded-full border-[#19337E] font-medium text-sm px-6 py-1.5 text-center inline-flex items-center"
         type="button"
       >
         Select Filter
@@ -26,11 +26,14 @@
         id="dropdown"
         class="z-10 absolute top-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
       >
-        <ul
-          class="py-2 text-sm text-gray-700"
-        >
+        <ul class="py-2 text-sm text-gray-700">
           <li>
-            <button type="button" class="block px-4 py-2 hover:bg-gray-100 w-full text-left">Date</button>
+            <button
+              type="button"
+              class="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+            >
+              Date
+            </button>
           </li>
         </ul>
       </div>
@@ -43,8 +46,6 @@
       type="button"
     >
       Assign Lecturer
-
-
 
       <svg
         class="w-5 h-5 ms-3"

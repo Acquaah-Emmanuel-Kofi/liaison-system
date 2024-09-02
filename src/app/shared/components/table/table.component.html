@@ -61,4 +61,11 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Panel Section -->
+  @if (selectedRow) {
+  <div class="w-1/3 p-4">
+    <liaison-preview-panel (closeEvent)="onClosePanel()" />
+  </div>
+  }
 </div>

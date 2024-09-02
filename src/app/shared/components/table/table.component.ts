@@ -20,4 +20,11 @@ export class TableComponent {
     this.selectedRow = row;
   }
 
+  onClosePanel() {
+    this.selectedRow = null;
+  }
+
+  onActionClick(row: TableData) {
+    this.actionClicked.emit(row);
+  }
 }

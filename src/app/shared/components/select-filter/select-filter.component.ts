@@ -27,4 +27,8 @@ export class SelectFilterComponent {
   openOption() {
     this.optionsSelection = !this.optionsSelection;
   }
+
+  onMouseLeave() {
+    this.optionsSelection = false;
+  }
 }

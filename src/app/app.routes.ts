@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { AdminDashboardComponent } from './pages/admin/components/admin-dashboard/admin-dashboard.component';
 import { AdminComponent } from './pages/admin/admin.component';
-import {UploadComponent} from "./pages/admin/components/upload/upload.component";
+import { UploadComponent } from './pages/admin/components/upload/upload.component';
 import { StudentsComponent } from './pages/admin/components/students/students.component';
 import { LecturersComponent } from './pages/admin/components/lecturers/lecturers.component';
+import { InternshipsComponent } from './pages/admin/components/internships/internships.component';
 
 export const routes: Routes = [
   {
@@ -20,7 +21,7 @@ export const routes: Routes = [
         component: AdminDashboardComponent,
       },
       {
-        path:'upload',
+        path: 'upload',
         component: UploadComponent,
       },
       {
@@ -30,6 +31,10 @@ export const routes: Routes = [
       {
         path: 'lecturers',
         component: LecturersComponent,
+      },
+      {
+        path: 'internships',
+        component: InternshipsComponent,
       },
     ],
   },

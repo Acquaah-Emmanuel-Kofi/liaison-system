@@ -22,7 +22,7 @@ export const routes: Routes = [
       {
         path:'upload',
         component: UploadComponent,
-      }
+      },
       {
         path: 'students',
         component: StudentsComponent,

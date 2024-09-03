@@ -35,6 +35,24 @@ export class InternshipsComponent {
       end_start: '05/05/23',
       status: 'completed',
     },
+    {
+      student_id: '#M234',
+      name: 'Brenda Jones',
+      department: 'Engineering',
+      place_of_internships: 'AmaliTech',
+      start_date: '05/02/23',
+      end_start: '05/05/23',
+      status: 'completed',
+    },
+    {
+      student_id: '#M234',
+      name: 'Brenda Jones',
+      department: 'Engineering',
+      place_of_internships: 'AmaliTech',
+      start_date: '05/02/23',
+      end_start: '05/05/23',
+      status: 'completed',
+    },
   ];
 
   handleRowSelection(row: TableData) {

@@ -1,0 +1,12 @@
+#sidebar {
+    border-right: 1px solid #d0d5dd;
+  }
+  
+  $mobile-breakpoint: 640px;
+  
+  @media (min-width: $mobile-breakpoint) {
+    #sidebar {
+      left: 0 !important;
+    }
+  }
+  

@@ -1,1 +1,9 @@
-<p>internships works!</p>
+<section>
+  <liaison-header />
+
+  <liaison-table
+    [columns]="columns"
+    [data]="data"
+    (actionClicked)="handleActionClick($event)"
+  />
+</section>

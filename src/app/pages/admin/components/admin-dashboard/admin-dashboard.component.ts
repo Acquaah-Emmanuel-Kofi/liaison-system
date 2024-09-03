@@ -54,28 +54,40 @@ export class AdminDashboardComponent {
   columns: TableColumn[] = [
     {
       label: "Regions",
-      key: "show",
+      key: "Region",
     },
     {
       label: "Sub-Zones",
-      key: "show",
+      key: "sub_zones",
     },
     {
       label: "No of Students",
-      key: "show",
+      key: "No_of_Students",
     }
   ]
 
   data: TableData[] = [
     {
-
+      Region: 'Western',
+      sub_zones: 15,
+      No_of_Students: 300,
     },
     {
-
+      Region: 'Greater Accra',
+      sub_zones: 20,
+      No_of_Students: 800,
     },
     {
-
+      Region: 'Central',
+      sub_zones: 12,
+      No_of_Students: 230,
+    },
+    {
+      Region: 'Eastern',
+      sub_zones: 10,
+      No_of_Students: 400,
     }
+
   ];
 
 

@@ -22,5 +22,9 @@ export class NavbarComponent {
     this.isProfileToggled = !this.isProfileToggled;
   }
 
+  onMouseLeave() {
+    this.isProfileToggled = false;
+  }
+
   getProfileMenu(menu: string): void {}
 }

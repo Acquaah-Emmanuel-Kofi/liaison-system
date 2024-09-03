@@ -84,7 +84,10 @@
       </div>
 
       @if(isProfileToggled){
-      <liaison-profile-card (emitMenu)="getProfileMenu($event)" />
+      <liaison-profile-card
+        (emitMenu)="getProfileMenu($event)"
+        (mouseleave)="onMouseLeave()"
+      />
       }
     </div>
   </div>

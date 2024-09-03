@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { AdminDashboardComponent } from './pages/admin/components/admin-dashboard/admin-dashboard.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import {UploadComponent} from "./pages/admin/components/upload/upload.component";
+import { StudentsComponent } from './pages/admin/components/students/students.component';
+import { LecturersComponent } from './pages/admin/components/lecturers/lecturers.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +23,14 @@ export const routes: Routes = [
         path:'upload',
         component: UploadComponent,
       }
+      {
+        path: 'students',
+        component: StudentsComponent,
+      },
+      {
+        path: 'lecturers',
+        component: LecturersComponent,
+      },
     ],
   },
 ];

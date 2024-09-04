@@ -9,7 +9,7 @@
           <th class="p-4">
             <input
               type="checkbox"
-              class="form-checkbox h-4 w-4 text-indigo-600"
+              class="form-checkbox h-4 w-4 accent-[#19337E]"
               [ngClass]="{ hidden: HideCheckbox }"
             />
           </th>
@@ -18,10 +18,39 @@
             <th
               class="px-6 py-3 text-left text-base font-medium text-black tracking-wider"
             >
+              @if (column.key.toLowerCase().includes('name')) {
+              <button
+                (click)="sortByName()"
+                class="flex items-center gap-2 text-black hover:text-gray-500 focus:outline-none"
+              >
+                {{ column.label }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-up"
+                >
+                  <path
+                    [attr.d]="sortOrder === 'asc' ? 'M12 19V5' : 'M12 5v14'"
+                  />
+                  <path
+                    [attr.d]="
+                      sortOrder === 'asc' ? 'm5 12 7-7 7 7' : 'm19 12-7 7-7-7'
+                    "
+                  />
+                </svg>
+              </button>
+              } @else {
               {{ column.label }}
+              }
             </th>
           </ng-container>
-
           }
         </tr>
       </thead>
@@ -29,10 +58,10 @@
       <tbody class="bg-[#F9FBFD] divide-[#D1D9E2] divide-y-2">
         @for (row of data(); track $index) {
         <tr class="cursor-pointer">
-          <td class="pl-4">
+          <td class="w-[60px] pl-5">
             <input
               type="checkbox"
-              class="form-checkbox h-4 w-4 text-indigo-600"
+              class="form-checkbox h-4 w-4 accent-[#19337E]"
               [ngClass]="{ hidden: HideCheckbox }"
             />
           </td>
@@ -41,18 +70,18 @@
           <ng-container>
             <td class="px-4 py-4 whitespace-nowrap text-sm">
               @if (column.key === 'student_id') { @if (row['imageUrl']) {
-              <div class="flex items-center gap-1">
+              <div class="flex items-center gap-3">
                 <img
                   [src]="row['imageUrl']"
                   alt="Student Display Profile"
-                  class="h-8 w-8 rounded-full mr-3"
+                  class="h-8 w-8 rounded-full"
                 />
                 {{ row["student_id"] }}
               </div>
               } @else {
-              <div class="flex items-center gap-1">
+              <div class="flex items-center gap-3">
                 <div
-                  class="h-8 w-8 rounded-full mr-3 bg-gray-100 flex justify-center items-center text-gray-500 font-semibold"
+                  class="h-8 w-8 rounded-full bg-gray-100 flex justify-center items-center text-gray-500 font-semibold"
                 >
                   {{ getNameInitials(row["name"]) }}
                 </div>

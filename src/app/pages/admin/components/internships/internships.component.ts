@@ -27,31 +27,50 @@ export class InternshipsComponent {
 
   data: TableData[] = [
     {
+      imageUrl: 'assets/images/profile.png',
       student_id: '#M234',
       name: 'Brenda Jones',
       department: 'Engineering',
-      place_of_internships: 'AmaliTech',
+      place_of_internships: 'UCC',
       start_date: '05/02/23',
       end_start: '05/05/23',
-      status: 'completed',
+      status: 'In progress',
     },
     {
       student_id: '#M234',
-      name: 'Brenda Jones',
-      department: 'Engineering',
+      name: 'Emmanuel Acquaah',
+      department: 'Computer Science',
       place_of_internships: 'AmaliTech',
       start_date: '05/02/23',
       end_start: '05/05/23',
-      status: 'completed',
+      status: 'Completed',
     },
     {
       student_id: '#M234',
-      name: 'Brenda Jones',
-      department: 'Engineering',
+      name: 'Kojo Setsofia',
+      department: 'Fashion',
       place_of_internships: 'AmaliTech',
       start_date: '05/02/23',
       end_start: '05/05/23',
-      status: 'completed',
+      status: 'Completed',
+    },
+    {
+      student_id: '#M234',
+      name: 'Ahadjie Bless',
+      department: 'Printing',
+      place_of_internships: 'AmaliTech',
+      start_date: '05/02/23',
+      end_start: '05/05/23',
+      status: 'In progress',
+    },
+    {
+      student_id: '#M234',
+      name: 'Safo Kwadwo',
+      department: 'Sculpture',
+      place_of_internships: 'GES',
+      start_date: '05/02/23',
+      end_start: '05/05/23',
+      status: 'Completed',
     },
   ];
 
@@ -63,3 +82,4 @@ export class InternshipsComponent {
     console.log('Action clicked for row:', row);
   }
 }
+                                                                        

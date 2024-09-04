@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject, OnDestroy} from '@angular/core';
 import { NgForOf, NgIf } from "@angular/common";
 import { DataService } from "../../../../../service/student-upload/data.service";
 import * as XLSX from "xlsx";
@@ -13,9 +13,11 @@ import * as XLSX from "xlsx";
   templateUrl: './upload-student.component.html',
   styleUrls: ['./upload-student.component.scss']
 })
-export class UploadStudentComponent {
+export class UploadStudentComponent implements OnDestroy{
   dataService = inject(DataService);
   selectedFileName!: string;
+  selectedFile!: File;  // Track the selected file
+  isDataImported: boolean = false;
 
   onFileChange(event: any) {
     const target: DataTransfer = <DataTransfer>(event.target);
@@ -25,7 +27,8 @@ export class UploadStudentComponent {
     }
 
     const file: File = target.files[0];
-    this.selectedFileName = file.name; // Update file name display
+    this.selectedFileName = file.name;
+    this.selectedFile = file;  // Store the selected file
     this.processFile(file);
   }
 
@@ -37,7 +40,8 @@ export class UploadStudentComponent {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];
     if (file) {
-      this.selectedFileName = file.name; // Update file name display
+      this.selectedFileName = file.name;
+      this.selectedFile = file;  // Store the selected file
       this.processFile(file);
     }
   }
@@ -81,14 +85,38 @@ export class UploadStudentComponent {
 
       this.dataService.students = students;
       this.showTable();
+      this.isDataImported = true;
     };
 
     reader.readAsBinaryString(file);
+  }
+
+  removeFile() {
+    this.resetData();
+  }
+
+  resetData() {
+    this.selectedFileName = '';
+    this.selectedFile = undefined!;
+    this.isDataImported = false;
+    this.dataService.headers = [];
+    this.dataService.students = [];
   }
 
   showTable() {
     document.getElementById('dropZone')!.style.display = 'none';
     document.getElementById('tableArea')!.classList.remove('hidden');
     document.getElementById('fileDisplayArea')!.classList.remove('hidden');
+  }
+
+  submitData() {
+    if (!this.selectedFile) {
+      alert('No file selected for submission.');
+      return;
+    }
+  }
+
+  ngOnDestroy() {
+    this.resetData();
   }
 }

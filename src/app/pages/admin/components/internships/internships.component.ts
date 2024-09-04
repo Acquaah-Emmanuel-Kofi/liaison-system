@@ -27,13 +27,14 @@ export class InternshipsComponent {
 
   data: TableData[] = [
     {
+      imageUrl: 'assets/images/profile.png',
       student_id: '#M234',
       name: 'Brenda Jones',
       department: 'Engineering',
       place_of_internships: 'AmaliTech',
       start_date: '05/02/23',
       end_start: '05/05/23',
-      status: 'completed',
+      status: 'Completed',
     },
     {
       student_id: '#M234',
@@ -42,7 +43,7 @@ export class InternshipsComponent {
       place_of_internships: 'AmaliTech',
       start_date: '05/02/23',
       end_start: '05/05/23',
-      status: 'completed',
+      status: 'In progress',
     },
     {
       student_id: '#M234',
@@ -51,7 +52,7 @@ export class InternshipsComponent {
       place_of_internships: 'AmaliTech',
       start_date: '05/02/23',
       end_start: '05/05/23',
-      status: 'completed',
+      status: 'Completed',
     },
   ];
 
@@ -63,3 +64,4 @@ export class InternshipsComponent {
     console.log('Action clicked for row:', row);
   }
 }
+                                                                        

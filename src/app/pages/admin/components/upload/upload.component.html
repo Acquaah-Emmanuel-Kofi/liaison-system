@@ -37,53 +37,53 @@
     </svg>
   </div>
 
-<!--  <div>-->
-<!--    Table Area for Student Data-->
-<!--    <div id="tableArea" class="mt-6 w-[50%] overflow-x-auto">-->
-<!--      <div class="inline-block min-w-full align-middle">-->
-<!--        <div class="overflow-hidden">-->
-<!--          &lt;!&ndash; Table to Display Imported Student Data &ndash;&gt;-->
-<!--          <table class="w-full divide-y divide-gray-200">-->
-<!--            <thead class="bg-gray-50">-->
-<!--            <tr>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration Number</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Programme</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year of Study</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telephone Number</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Name</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Address</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Phone No</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Email</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Exact Location</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Supervisor</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supervisor Phone No</th>-->
-<!--              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Zone</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody class="bg-white divide-y divide-gray-200">-->
-<!--            &lt;!&ndash; Dynamically generated rows for student data &ndash;&gt;-->
-<!--            <tr *ngFor="let student of dataService.students">-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.id }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.name }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.programme }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.yearOfStudy }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.telephoneNumber }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyName }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyAddress }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyPhoneNo }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyEmail }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyExactLocation }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.companySupervisor }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.supervisorPhoneNo }}</td>-->
-<!--              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyZone }}</td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+  <div>
+    Table Area for Student Data
+    <div id="tableArea" class="mt-6 w-[50%] overflow-x-auto">
+      <div class="inline-block min-w-full align-middle">
+        <div class="overflow-hidden">
+          <!-- Table to Display Imported Student Data -->
+          <table class="w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration Number</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Programme</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year of Study</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telephone Number</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Name</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Address</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Phone No</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company's Email</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Exact Location</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Supervisor</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supervisor Phone No</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Zone</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <!-- Dynamically generated rows for student data -->
+            <tr *ngFor="let student of dataService.students">
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.id }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.name }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.programme }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.yearOfStudy }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.telephoneNumber }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyName }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyAddress }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyPhoneNo }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyEmail }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyExactLocation }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.companySupervisor }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.supervisorPhoneNo }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ student.companyZone }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 

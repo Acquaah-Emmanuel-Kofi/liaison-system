@@ -3,6 +3,7 @@ import { TableColumn, TableData } from './table.interface';
 import { PreviewPanelComponent } from './components/preview-panel/preview-panel.component';
 import { CommonModule, NgClass } from '@angular/common';
 import { StatusChipComponent } from '../status-chip/status-chip.component';
+import { getFirstTwoInitials } from '../../helpers/constants.helper';
 
 @Component({
   selector: 'liaison-table',
@@ -18,6 +19,10 @@ export class TableComponent {
 
   selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
+
+  getNameInitials(name: string) {
+    return getFirstTwoInitials(name);
+  }
 
   onSelectRow(row: TableData) {
     this.selectedRow = row;

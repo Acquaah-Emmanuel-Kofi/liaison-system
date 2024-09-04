@@ -1,6 +1,8 @@
 // data.service.ts
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
+import {Password} from "primeng/password";
+import {EmailValidator} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class DataService {
   assignments: { [studentId: string]: string } = {}; // studentId -> lecturerId
 
   // Required headers for students and placements
-  private requiredStudentHeaders = ['Registration number', 'Name','Programme','Year of study','Telephone number','Company\'s name','Company\'s address','Company\'s phone no','Company\'s email','Company Exact Location','Company Supervisor','Supervisor phoneNo', 'Company Zone'];
+  private requiredStudentHeaders = ['Registration number', 'Name', 'Programme', 'Year of study', 'Telephone number', 'Company\'s name', 'Company\'s address', 'Company\'s phone no', 'Company\'s email', 'Company Exact Location', 'Company Supervisor', 'Supervisor phoneNo', 'Company Zone'];
   private requiredPlacementHeaders = ['Registration number', 'Name', 'Location'];
 
   importData(file: File, type: 'students' | 'placements'): boolean {
@@ -19,10 +21,10 @@ export class DataService {
     // @ts-ignore
     reader.onload = (e: any) => {
       const data = e.target.result;
-      const workbook = XLSX.read(data, { type: 'binary' });
+      const workbook = XLSX.read(data, {type: 'binary'});
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      const jsonData = XLSX.utils.sheet_to_json(sheet, {header: 1});
 
       // Validate headers based on the type
       const headers = jsonData[0];

@@ -5,12 +5,20 @@ import { UploadComponent } from './pages/admin/components/upload/upload.componen
 import { StudentsComponent } from './pages/admin/components/students/students.component';
 import { LecturersComponent } from './pages/admin/components/lecturers/lecturers.component';
 import { InternshipsComponent } from './pages/admin/components/internships/internships.component';
+import {
+  UploadStudentComponent
+} from "./pages/admin/components/students/components/uploadStudent/upload-student/upload-student.component";
+import {LoginComponent} from "./auth/login/login.component";
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
+  },
+  {
+    path:'login',
+    component: LoginComponent
   },
   {
     path: 'admin',
@@ -23,6 +31,10 @@ export const routes: Routes = [
       {
         path: 'upload',
         component: UploadComponent,
+      },
+      {
+        path:'student-upload',
+        component:UploadStudentComponent
       },
       {
         path: 'students',

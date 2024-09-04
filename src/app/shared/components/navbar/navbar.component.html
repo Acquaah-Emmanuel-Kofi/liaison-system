@@ -1,6 +1,6 @@
 <header
   id="header"
-  class="z-40 flex items-center justify-between bg-white py-4 px-[2%]"
+  class="z-40 flex items-center justify-between bg-white py-4 pl-3 pr-10"
 >
   <div class="flex items-center">
     <button
@@ -31,7 +31,8 @@
       class="pl-4 md:hidden"
     />
 
-    <liaison-searchbar class="hidden md:block" />
+    <liaison-header-title [title]="currentPage()" class="hidden md:block" />
+
   </div>
   <div class="flex items-center gap-2">
     <button

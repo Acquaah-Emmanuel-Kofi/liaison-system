@@ -1,5 +1,5 @@
-<header class="flex md:flex-row flex-col items-center justify-between my-4">
-  <liaison-header-title title="Students" />
+<header class="flex md:flex-row flex-col items-center justify-between my-6">
+  <liaison-searchbar (searchTermValue)="handleSearchTerm($event)" />
 
   <div class="flex items-center gap-2">
     <liaison-select-filter

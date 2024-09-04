@@ -5,6 +5,12 @@ export const getFirstTwoInitials = (name: string) => {
     .join('');
 };
 
+/**
+ * This method is used to sort arrays either by ascending or descending order
+ * @param data takes the array to sort
+ * @param columnKey is the key to sort the data by
+ * @param sortOrder is the order to sort
+ */
 export const sortByKey = <T extends Record<string, any>>(
   data: T[],
   columnKey: keyof T,
@@ -22,3 +28,22 @@ export const sortByKey = <T extends Record<string, any>>(
   });
 };
 
+const routeValueKey: { [key: string]: string } = {
+  dashboard: 'Dashboard',
+  lecturers: 'Lecturers',
+  students: 'Students',
+  internships: 'Internships',
+  'access-control': 'Access Control',
+  courses: 'Courses',
+  Location: 'Location',
+  Annoucements: 'Annoucements',
+};
+
+export function setPageHeader(currentRoute: string): string {
+  for (const key in routeValueKey) {
+    if (currentRoute.includes(key)) {
+      return routeValueKey[key];
+    }
+  }
+  return '';
+}

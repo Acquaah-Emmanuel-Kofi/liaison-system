@@ -1,18 +1,18 @@
 import {Component, inject} from '@angular/core';
-import { HeaderTitleComponent } from '../../../../../../shared/components/header-title/header-title.component';
 import { SelectFilterComponent } from '../../../../../../shared/components/select-filter/select-filter.component';
 import {Router, RouterLink} from "@angular/router";
+import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
 
 @Component({
   selector: 'liaison-header',
   standalone: true,
-  imports: [HeaderTitleComponent, SelectFilterComponent, RouterLink],
+  imports: [SearchbarComponent, SelectFilterComponent, RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
   toggledFilterButton: boolean = false;
-  route = inject(Router)
+  route = inject(Router);
 
   filterOptions: string[] = [
     'Computer Science',
@@ -34,6 +34,10 @@ export class HeaderComponent {
   }
 
   navigate() {
-      this.route.navigate(['admin/student-upload'])
+    this.route.navigate(['admin/student-upload']);
+  }
+
+  handleSearchTerm(value: string) {
+    console.log(value);
   }
 }

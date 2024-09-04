@@ -10,13 +10,13 @@
             <input
               type="checkbox"
               class="form-checkbox h-4 w-4 text-indigo-600"
-              [ngClass]="{'hidden':HideCheckbox}"
+              [ngClass]="{ hidden: HideCheckbox }"
             />
           </th>
           @for (column of columns(); track $index) {
           <ng-container>
             <th
-              class="px-6 py-3 text-left text-base font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-base font-medium text-black tracking-wider"
             >
               {{ column.label }}
             </th>
@@ -25,34 +25,52 @@
           }
         </tr>
       </thead>
+
       <tbody class="bg-[#F9FBFD] divide-[#D1D9E2] divide-y-2">
         @for (row of data(); track $index) {
         <tr class="cursor-pointer">
-          <td class="p-4">
+          <td class="pl-4">
             <input
               type="checkbox"
               class="form-checkbox h-4 w-4 text-indigo-600"
-              [ngClass]="{'hidden':HideCheckbox}"
+              [ngClass]="{ hidden: HideCheckbox }"
             />
           </td>
+
           @for (column of columns(); track $index) {
           <ng-container>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-              @if (!column.isAction) {
-              <ng-container>
-                {{ row[column.key] }}
-              </ng-container>
-              } @if (column.isAction) {
-              <ng-container>
-                <button
-                  type="button"
-                  (click)="onSelectRow($event)"
-                  class="text-indigo-600 hover:text-indigo-900 underline"
+            <td class="px-4 py-4 whitespace-nowrap text-sm">
+              @if (column.key === 'student_id') { @if (row['imageUrl']) {
+              <div class="flex items-center gap-1">
+                <img
+                  [src]="row['imageUrl']"
+                  alt="Student Display Profile"
+                  class="h-8 w-8 rounded-full mr-3"
+                />
+                {{ row["student_id"] }}
+              </div>
+              } @else {
+              <div class="flex items-center gap-1">
+                <div
+                  class="h-8 w-8 rounded-full mr-3 bg-gray-100 flex justify-center items-center text-gray-500 font-semibold"
                 >
-                  View
-                </button>
-              </ng-container>
+                  {{ getNameInitials(row["name"]) }}
+                </div>
+                {{ row[column.key] }}
+              </div>
+              } } @else if(column.key === 'status') {
+              <liaison-status-chip [status]="row['status']" />
 
+              } @else if (column.isAction) {
+              <button
+                type="button"
+                (click)="onSelectRow($event)"
+                class="text-indigo-600 hover:text-indigo-900 underline"
+              >
+                View
+              </button>
+              } @else {
+              {{ row[column.key] }}
               }
             </td>
           </ng-container>

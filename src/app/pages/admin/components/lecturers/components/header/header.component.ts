@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { HeaderTitleComponent } from '../../../../../../shared/components/header-title/header-title.component';
 import { SelectFilterComponent } from '../../../../../../shared/components/select-filter/select-filter.component';
+import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
 
 @Component({
   selector: 'liaison-header',
   standalone: true,
-  imports: [HeaderTitleComponent, SelectFilterComponent],
+  imports: [SearchbarComponent, SelectFilterComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -29,5 +29,9 @@ export class HeaderComponent {
 
   getOptionSelected(value: string) {
     console.log('Option selected:', value);
+  }
+
+  handleSearchTerm(value: string) {
+    console.log(value);
   }
 }

@@ -1,12 +1,13 @@
-import {Component, Input, input, output} from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 import { TableColumn, TableData } from './table.interface';
 import { PreviewPanelComponent } from './components/preview-panel/preview-panel.component';
-import {NgClass} from "@angular/common";
+import { CommonModule, NgClass } from '@angular/common';
+import { StatusChipComponent } from '../status-chip/status-chip.component';
 
 @Component({
   selector: 'liaison-table',
   standalone: true,
-  imports: [PreviewPanelComponent, NgClass],
+  imports: [PreviewPanelComponent, NgClass, CommonModule, StatusChipComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })

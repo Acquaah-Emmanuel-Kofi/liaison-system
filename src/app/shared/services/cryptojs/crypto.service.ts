@@ -31,4 +31,16 @@ export class CryptoService {
     ).toString();
     return encrypted;
   }
+
+  /**
+   *  Decrypts a given encrypted token using AES decryption with a randomly generated key.
+   * The encryption key is stored in the `encryptionKey` property of the class.
+   * @param encryptedToken - The encrypted token to be decrypted. It should be a string.
+   * @returns The decrypted token as a string.
+   */
+  decryptToken(encryptedToken: string): string {
+    const bytes = CryptoJS.AES.decrypt(encryptedToken, this.encryptionKey);
+    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+    return decrypted;
+  }
 }

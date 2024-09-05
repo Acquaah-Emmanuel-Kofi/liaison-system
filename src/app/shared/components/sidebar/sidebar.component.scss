@@ -1,12 +1,24 @@
 #sidebar {
-    border-right: 1px solid #d0d5dd;
+  border-right: 1px solid #d0d5dd;
+  transition: width 0.3s ease;
+}
+
+$mobile-breakpoint: 640px;
+
+@media (min-width: $mobile-breakpoint) {
+  #sidebar {
+    left: 0 !important;
   }
-  
-  $mobile-breakpoint: 640px;
-  
-  @media (min-width: $mobile-breakpoint) {
-    #sidebar {
-      left: 0 !important;
-    }
-  }
-  
+}
+
+#sidebar.collapsed {
+  width: 64px;
+}
+
+.nav-text {
+  transition: opacity 0.3s ease;
+}
+
+#sidebar.collapsed .nav-text {
+  display: none;
+}

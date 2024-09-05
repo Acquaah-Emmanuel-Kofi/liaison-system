@@ -3,7 +3,7 @@ import { TableColumn, TableData } from './table.interface';
 import { PreviewPanelComponent } from './components/preview-panel/preview-panel.component';
 import { CommonModule, NgClass } from '@angular/common';
 import { StatusChipComponent } from '../status-chip/status-chip.component';
-import { getFirstTwoInitials, sortByKey } from '../../helpers/constants.helper';
+import { getFirstTwoInitials, sortByKey } from '../../helpers/functions.helper';
 
 @Component({
   selector: 'liaison-table',

@@ -32,4 +32,8 @@ export class TokenService {
 
     return null;
   }
+
+  removeToken() {
+    removeFromLocalStorage(ACCESS_TOKEN_KEY);
+  }
 }

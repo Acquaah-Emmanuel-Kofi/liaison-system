@@ -42,4 +42,9 @@ export class AuthService {
     removeFromLocalStorage(ACCESS_TOKEN_KEY);
     this._router.navigate(['/login']);
   }
+
+  public isAuthenticated(): boolean {
+    const token = this._tokenService.getToken();
+    return !this._jwtHelper.isTokenExpired(token);
+  }
 }

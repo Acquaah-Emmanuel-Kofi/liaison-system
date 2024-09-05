@@ -73,4 +73,31 @@
       </ul>
     </nav>
   </div>
+
+  <!-- Toggle Button -->
+  <button
+    (click)="toggleCollapse()"
+    class="absolute bottom-20 -right-[10px] h-6 w-8 bg-[#DDAC25] rounded-md text-white hidden md:block"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-chevrons-right"
+    >
+      @if (!isCollapsed) {
+      <path d="m11 17-5-5 5-5" />
+      <path d="m18 17-5-5 5-5" />
+      } @else {
+      <path d="m6 17 5-5-5-5" />
+      <path d="m13 17 5-5-5-5" />
+      }
+    </svg>
+  </button>
 </div>

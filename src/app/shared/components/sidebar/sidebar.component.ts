@@ -22,6 +22,8 @@ export class SidebarComponent {
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();
 
+  isCollapsed = false;
+
   currentRoute = signal<string>('');
 
   private _router = inject(Router);
@@ -35,6 +37,10 @@ export class SidebarComponent {
           this.currentRoute.set(event.url);
         }
       });
+  }
+
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
   }
 
   public closeSidebar() {

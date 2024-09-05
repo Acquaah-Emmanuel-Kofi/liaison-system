@@ -1,11 +1,20 @@
 <div
   id="sidebar"
   [style.left]="toggled() ? '0' : '-100%'"
-  class="absolute top-0 z-50 h-screen flex-col duration-500 w-[80%] ease-in md:relative md:flex md:w-64 bg-[#19337E] 2xl:w-72"
+  [class.collapsed]="isCollapsed"
+  class="absolute top-0 z-50 h-screen flex-col duration-500 w-[80%] ease-in md:relative md:flex bg-[#19337E] 2xl:w-72 transition-width md:w-64"
 >
+
+<!-- Brand -->
   <div class="hidden py-6 md:block pl-5">
-    <liaison-brand color="white" [logoSize]="20" [textSize]="16" />
+    <liaison-brand
+      color="white"
+      [logoSize]="20"
+      [textSize]="isCollapsed ? 0 : 16"
+    />
   </div>
+
+  <!-- Close Button -->
   <button
     type="button"
     (click)="closeSidebar()"
@@ -24,16 +33,18 @@
       />
     </svg>
   </button>
+
+  <!-- Sidebar Content -->
   <div class="flex flex-1 flex-col overflow-y-auto">
     <nav class="flex-1 pt-10 md:py-4">
       <ul class="space-y-3">
         @for (navLink of links(); track $index) {
-        <li class="text-white">
+        <li class="text-white" [title]="isCollapsed ? navLink.title : ''">
           <a
-          [routerLink]="navLink.routerLink"
-          routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
-          (click)="closeSidebar()"
-            class="relative flex pl-5 text-white items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[4px] hover:before:h-full hover:before:bg-[#FDF2D4]"
+            [routerLink]="navLink.routerLink"
+            routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
+            (click)="closeSidebar()"
+            class="relative flex items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[4px] hover:before:h-full hover:before:bg-[#FDF2D4]"
           >
             <div
               [style]="
@@ -45,6 +56,7 @@
                     navLink.defaultIconSrc +
                     ') no-repeat center;'
               "
+              class="w-8 h-8"
             >
               <img
                 [src]="navLink.defaultIconSrc"
@@ -52,7 +64,9 @@
                 class="opacity-0"
               />
             </div>
-            {{ navLink.title }}
+            <span class="nav-text" [class]="{ hidden: isCollapsed }">
+              {{ navLink.title }}
+            </span>
           </a>
         </li>
         }

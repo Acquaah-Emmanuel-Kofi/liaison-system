@@ -8,7 +8,7 @@ import { InternshipsComponent } from './pages/admin/components/internships/inter
 import {
   UploadStudentComponent
 } from "./pages/admin/components/students/components/uploadStudent/upload-student/upload-student.component";
-import {LoginComponent} from "./auth/login/login.component";
+import { LoginComponent } from './pages/auth/login/login.component';
 
 export const routes: Routes = [
   {

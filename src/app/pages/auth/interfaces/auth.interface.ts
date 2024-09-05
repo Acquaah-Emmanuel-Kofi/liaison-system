@@ -1,5 +1,5 @@
-import { ICommonResponse } from '../../shared/interfaces/response.interface';
-import { IUser } from '../../shared/interfaces/user.interface';
+import { ICommonResponse } from '../../../shared/interfaces/response.interface';
+import { IUser } from '../../../shared/interfaces/user.interface';
 
 export interface ICredentials {
   email: string;

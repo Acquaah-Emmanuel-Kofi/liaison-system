@@ -3,14 +3,14 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ICredentials, ILoginResponse } from '../../interfaces/auth.interface';
-import { environment } from '../../../../environments/environment.development';
 import { Observable, tap } from 'rxjs';
+import { TokenService } from '../../../../shared/services/token/token.service';
+import { environment } from '../../../../../environments/environment.development';
 import {
   ACCESS_TOKEN_KEY,
   removeFromLocalStorage,
   saveToLocalStorage,
-} from '../../../shared/helpers/constants.helper';
-import { TokenService } from '../../../shared/services/token/token.service';
+} from '../../../../shared/helpers/constants.helper';
 
 @Injectable({
   providedIn: 'root',

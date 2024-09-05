@@ -37,4 +37,9 @@ export class AuthService {
         })
       );
   }
+
+  public logout() {
+    removeFromLocalStorage(ACCESS_TOKEN_KEY);
+    this._router.navigate(['/login']);
+  }
 }

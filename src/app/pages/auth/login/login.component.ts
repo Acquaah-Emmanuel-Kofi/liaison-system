@@ -11,6 +11,7 @@ import { ChipsModule } from 'primeng/chips';
 import { Button } from 'primeng/button';
 import { AuthService } from '../services/auth/auth.service';
 import { ICredentials, ILoginResponse } from '../interfaces/auth.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'liaison-login',
@@ -35,6 +36,7 @@ export class LoginComponent {
   public isText: boolean = false;
 
   private _authService = inject(AuthService);
+  private _router = inject(Router);
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -57,7 +59,7 @@ export class LoginComponent {
     if (this.formIsValid()) {
       this.isLoading = true;
 
-      this._authService.loginUser(credentials as ICredentials).subscribe({
+      this._authService.login(credentials as ICredentials).subscribe({
         next: (response) => {
           this.handleResponse(response);
         },
@@ -80,5 +82,6 @@ export class LoginComponent {
 
   handleResponse(response: ILoginResponse) {
     alert(response.message);
+    this._router.navigate(['/admin']);
   }
 }

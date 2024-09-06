@@ -5,9 +5,7 @@ import { UploadComponent } from './pages/admin/components/upload/upload.componen
 import { StudentsComponent } from './pages/admin/components/students/students.component';
 import { LecturersComponent } from './pages/admin/components/lecturers/lecturers.component';
 import { InternshipsComponent } from './pages/admin/components/internships/internships.component';
-import {
-  UploadStudentComponent
-} from "./pages/admin/components/students/components/uploadStudent/upload-student/upload-student.component";
+import { UploadStudentComponent } from './pages/admin/components/students/components/uploadStudent/upload-student/upload-student.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 
 export const routes: Routes = [
@@ -17,13 +15,18 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path:'login',
-    component: LoginComponent
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: 'admin',
     component: AdminComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
       {
         path: 'dashboard',
         component: AdminDashboardComponent,
@@ -33,8 +36,8 @@ export const routes: Routes = [
         component: UploadComponent,
       },
       {
-        path:'student-upload',
-        component:UploadStudentComponent
+        path: 'student-upload',
+        component: UploadStudentComponent,
       },
       {
         path: 'students',

@@ -9,7 +9,6 @@ import { environment } from '../../../../../environments/environment.development
 import {
   ACCESS_TOKEN_KEY,
   removeFromLocalStorage,
-  saveToLocalStorage,
 } from '../../../../shared/helpers/constants.helper';
 
 @Injectable({
@@ -23,16 +22,16 @@ export class AuthService {
 
   constructor() {}
 
-  public loginUser(credentials: ICredentials): Observable<ILoginResponse> {
+  public login(credentials: ICredentials): Observable<ILoginResponse> {
     return this._http
       .post<ILoginResponse>(
-        `${environment.BACKEND_API_BASE_URL}/login`,
+        `${environment.BACKEND_API_BASE_URL}/auth/login`,
         credentials
       )
       .pipe(
         tap((response: ILoginResponse) => {
           if (response.status === 200) {
-            saveToLocalStorage(ACCESS_TOKEN_KEY, response.data.token);
+            this._tokenService.saveToken(response.data.token);
           }
         })
       );

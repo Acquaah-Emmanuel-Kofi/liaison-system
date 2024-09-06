@@ -4,14 +4,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { routes } from './app.routes';
 import { JwtModule } from '@auth0/angular-jwt';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ACCESS_TOKEN_KEY,
   getFromLocalStorage,
 } from './shared/helpers/constants.helper';
+import { authInterceptor } from './interceptors/auth/auth.interceptor';
+import { errorInterceptor } from './interceptors/error/error.interceptor';
 
 const token = () => getFromLocalStorage(ACCESS_TOKEN_KEY);
 
@@ -28,6 +27,6 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
   ],
 };

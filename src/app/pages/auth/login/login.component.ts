@@ -12,6 +12,7 @@ import { Button } from 'primeng/button';
 import { AuthService } from '../services/auth/auth.service';
 import { ICredentials, ILoginResponse } from '../interfaces/auth.interface';
 import { Router } from '@angular/router';
+import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'liaison-login',
@@ -25,6 +26,7 @@ import { Router } from '@angular/router';
     ReactiveFormsModule,
     NgIf,
     Button,
+    LoaderComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -64,6 +66,7 @@ export class LoginComponent {
           this.handleResponse(response);
         },
         error: (error) => {
+          this.isLoading = false;
           alert(error.message);
         },
         complete: () => {
@@ -81,6 +84,8 @@ export class LoginComponent {
   }
 
   handleResponse(response: ILoginResponse) {
+    this.isLoading = false;
+    
     alert(response.message);
     this._router.navigate(['/admin']);
   }

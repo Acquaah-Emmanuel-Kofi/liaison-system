@@ -40,7 +40,7 @@ export class StudentsComponent {
     },
     {
       student_id: '#M234',
-      name: 'Brenda Jones',
+      name: 'Killer Jones',
       department: 'Engineering',
       credit_hours: '32',
     },

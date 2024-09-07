@@ -34,7 +34,7 @@ export class HeaderComponent {
   }
 
   navigate() {
-    this.route.navigate(['admin/student-upload']);
+    this.route.navigate(['admin/students/upload']);
   }
 
   handleSearchTerm(value: string) {

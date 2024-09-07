@@ -14,7 +14,7 @@ export const ADMIN_NAVLINKS: INavLinks[] = [
   {
     title: 'Students',
     defaultIconSrc: '/assets/icons/students.svg',
-    routerLink: 'students',
+    routerLink: '/admin/students',
   },
   {
     title: 'Internships',

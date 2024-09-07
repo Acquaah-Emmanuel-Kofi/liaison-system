@@ -43,6 +43,7 @@
           <a
             [routerLink]="navLink.routerLink"
             routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
+            [routerLinkActiveOptions]="{ exact: false }"
             (click)="closeSidebar()"
             class="relative flex items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[4px] hover:before:h-full hover:before:bg-[#FDF2D4]"
           >

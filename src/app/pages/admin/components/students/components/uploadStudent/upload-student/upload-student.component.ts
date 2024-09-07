@@ -2,6 +2,7 @@ import {Component, inject, OnDestroy} from '@angular/core';
 import { NgForOf, NgIf } from "@angular/common";
 import { DataService } from "../../../../../service/student-upload/data.service";
 import * as XLSX from "xlsx";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'liaison-upload-student',
@@ -11,9 +12,11 @@ import * as XLSX from "xlsx";
     NgIf
   ],
   templateUrl: './upload-student.component.html',
-  styleUrls: ['./upload-student.component.scss']
+  styleUrls: ['./upload-student.component.scss'],
+  providers: [MessageService]
 })
 export class UploadStudentComponent implements OnDestroy{
+  messageService = inject(MessageService)
   dataService = inject(DataService);
   selectedFileName!: string;
   selectedFile!: File;  // Track the selected file
@@ -70,7 +73,7 @@ export class UploadStudentComponent implements OnDestroy{
       ];
 
       if (JSON.stringify(fileHeaders) !== JSON.stringify(expectedHeaders)) {
-        alert('Excel headers do not match expected format.');
+        this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Excel headers do not match expected format.' });
         return;
       }
 
@@ -78,7 +81,7 @@ export class UploadStudentComponent implements OnDestroy{
       const students = data.slice(1).map((row: any) => {
         const student: any = {};
         fileHeaders.forEach((header: string, index: number) => {
-          student[header] = row[index] || ''; // Assign data to respective header
+          student[header] = row[index] || '';
         });
         return student;
       });
@@ -109,11 +112,16 @@ export class UploadStudentComponent implements OnDestroy{
     document.getElementById('fileDisplayArea')!.classList.remove('hidden');
   }
 
+
   submitData() {
     if (!this.selectedFile) {
-      alert('No file selected for submission.');
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No file selected for submission.' });
       return;
     }
+
+    this.dataService.sendFileToBackend(this.selectedFile, 'students');
+
+
   }
 
   ngOnDestroy() {

@@ -9,6 +9,9 @@ import {
   UploadStudentComponent
 } from "./pages/admin/components/students/components/uploadStudent/upload-student/upload-student.component";
 import { LoginComponent } from './pages/auth/login/login.component';
+import {
+  StudentsTableComponent
+} from "./pages/admin/components/students/components/students-table/students-table.component";
 
 export const routes: Routes = [
   {
@@ -33,12 +36,18 @@ export const routes: Routes = [
         component: UploadComponent,
       },
       {
-        path:'student-upload',
-        component:UploadStudentComponent
-      },
-      {
         path: 'students',
         component: StudentsComponent,
+        children:[
+          {
+            path:'table',
+            component:StudentsTableComponent
+          },
+          {
+            path:'upload',
+            component:UploadStudentComponent
+          }
+        ]
       },
       {
         path: 'lecturers',

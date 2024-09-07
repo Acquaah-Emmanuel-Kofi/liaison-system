@@ -1,49 +1,13 @@
-export const getFirstTwoInitials = (name: string) => {
-  return name
-    .split(' ')
-    .map((name) => name.charAt(0).toUpperCase())
-    .join('');
+export const ACCESS_TOKEN_KEY: string = 'LIAISON_SYSTEM_TOKEN';
+
+export const saveToLocalStorage = (key: string, value: any) => {
+  return localStorage.setItem(key, value);
 };
 
-/**
- * This method is used to sort arrays either by ascending or descending order
- * @param data takes the array to sort
- * @param columnKey is the key to sort the data by
- * @param sortOrder is the order to sort
- */
-export const sortByKey = <T extends Record<string, any>>(
-  data: T[],
-  columnKey: keyof T,
-  sortOrder: 'asc' | 'desc'
-): void => {
-  data.sort((a, b) => {
-    const valueA = String(a[columnKey]).toLowerCase();
-    const valueB = String(b[columnKey]).toLowerCase();
-
-    if (sortOrder === 'asc') {
-      return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-    } else {
-      return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
-    }
-  });
+export const getFromLocalStorage = (key: string) => {
+  return localStorage.getItem(key);
 };
 
-const routeValueKey: { [key: string]: string } = {
-  dashboard: 'Dashboard',
-  lecturers: 'Lecturers',
-  students: 'Students',
-  internships: 'Internships',
-  'access-control': 'Access Control',
-  courses: 'Courses',
-  Location: 'Location',
-  Annoucements: 'Annoucements',
+export const removeFromLocalStorage = (key: string) => {
+  return localStorage.removeItem(key);
 };
-
-export function setPageHeader(currentRoute: string): string {
-  for (const key in routeValueKey) {
-    if (currentRoute.includes(key)) {
-      return routeValueKey[key];
-    }
-  }
-  return '';
-}

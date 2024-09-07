@@ -1,27 +1,40 @@
-<div class="w-[100%] flex items-center h-screen overflow-hidden">
-  <div class="w-[100%] xl:w-[80%] flex flex-col items-center gap-10">
+<div class="w-full flex items-center h-screen">
+  <div class="w-full flex flex-col items-center gap-10">
     <div class="flex items-center gap-0 cursor-pointer">
-      <img class="w-10-10" ngSrc="assets/Lookscout.svg" alt="icon" width="128" height="32">
-     <p class="absolute ml-8 text-Primary-Blue font-bold">Liaison</p>
+      <img
+        class="w-10-10"
+        ngSrc="assets/Lookscout.svg"
+        alt="icon"
+        width="128"
+        height="32"
+      />
+      <p class="absolute ml-8 text-Primary-Blue font-bold">Liaison</p>
     </div>
 
     <div class="flex flex-col items-center">
       <p class="text-Primary-Black text-[30px] font-medium">Welcome Back!</p>
-      <p class="text-Primary-Blue text-[20px]">Enter your credentials to get started</p>
+      <p class="text-Primary-Blue text-[20px]">
+        Enter your credentials to get started
+      </p>
     </div>
 
-    <div class=" w-[70%]">
-      <form class="flex flex-col gap-3 relative" [formGroup]="loginForm">
+    <div class="w-[70%]">
+      <form
+        class="flex flex-col gap-3 relative"
+        [formGroup]="loginForm"
+        (ngSubmit)="handleSubmit()"
+      >
         <div class="mb-5">
           <p-floatLabel>
             <input
               type="email"
               id="email"
-              formControlName ="email"
-              pInputText  class="border-red-700 h-10 w-[100%] pl-3 focus:outline-none"/>
+              formControlName="email"
+              pInputText
+              class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+            />
             <label for="email">Email address</label>
           </p-floatLabel>
-
         </div>
         <div class="mb-5">
           <p-floatLabel>
@@ -29,7 +42,9 @@
               [type]="type"
               id="password"
               formControlName="password"
-              pInputText  class="border-red-700 h-10 w-[100%] pl-3 focus:outline-none"/>
+              pInputText
+              class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+            />
             <label for="email">Password</label>
           </p-floatLabel>
           <div (click)="hideShowPassword()">
@@ -58,7 +73,7 @@
             </div>
             <div *ngIf="type === 'password'">
               <svg
-                class="absolute right-0 mr-3 top-20 cursor-pointer bottom-2 "
+                class="absolute right-0 mr-3 top-20 cursor-pointer bottom-2"
                 width="25"
                 height="24"
                 viewBox="0 0 25 24"
@@ -82,7 +97,6 @@
               </svg>
             </div>
           </div>
-
         </div>
         <div class="flex justify-between items-center">
           <div class="inline-flex gap-1 items-center">
@@ -98,7 +112,7 @@
               <span
                 class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100"
               >
-								<svg
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-2 w-2"
                   viewBox="0 0 20 20"
@@ -106,31 +120,43 @@
                   stroke="currentColor"
                   stroke-width="1"
                 >
-									<path
+                  <path
                     fill-rule="evenodd"
                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                     clip-rule="evenodd"
                   ></path>
-								</svg>
-							</span>
+                </svg>
+              </span>
             </label>
             <h2 class="font-medium text-sm">Remember me</h2>
           </div>
-          <h2
-            class="text-Primary-Blue cursor-pointer hover:underline"
-          >
+          <h2 class="text-Primary-Blue cursor-pointer hover:underline">
             Forgot password?
           </h2>
         </div>
         <div class="flex flex-col items-center">
-          <button class="bg-Primary-Blue w-[35%] xl:w-[15%] rounded-full text-white h-8 ">Log in</button>
+          @if (!isLoading) {
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="bg-Primary-Blue w-[35%] xl:w-[15%] rounded-full text-white h-8"
+          >
+            Log in
+          </button>
+          } @else {
+          <liaison-loader [type]="'button'" />
+          }
         </div>
       </form>
     </div>
-
   </div>
-  <div class="hidden xl:block w-[30%] ">
-    <img  ngSrc="assets/ttulogo.svg" alt="login image" width="516" height="1024" priority>
-
+  <div class="hidden md:block">
+    <img
+      ngSrc="assets/ttulogo.svg"
+      alt="login"
+      width="516"
+      height="1024"
+      priority
+    />
   </div>
 </div>

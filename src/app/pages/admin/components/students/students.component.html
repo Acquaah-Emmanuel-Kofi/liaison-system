@@ -1,9 +1,13 @@
-<section>
-  <liaison-header />
+@if (!isChildRouteActive()){
+  <section >
+<liaison-header />
 
-  <liaison-table
-    [columns]="columns"
-    [data]="data"
-    (actionClicked)="handleActionClick($event)"
-  />
-</section>
+<liaison-table
+[columns]="columns"
+[data]="data"
+(actionClicked)="handleActionClick($event)"
+/>
+</section>}
+
+<!-- The router outlet displays child components when their routes are active -->
+<router-outlet></router-outlet>

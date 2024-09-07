@@ -1,6 +1,6 @@
 import {Component, inject, OnDestroy} from '@angular/core';
-import { NgForOf, NgIf } from "@angular/common";
-import { DataService } from "../../../../../service/student-upload/data.service";
+import {NgForOf, NgIf} from "@angular/common";
+import {DataService} from "../../../../../service/student-upload/data.service";
 import * as XLSX from "xlsx";
 import {MessageService} from "primeng/api";
 
@@ -78,15 +78,13 @@ export class UploadStudentComponent implements OnDestroy{
       }
 
       // Process and store the data using the data service
-      const students = data.slice(1).map((row: any) => {
+      this.dataService.students = data.slice(1).map((row: any) => {
         const student: any = {};
         fileHeaders.forEach((header: string, index: number) => {
           student[header] = row[index] || '';
         });
         return student;
       });
-
-      this.dataService.students = students;
       this.showTable();
       this.isDataImported = true;
     };

@@ -63,6 +63,14 @@ export class DataService {
   validatePlacement(row: any): boolean {
     return !!(row[0] && row[1] && row[2]);
   }
+  sendFileToBackend(file: File, type: 'students') {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', type);
+
+    console.log(formData)
+
+  }
 
   assignLecturer(studentId: string, lecturerId: string) {
     this.assignments[studentId] = lecturerId;

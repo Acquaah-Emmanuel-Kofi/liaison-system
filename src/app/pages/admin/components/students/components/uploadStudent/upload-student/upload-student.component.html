@@ -5,26 +5,44 @@
     <p class="text-Primary-Black font-bold text-[20px]">Import File</p>
 
     <!-- Import Data Button -->
-    <button
-      class="bg-white text-Dark-Blue border-2 border-Dark-Blue rounded-full py-1 px-4 flex items-center hover:bg-blue-200"
-      onclick="document.getElementById('fileInput').click()">
-      Import Data
-      <span class="ml-3">
+   <div class="flex items-center gap-3">
+     <button
+       class="bg-white text-Dark-Blue border-2 border-Dark-Blue rounded-full py-1 px-4 flex items-center hover:bg-blue-200"
+       onclick="document.getElementById('fileInput').click()">
+       Import Data
+       <span class="ml-3">
         <img src="assets/icons/import.svg" alt="import">
       </span>
-    </button>
+     </button>
+
+     <!--Accept button-->
+     <div *ngIf="isDataImported" class="">
+       <button
+         class="text-white border-2 rounded-full bg-[#19337E] border-[#19337E] font-medium text-sm px-6 py-1.5 text-center inline-flex items-center"
+         (click)="submitData()">
+         Submit Data
+       </button>
+     </div>
+   </div>
 
     <!-- Hidden File Input for Upload -->
     <input id="fileInput" type="file" class="hidden" (change)="onFileChange($event)" accept=".xls,.xlsx"/>
   </div>
 
   <!-- File Display Area -->
-  <div id="fileDisplayArea" class="w-[300px] flex items-center gap-3 border-2 border-[#D1D6E5] h-[50px] rounded-[10px] py-3 pl-5">
+  <div id="fileDisplayArea" class="w-[300px] flex items-center gap-2 border-2 border-[#D1D6E5] h-[50px] rounded-[10px] py-3 pl-5">
     <img src="assets/pdf.svg" alt="pdf file">
     <p class="text-[13px]" *ngIf="selectedFileName; else placeholder">{{ selectedFileName }}</p>
     <ng-template #placeholder>
       <p class="text-[13px]">File will appear here after import</p>
     </ng-template>
+    <button *ngIf="selectedFileName" (click)="removeFile()" class="ml-[20%] right-2 bg-red-500 text-white rounded-full p-1">
+      <!-- X SVG Icon -->
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
   </div>
 
   <!-- Drag and Drop Area -->
@@ -37,15 +55,15 @@
     </svg>
   </div>
 
-  <div class="">
-    <div id="tableArea" class="mt-6 w-[80%] 2xl:w-[100%] overflow-x-auto">
-      <div class="inline-block min-w-full align-middle">
+  <div class="absolute mt-6 max-h-[380px] 2xl:max-h-[720px] max-w-[78%] 2xl:w-[100%] overflow-auto">
+    <div id="tableArea" class="">
+      <div class=" min-w-full align-middle">
         <div class="overflow-hidden">
           <!-- Table to Display Imported Student Data -->
           <table class="w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
             <tr>
-              <th *ngFor="let header of dataService.headers" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th *ngFor="let header of dataService.headers" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
                 {{ header }}
               </th>
             </tr>

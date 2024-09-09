@@ -4,6 +4,11 @@ import { DataService } from "../../../../../service/student-upload/data.service"
 import * as XLSX from "xlsx";
 import {MessageService} from "primeng/api";
 import {SidebarService} from "../../../../../../../shared/services/sidebar/sidebar.service";
+import {ToastModule} from "primeng/toast";
+import {Router} from "@angular/router";
+import {
+  LoaderModalComponent
+} from "../../../../../../../shared/components/loader-modal/loader-modal/loader-modal.component";
 
 @Component({
   selector: 'liaison-upload-student',
@@ -12,7 +17,9 @@ import {SidebarService} from "../../../../../../../shared/services/sidebar/sideb
     NgForOf,
     NgIf,
     NgClass,
-    AsyncPipe
+    AsyncPipe,
+    ToastModule,
+    LoaderModalComponent
   ],
   templateUrl: './upload-student.component.html',
   styleUrls: ['./upload-student.component.scss'],
@@ -25,6 +32,9 @@ export class UploadStudentComponent implements OnDestroy{
   selectedFileName!: string;
   selectedFile!: File;  // Track the selected file
   isDataImported: boolean = false;
+  isModalOpen: boolean = false;
+
+  private _router = inject(Router);
 
   onFileChange(event: any) {
     const target: DataTransfer = <DataTransfer>(event.target);
@@ -128,14 +138,30 @@ export class UploadStudentComponent implements OnDestroy{
 
 
   submitData() {
+    this.isModalOpen = true
     if (!this.selectedFile) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No file selected for submission.' });
+      this.isModalOpen = false
       return;
     }
 
-    this.dataService.sendFileToBackend(this.selectedFile, 'students');
-
-
+    this.dataService.sendFileToBackend(this.selectedFile, 'students').subscribe(
+      {
+        next: (response) => {
+          if(response){
+            this.messageService.add({severity:'success', summary:'Success',detail: response.message})
+            this.isModalOpen = false
+            setTimeout(()=>{
+              this._router.navigate(['/admin/students']).then();
+            },2000)
+          }
+        },
+        error: (error) => {
+          this.messageService.add({severity:'error', summary:'Error',detail: error.error.message})
+          this.isModalOpen = false
+        }
+      }
+    );
   }
 
   ngOnDestroy() {

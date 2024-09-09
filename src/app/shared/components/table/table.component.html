@@ -110,7 +110,7 @@
       </tbody>
     </table>
     @if (totalData > 10){
-      <div class=" flex right-0 items-center justify-end">
+      <div class=" flex right-0 items-center justify-end" [ngClass]="{ hidden: HidePagination }">
       <div class="card flex justify-content-center ">
         <p-paginator
           (onPageChange)="onPageChange($event)"

@@ -1,5 +1,15 @@
-@switch (type()) { @case ('button') {
-<div class="loader"></div>
-} @case ('page') {
-<div class="spinner"></div>
-} }
+<div class="cool-loader">
+  <ng-container [ngSwitch]="loaderType">
+    <div *ngSwitchCase="'dots'" class="dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div *ngSwitchCase="'bars'" class="bars">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div *ngSwitchCase="'ring'" class="ring"></div>
+  </ng-container>
+</div>

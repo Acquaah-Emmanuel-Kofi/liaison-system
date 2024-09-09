@@ -9,6 +9,7 @@ import {
   UploadStudentComponent
 } from "./pages/admin/components/students/components/uploadStudent/upload-student/upload-student.component";
 import {LoginComponent} from './pages/auth/login/login.component';
+import {ErrorPageComponent} from "./pages/404/error-page/error-page.component";
 
 export const routes: Routes = [
   {
@@ -50,6 +51,11 @@ export const routes: Routes = [
         path: 'internships',
         component: InternshipsComponent,
       },
+
     ],
   },
+  {
+    path: '**',
+    component: ErrorPageComponent
+  }
 ];

@@ -15,6 +15,7 @@ import {PaginatorModule, PaginatorState} from "primeng/paginator";
 })
 export class TableComponent implements OnInit {
   @Input() HideCheckbox!: boolean;
+  @Input() HidePagination!: boolean
   columns = input.required<TableColumn[]>();
   data = input.required<TableData[]>();
 

@@ -27,6 +27,7 @@ export class AdminDashboardComponent {
   currentYear: number = new Date().getFullYear();
   years: number[] = [];
   HideCheckbox = true;
+  HidePagination = true;
 
   constructor() {
     this.populateYears();

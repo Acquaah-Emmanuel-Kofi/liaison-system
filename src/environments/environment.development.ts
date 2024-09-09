@@ -1,4 +1,5 @@
 export const environment = {
-  production: false,
-  BACKEND_API_BASE_URL: 'https://liaison-system-backend.onrender.com',
+  DEVELOPMENT: import.meta.env.DEVELOPMENT,
+  BACKEND_API_BASE_URL: import.meta.env.BACKEND_API_BASE_URL,
+  SECRET_KEY: import.meta.env.SECRET_KEY,
 };

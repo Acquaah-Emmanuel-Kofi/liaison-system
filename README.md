@@ -78,7 +78,7 @@ This will create a `dist` directory with all the necessary files for deployment.
 
 ### Frontend Development
 
-- **Emmanuel Acqaauh**
+- **Emmanuel Acquaah**
 - **Bless Ahadjie**
 
 ### Backend Development

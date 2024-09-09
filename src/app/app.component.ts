@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment.development';
-import { AngularQueryDevtools } from '@tanstack/angular-query-devtools-experimental';
+import {AngularQueryDevtools} from "@tanstack/angular-query-devtools-experimental";
 
 @Component({
   selector: 'app-root',

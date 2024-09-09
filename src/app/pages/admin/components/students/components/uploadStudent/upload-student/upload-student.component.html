@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="w-[100%]">
 
   <!-- Upload Component Content -->
@@ -22,6 +23,7 @@
          (click)="submitData()">
          Submit Data
        </button>
+       <liaison-loader-modal [isOpen]="isModalOpen"></liaison-loader-modal>
      </div>
    </div>
 

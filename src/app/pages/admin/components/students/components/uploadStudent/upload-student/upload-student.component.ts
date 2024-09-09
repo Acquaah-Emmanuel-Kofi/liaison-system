@@ -159,6 +159,7 @@ export class UploadStudentComponent implements OnDestroy{
         error: (error) => {
           this.messageService.add({severity:'error', summary:'Error',detail: error.error.message})
           this.isModalOpen = false
+
         }
       }
     );

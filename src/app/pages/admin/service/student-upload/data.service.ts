@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  http = inject(HttpClient)
   students: any[] = [];
   placements: any[] = [];
   assignments: { [studentId: string]: string } = {}; // studentId -> lecturerId
@@ -68,8 +70,16 @@ export class DataService {
     formData.append('file', file);
     formData.append('type', type);
 
-    console.log(formData)
+    const requestOptions = {
+      headers: new HttpHeaders({
+        'ngrok-skip-browser-warning': 'skip-browser-warning',
+        Authorization: 'Bearer ' + "jniojji",
+      }),
 
+    };
+
+    const backend = "https://ss7ffblh-8040.euw.devtunnels.ms";
+    return this.http.post(`${backend}/liaison/api/v1/admin/students`, formData, requestOptions);
   }
 
   assignLecturer(studentId: string, lecturerId: string) {

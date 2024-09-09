@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
+import {BrandComponent} from "../../../shared/components/brand/brand.component";
 
 @Component({
   selector: 'liaison-login',
@@ -29,7 +30,8 @@ import {MessageService} from "primeng/api";
     NgIf,
     Button,
     LoaderComponent,
-    ToastModule
+    ToastModule,
+    BrandComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -72,7 +74,7 @@ export class LoginComponent {
         },
         error: (error) => {
           this.isLoading = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message?? 'pol' });
         },
         complete: () => {
           this.isLoading = false;

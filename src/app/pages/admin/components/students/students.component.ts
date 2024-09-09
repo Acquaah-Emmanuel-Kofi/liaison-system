@@ -76,7 +76,7 @@ export class StudentsComponent {
   }
 
   handleClosePanel() {
-    this.selectedRowData = null;  // Clear selected row data to hide the preview panel
+    this.selectedRowData = null;
   }
 
   handleActionClick(row: TableData): void {

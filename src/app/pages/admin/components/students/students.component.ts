@@ -1,16 +1,21 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
+import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'liaison-students',
   standalone: true,
-  imports: [HeaderComponent, TableComponent],
+  imports: [HeaderComponent, TableComponent, RouterOutlet],
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
 })
 export class StudentsComponent {
+  // private router: Router, private activatedRoute: ActivatedRoute
+  router = inject(Router)
+  activatedRoute = inject(ActivatedRoute)
+
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
     { label: 'Name', key: 'name' },
@@ -45,6 +50,10 @@ export class StudentsComponent {
       credit_hours: '32',
     },
   ];
+
+  isChildRouteActive(): boolean {
+    return this.activatedRoute.firstChild !== null;
+  }
 
   handleRowSelection(row: TableData) {
     console.log('Row selected:', row);

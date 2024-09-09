@@ -11,5 +11,5 @@ import { AngularQueryDevtools } from '@tanstack/angular-query-devtools-experimen
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  devEnvironment = environment.DEVELOPMENT;
+  devEnvironment: boolean = true;
 }

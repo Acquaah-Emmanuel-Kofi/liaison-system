@@ -78,23 +78,23 @@ This will create a `dist` directory with all the necessary files for deployment.
 
 ### Frontend Development
 
-- **[Emmanuel Acquaah](https://https://github.com/Acquaah-Emmanuel-Kofi)**
-- **[Bless Ahadjie](https://https://github.com/Dev-Bless)**
+- **[Emmanuel Acquaah](https://github.com/Acquaah-Emmanuel-Kofi)**
+- **[Bless Ahadjie](https://github.com/Dev-Bless)**
 
 ### Backend Development
 
-- **[Setsofia Nusetor](https://https://github.com/Funky2003)**
+- **[Setsofia Nusetor](https://github.com/Funky2003)**
 
 ### Testing and Documentation
 
-- **[Safo Kwadwo](https://https://github.com/Darksafo)**
+- **[Safo Kwadwo](https://github.com/Darksafo)**
 
 ### Honorary Mentions
 
 Special thanks to:
 
 - **Blessing Esi Avornyoh**
-- **[Maxwell Antwi](https://https://github.com/)**
+- **[Maxwell Antwi](https://github.com/)**
 - **Faith Mensah**
 
 For their invaluable contributions to the project.

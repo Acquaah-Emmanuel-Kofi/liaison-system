@@ -39,7 +39,7 @@
     <nav class="flex-1 pt-10 md:py-4">
       <ul class="space-y-3">
         @for (navLink of links(); track $index) {
-        <li class="text-white" [title]="isCollapsed ? navLink.title : ''">
+        <li class="text-white" [title]="(sidebarService.isCollapsed$ | async) ? navLink.title : ''">
           <a
             [routerLink]="navLink.routerLink"
             routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"

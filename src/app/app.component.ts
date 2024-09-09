@@ -1,15 +1,25 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { environment } from '../environments/environment.development';
-import {AngularQueryDevtools} from "@tanstack/angular-query-devtools-experimental";
+import { StatCardComponent } from './shared/components/stat-card/stat-card.component';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { INavLinks } from './shared/components/sidebar/sidebar.interface';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { LoginComponent } from './pages/auth/login/login.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AngularQueryDevtools],
+  imports: [
+    RouterOutlet,
+    LoginComponent,
+    StatCardComponent,
+    SidebarComponent,
+    NavbarComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  devEnvironment: boolean = environment.DEVELOPMENT;
+  title = 'liaison-system';
+  plkisns!: INavLinks[];
 }

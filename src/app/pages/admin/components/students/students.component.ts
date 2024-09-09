@@ -22,6 +22,7 @@ export class StudentsComponent {
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
+  selectedRowData: TableData | null = null;
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -29,6 +30,7 @@ export class StudentsComponent {
     { label: 'Faculty', key: 'faculty' },
     { label: 'Department', key: 'department' },
     { label: 'Actions', key: 'action', isAction: true },
+
   ];
 
   query = injectQuery(() => ({
@@ -58,6 +60,10 @@ export class StudentsComponent {
       name: student.name,
       faculty: student.faculty,
       department: student.department,
+      course: student.course,
+      age: student.age,
+      gender: student.gender,
+      phone: student.phone
     }));
   }
 
@@ -69,7 +75,11 @@ export class StudentsComponent {
     console.log('Row selected:', row);
   }
 
+  handleClosePanel() {
+    this.selectedRowData = null;  // Clear selected row data to hide the preview panel
+  }
+
   handleActionClick(row: TableData): void {
-    console.log('Action clicked for row:', row);
+    this.selectedRowData = row;
   }
 }

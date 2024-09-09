@@ -39,15 +39,16 @@
     <nav class="flex-1 pt-10 md:py-4">
       <ul class="space-y-3">
         @for (navLink of links(); track $index) {
-          <li class="text-white" [title]="(sidebarService.isCollapsed$ | async) ? navLink.title : ''">
-            <a
-              [routerLink]="navLink.routerLink"
-              routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
-              (click)="closeSidebar()"
-              class="relative flex items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:left-0 hover:w-[4px] hover:h-full hover:bg-[#FDF2D4]"
-            >
-              <div
-                [style]="
+        <li class="text-white" [title]="isCollapsed ? navLink.title : ''">
+          <a
+            [routerLink]="navLink.routerLink"
+            routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
+            [routerLinkActiveOptions]="{ exact: false }"
+            (click)="closeSidebar()"
+            class="relative flex items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[4px] hover:before:h-full hover:before:bg-[#FDF2D4]"
+          >
+            <div
+              [style]="
                 currentRoute().includes(navLink.routerLink)
                   ? 'background-color: #fff; -webkit-mask: url(' +
                     navLink.defaultIconSrc +

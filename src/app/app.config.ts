@@ -11,6 +11,10 @@ import {
 } from './shared/helpers/constants.helper';
 import { authInterceptor } from './interceptors/auth/auth.interceptor';
 import { errorInterceptor } from './interceptors/error/error.interceptor';
+import {
+  provideAngularQuery,
+  QueryClient,
+} from '@tanstack/angular-query-experimental';
 
 const token = () => getFromLocalStorage(ACCESS_TOKEN_KEY);
 
@@ -28,5 +32,6 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    provideAngularQuery(new QueryClient()),
   ],
 };

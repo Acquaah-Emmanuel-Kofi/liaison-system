@@ -33,12 +33,14 @@ export const routes: Routes = [
         component: UploadComponent,
       },
       {
-        path:'student-upload',
-        component:UploadStudentComponent
-      },
-      {
         path: 'students',
         component: StudentsComponent,
+        children:[
+          {
+            path:'upload',
+            component:UploadStudentComponent
+          }
+        ]
       },
       {
         path: 'lecturers',

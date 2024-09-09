@@ -16,6 +16,7 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
 import {BrandComponent} from "../../../shared/components/brand/brand.component";
+import {LoaderModalComponent} from "../../../shared/components/loader-modal/loader-modal/loader-modal.component";
 
 @Component({
   selector: 'liaison-login',
@@ -31,7 +32,8 @@ import {BrandComponent} from "../../../shared/components/brand/brand.component";
     Button,
     LoaderComponent,
     ToastModule,
-    BrandComponent
+    BrandComponent,
+    LoaderModalComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -42,6 +44,7 @@ export class LoginComponent {
   fb = inject(FormBuilder);
   public type: string = 'password';
   public isLoading: boolean = false;
+  isModalOpen: boolean = false;
   public isText: boolean = false;
 
   private _authService = inject(AuthService);
@@ -67,6 +70,7 @@ export class LoginComponent {
 
     if (this.formIsValid()) {
       this.isLoading = true;
+      this.isModalOpen = true;
 
       this._authService.login(credentials as ICredentials).subscribe({
         next: (response) => {
@@ -74,7 +78,8 @@ export class LoginComponent {
         },
         error: (error) => {
           this.isLoading = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message?? 'pol' });
+          this.isModalOpen = false;
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message});
         },
         complete: () => {
           this.isLoading = false;
@@ -87,12 +92,19 @@ export class LoginComponent {
     }
   }
 
+  // showLoadingModal() {
+  //   this.isLoading = true;
+  //   this.isModalOpen = true;
+  // }
+
+
   formIsValid() {
     return this.loginForm.valid;
   }
 
   handleResponse(response: ILoginResponse) {
     this.isLoading = false;
+    this.isModalOpen = false;
 
     this.messageService.add({ severity: 'success', summary: 'Success', detail: response.message });
     this._router.navigate(['/admin']);

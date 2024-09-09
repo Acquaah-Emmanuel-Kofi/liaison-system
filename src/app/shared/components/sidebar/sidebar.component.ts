@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import {Component, inject, input, OnDestroy, output, signal} from '@angular/core';
 import { INavLinks } from './sidebar.interface';
 import {
   Event,
@@ -17,7 +17,7 @@ import { BrandComponent } from '../brand/brand.component';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnDestroy{
   closeEvent = output<void>();
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();

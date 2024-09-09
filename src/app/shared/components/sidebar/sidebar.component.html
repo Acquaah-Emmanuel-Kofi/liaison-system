@@ -1,16 +1,16 @@
 <div
   id="sidebar"
   [style.left]="toggled() ? '0' : '-100%'"
-  [class.collapsed]="isCollapsed"
+  [class.collapsed]="(sidebarService.isCollapsed$ | async) ? 'collapsed' : ''"
   class="absolute top-0 z-50 h-screen flex-col duration-500 w-[80%] ease-in md:relative md:flex bg-[#19337E] 2xl:w-72 transition-width md:w-64"
 >
 
-<!-- Brand -->
+  <!-- Brand -->
   <div class="hidden py-6 md:block pl-5">
     <liaison-brand
       color="white"
       [logoSize]="20"
-      [textSize]="isCollapsed ? 0 : 16"
+      [textSize]="(sidebarService.isCollapsed$ | async) ? 0 : 16"
     />
   </div>
 
@@ -39,10 +39,11 @@
     <nav class="flex-1 pt-10 md:py-4">
       <ul class="space-y-3">
         @for (navLink of links(); track $index) {
-        <li class="text-white" [title]="isCollapsed ? navLink.title : ''">
+        <li class="text-white" [title]="(sidebarService.isCollapsed$ | async) ? navLink.title : ''">
           <a
             [routerLink]="navLink.routerLink"
             routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
+            [routerLinkActiveOptions]="{ exact: false }"
             (click)="closeSidebar()"
             class="relative flex items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[4px] hover:before:h-full hover:before:bg-[#FDF2D4]"
           >
@@ -56,19 +57,19 @@
                     navLink.defaultIconSrc +
                     ') no-repeat center;'
               "
-              class="w-8 h-8"
-            >
-              <img
-                [src]="navLink.defaultIconSrc"
-                alt="icon"
-                class="opacity-0"
-              />
-            </div>
-            <span class="nav-text" [class]="{ hidden: isCollapsed }">
+                class="w-8 h-8"
+              >
+                <img
+                  [src]="navLink.defaultIconSrc"
+                  alt="icon"
+                  class="opacity-0"
+                />
+              </div>
+              <span class="nav-text" [class.hidden]="(sidebarService.isCollapsed$ | async)">
               {{ navLink.title }}
             </span>
-          </a>
-        </li>
+            </a>
+          </li>
         }
       </ul>
     </nav>
@@ -91,12 +92,12 @@
       stroke-linejoin="round"
       class="lucide lucide-chevrons-right"
     >
-      @if (!isCollapsed) {
-      <path d="m11 17-5-5 5-5" />
-      <path d="m18 17-5-5 5-5" />
+      @if (!(sidebarService.isCollapsed$ | async)) {
+        <path d="m11 17-5-5 5-5" />
+        <path d="m18 17-5-5 5-5" />
       } @else {
-      <path d="m6 17 5-5-5-5" />
-      <path d="m13 17 5-5-5-5" />
+        <path d="m6 17 5-5-5-5" />
+        <path d="m13 17 5-5-5-5" />
       }
     </svg>
   </button>

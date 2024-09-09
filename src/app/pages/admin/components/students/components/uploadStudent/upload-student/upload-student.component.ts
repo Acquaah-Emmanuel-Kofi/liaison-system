@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 import {
   LoaderModalComponent
 } from "../../../../../../../shared/components/loader-modal/loader-modal/loader-modal.component";
+import {injectMutation, injectQuery} from "@tanstack/angular-query-experimental";
 
 @Component({
   selector: 'liaison-upload-student',
@@ -137,6 +138,7 @@ export class UploadStudentComponent implements OnDestroy{
   }
 
 
+
   submitData() {
     this.isModalOpen = true
     if (!this.selectedFile) {
@@ -145,24 +147,35 @@ export class UploadStudentComponent implements OnDestroy{
       return;
     }
 
-    this.dataService.sendFileToBackend(this.selectedFile, 'students').subscribe(
-      {
-        next: (response) => {
-          if(response){
-            this.messageService.add({severity:'success', summary:'Success',detail: response.message})
+    let mutation = injectMutation((client) => ({
+      mutationFn: (file) => this.dataService.sendFileToBackend(this.selectedFile),
+      onSuccess: () => {
+        client.invalidateQueries({queryKey: ['send upload']}).then(
+          (response)=>{
+            this.messageService.add({severity:'success', summary:'Success',detail: "response"})
             this.isModalOpen = false
             setTimeout(()=>{
               this._router.navigate(['/admin/students']).then();
             },2000)
           }
-        },
-        error: (error) => {
-          this.messageService.add({severity:'error', summary:'Error',detail: error.error.message})
-          this.isModalOpen = false
+        )
+      },
+    }))
 
-        }
-      }
-    );
+    // this.dataService.sendFileToBackend(this.selectedFile).subscribe(
+      // {
+      //   next: (response) => {
+      //     if(response){
+
+      //     }
+      //   },
+      //   error: (error) => {
+      //     this.messageService.add({severity:'error', summary:'Error',detail: error.error.message})
+      //     this.isModalOpen = false
+      //
+      //   }
+      // }
+    // );
   }
 
   ngOnDestroy() {

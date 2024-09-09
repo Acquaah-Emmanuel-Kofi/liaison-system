@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import {Component, computed, effect, inject, Signal} from '@angular/core';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
   TableColumn,
   TableData,
 } from '../../../../shared/components/table/table.interface';
+import {StudentTableService} from "../../service/students-table/student-table.service";
+import {injectQuery} from "@tanstack/angular-query-experimental";
+import {getStudentResponse, studentData} from "../../../../shared/interfaces/upload.interface";
+import {formatDateToDDMMYYYY} from "./helpers/date";
 
 @Component({
   selector: 'liaison-internships',
@@ -14,6 +18,8 @@ import {
   styleUrl: './internships.component.scss',
 })
 export class InternshipsComponent {
+  studentService = inject(StudentTableService);
+
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
     { label: 'Name', key: 'name' },
@@ -22,57 +28,42 @@ export class InternshipsComponent {
     { label: 'Start Date', key: 'start_date' },
     { label: 'End Date', key: 'end_start' },
     { label: 'Status', key: 'status' },
-    // { label: '', key: 'action', isAction: true },
   ];
 
-  data: TableData[] = [
-    {
-      imageUrl: 'assets/images/profile.png',
-      student_id: '#M234',
-      name: 'Brenda Jones',
-      department: 'Engineering',
-      place_of_internships: 'UCC',
-      start_date: '05/02/23',
-      end_start: '05/05/23',
-      status: 'In progress',
-    },
-    {
-      student_id: '#M234',
-      name: 'Emmanuel Acquaah',
-      department: 'Computer Science',
-      place_of_internships: 'AmaliTech',
-      start_date: '05/02/23',
-      end_start: '05/05/23',
-      status: 'Completed',
-    },
-    {
-      student_id: '#M234',
-      name: 'Kojo Setsofia',
-      department: 'Fashion',
-      place_of_internships: 'AmaliTech',
-      start_date: '05/02/23',
-      end_start: '05/05/23',
-      status: 'Completed',
-    },
-    {
-      student_id: '#M234',
-      name: 'Ahadjie Bless',
-      department: 'Printing',
-      place_of_internships: 'AmaliTech',
-      start_date: '05/02/23',
-      end_start: '05/05/23',
-      status: 'In progress',
-    },
-    {
-      student_id: '#M234',
-      name: 'Safo Kwadwo',
-      department: 'Sculpture',
-      place_of_internships: 'GES',
-      start_date: '05/02/23',
-      end_start: '05/05/23',
-      status: 'Completed',
-    },
-  ];
+  data: TableData[] = [];
+
+  query = injectQuery(() => ({
+    queryKey: ['All students'],
+    queryFn: () => this.studentService.getAllStudents(),
+  }));
+
+  tableData: Signal<TableData[]> = computed(() => {
+    const data = this.query.data();
+    return this.destructureStudents(data);
+  });
+
+  constructor() {
+    effect(() => {
+      this.data = this.tableData();
+    });
+  }
+
+
+  destructureStudents(response: getStudentResponse | undefined): TableData[] {
+    if (!response || !response.data) return [];
+
+    return response.data.map((student: studentData) => ({
+      student_id: student.id,
+      name: student.name,
+      faculty: student.faculty,
+      department: student.department,
+      course: student.course,
+      status: student.age,
+      end_start: formatDateToDDMMYYYY(student.endDate),
+      start_date: formatDateToDDMMYYYY(student.startDate),
+      place_of_internships: student.placeOfInternship
+    }));
+  }
 
   handleRowSelection(row: TableData) {
     console.log('Row selected:', row);
@@ -82,4 +73,3 @@ export class InternshipsComponent {
     console.log('Action clicked for row:', row);
   }
 }
-                                                                        

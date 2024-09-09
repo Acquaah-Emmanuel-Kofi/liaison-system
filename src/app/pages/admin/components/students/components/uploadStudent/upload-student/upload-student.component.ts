@@ -1,15 +1,18 @@
 import {Component, inject, OnDestroy} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
-import {DataService} from "../../../../../service/student-upload/data.service";
+import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import { DataService } from "../../../../../service/student-upload/data.service";
 import * as XLSX from "xlsx";
 import {MessageService} from "primeng/api";
+import {SidebarService} from "../../../../../../../shared/services/sidebar/sidebar.service";
 
 @Component({
   selector: 'liaison-upload-student',
   standalone: true,
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    NgClass,
+    AsyncPipe
   ],
   templateUrl: './upload-student.component.html',
   styleUrls: ['./upload-student.component.scss'],
@@ -18,6 +21,7 @@ import {MessageService} from "primeng/api";
 export class UploadStudentComponent implements OnDestroy{
   messageService = inject(MessageService)
   dataService = inject(DataService);
+  sidebarService = inject(SidebarService)
   selectedFileName!: string;
   selectedFile!: File;  // Track the selected file
   isDataImported: boolean = false;
@@ -66,31 +70,43 @@ export class UploadStudentComponent implements OnDestroy{
       const fileHeaders = data[0].map((header: string) => header.trim());
       this.dataService.headers = fileHeaders;
 
-      // Validate headers
+      // Define expected headers
       const expectedHeaders = [
-        'Student ID', 'Name', 'Faculty', 'Department', 'Age', 'Gender', 'About',
-        'Password', 'Course', 'Email', 'Telephone number',
+        'Student ID', 'First Name', 'Last Name', 'Other Name', 'Faculty', 'Department',
+        'Age', 'Gender', 'About', 'Password', 'Course', 'Email', 'Telephone number',
+        'Place of Internship', 'Start date', 'End date', 'Status',
       ];
 
+      // Validate headers
       if (JSON.stringify(fileHeaders) !== JSON.stringify(expectedHeaders)) {
-        this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Excel headers do not match expected format.' });
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Info',
+          detail: 'Excel headers do not match the expected format.'
+        });
+
+        // Do not show the table if headers are incorrect
+        this.isDataImported = false;
         return;
       }
 
       // Process and store the data using the data service
-      this.dataService.students = data.slice(1).map((row: any) => {
+      const students = data.slice(1).map((row: any) => {
         const student: any = {};
         fileHeaders.forEach((header: string, index: number) => {
           student[header] = row[index] || '';
         });
         return student;
       });
+
+      this.dataService.students = students;
       this.showTable();
       this.isDataImported = true;
     };
 
     reader.readAsBinaryString(file);
   }
+
 
   removeFile() {
     this.resetData();

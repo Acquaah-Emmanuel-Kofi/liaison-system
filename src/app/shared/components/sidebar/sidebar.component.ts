@@ -9,24 +9,26 @@ import {
 } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { BrandComponent } from '../brand/brand.component';
+import {SidebarService} from "../../services/sidebar/sidebar.service";
+import {AsyncPipe} from "@angular/common";
 
 @Component({
   selector: 'liaison-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, BrandComponent],
+  imports: [RouterLink, RouterLinkActive, BrandComponent, AsyncPipe],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnDestroy{
   closeEvent = output<void>();
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();
 
-  isCollapsed = false;
-
+  // Remove local isCollapsed variable; use the service instead
   currentRoute = signal<string>('');
 
   private _router = inject(Router);
+  protected sidebarService = inject(SidebarService);
   private _routerSubscription!: Subscription;
 
   constructor() {
@@ -39,10 +41,12 @@ export class SidebarComponent implements OnDestroy{
       });
   }
 
+  // Use the service to toggle collapse state
   toggleCollapse() {
-    this.isCollapsed = !this.isCollapsed;
+    this.sidebarService.toggleCollapse();
   }
 
+  // Method to close the sidebar
   public closeSidebar() {
     this.closeEvent.emit();
   }

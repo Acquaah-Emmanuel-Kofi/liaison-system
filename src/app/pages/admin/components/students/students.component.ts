@@ -1,9 +1,8 @@
 import {Component, inject} from '@angular/core';
-import {HeaderComponent} from './components/header/header.component';
-import {TableComponent} from '../../../../shared/components/table/table.component';
+import { HeaderComponent } from './components/header/header.component';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
 import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
-import {TableColumn, TableData} from "../../../../shared/components/table/table.interface";
-
 
 @Component({
   selector: 'liaison-students',
@@ -13,14 +12,15 @@ import {TableColumn, TableData} from "../../../../shared/components/table/table.
   styleUrl: './students.component.scss',
 })
 export class StudentsComponent {
+  // private router: Router, private activatedRoute: ActivatedRoute
   router = inject(Router)
   activatedRoute = inject(ActivatedRoute)
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
     { label: 'Name', key: 'name' },
+    { label: 'Faculty', key: 'faculty' },
     { label: 'Department', key: 'department' },
-    { label: 'Credit Hours', key: 'credit_hours' },
     { label: '', key: 'action', isAction: true },
   ];
 
@@ -29,25 +29,25 @@ export class StudentsComponent {
       student_id: '#M234',
       name: 'Brenda Jones',
       department: 'Engineering',
-      credit_hours: '32',
+      faculty: 'Engineering',
     },
     {
       student_id: '#M234',
       name: 'Brenda Jones',
-      department: 'Engineering',
-      credit_hours: '32',
+      department: 'Plant Engineering',
+      faculty: 'Engineering',
     },
     {
       student_id: '#M234',
       name: 'Brenda Jones',
-      department: 'Engineering',
-      credit_hours: '32',
+      department: 'Electrical Engineering',
+      faculty: 'Engineering',
     },
     {
       student_id: '#M234',
       name: 'Killer Jones',
-      department: 'Engineering',
-      credit_hours: '32',
+      department: 'Computer Science',
+      faculty: 'Applied Sciences',
     },
   ];
 

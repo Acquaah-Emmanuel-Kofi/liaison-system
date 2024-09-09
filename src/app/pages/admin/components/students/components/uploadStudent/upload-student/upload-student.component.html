@@ -55,8 +55,11 @@
     </svg>
   </div>
 
-  <div class="absolute mt-6 max-h-[380px] 2xl:max-h-[720px] max-w-[78%] 2xl:w-[100%] overflow-auto">
-    <div id="tableArea" class="">
+  <div
+    class="absolute mt-6 max-h-[380px] 2xl:max-h-[720px] w-[100%] overflow-auto"
+    [ngClass]="{ 'lg:max-w-[calc(100%-280px)] 2xl:max-w-[84%]': !(sidebarService.isCollapsed$ | async), 'lg:max-w-[calc(100%-100px)] 2xl:max-w-[95%]': (sidebarService.isCollapsed$ | async) }">
+
+  <div id="tableArea" class="overflow-auto">
       <div class=" min-w-full align-middle">
         <div class="overflow-hidden">
           <!-- Table to Display Imported Student Data -->

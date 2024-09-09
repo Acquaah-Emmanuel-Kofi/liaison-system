@@ -1,0 +1,6 @@
+<div class="fixed inset-0 flex items-center justify-center z-50 loading-modal" *ngIf="isOpen">
+  <div class="absolute inset-0 bg-gray-500 bg-opacity-50"></div>
+  <div class="bg-white p-8 rounded-lg shadow-lg relative z-10">
+    <liaison-loader [loaderType]="'bars'"></liaison-loader>
+  </div>
+</div>

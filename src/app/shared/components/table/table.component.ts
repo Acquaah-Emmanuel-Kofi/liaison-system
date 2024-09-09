@@ -40,9 +40,12 @@ export class TableComponent implements OnInit {
     return getFirstTwoInitials(name);
   }
 
+
   onSelectRow(row: TableData) {
     this.selectedRow = row;
+    this.actionClicked.emit(row);
   }
+
 
   onClosePanel() {
     this.selectedRow = null;

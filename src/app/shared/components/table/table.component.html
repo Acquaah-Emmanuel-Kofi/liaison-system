@@ -76,7 +76,7 @@
                   alt="Student Display Profile"
                   class="h-8 w-8 rounded-full"
                 />
-                <span class="truncate">{{ row["student_id"] }} Helloworldejn</span>
+                <span class="truncate">{{ row["student_id"] }} </span>
               </div>
               } @else {
               <div class="flex items-center gap-3">
@@ -93,7 +93,7 @@
               } @else if (column.isAction) {
               <button
                 type="button"
-                (click)="onSelectRow($event)"
+                (click)="onSelectRow(row)"
                 class="text-indigo-600 hover:text-indigo-900 underline"
               >
                 View
@@ -137,7 +137,7 @@
   <!-- Panel Section -->
   @if (selectedRow) {
   <div class="w-[30%] p-4">
-    <liaison-preview-panel (closeEvent)="onClosePanel()" />
+    <liaison-preview-panel (closeEvent)="onClosePanel()"  [data]="selectedRow" />
   </div>
   }
 </div>

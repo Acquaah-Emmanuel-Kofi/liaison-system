@@ -133,7 +133,16 @@ export class UploadStudentComponent implements OnDestroy{
       return;
     }
 
-    this.dataService.sendFileToBackend(this.selectedFile, 'students');
+    this.dataService.sendFileToBackend(this.selectedFile, 'students').subscribe(
+      {
+      next:(response) =>{
+        console.log(response)
+      },
+        error: (error) =>{
+          console.log(error)
+        }
+      }
+    );
 
 
   }

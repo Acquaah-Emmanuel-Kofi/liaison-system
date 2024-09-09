@@ -1,5 +1,6 @@
 export interface  startCard{
   title:string,
   number: number,
-  iconSrc: string
+  iconSrc: string,
+  navigateTo: string
 }

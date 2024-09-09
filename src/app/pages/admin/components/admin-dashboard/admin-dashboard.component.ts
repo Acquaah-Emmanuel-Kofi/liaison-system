@@ -38,17 +38,21 @@ export class AdminDashboardComponent {
     {
       title: 'Lectures',
       number: 100,
-      iconSrc: 'assets/lectures.svg'
+      iconSrc: 'assets/lectures.svg',
+      navigateTo:'/admin/lecturers'
     },
     {
       title: 'Students',
       number: 100,
-      iconSrc: 'assets/students.svg'
+      iconSrc: 'assets/students.svg',
+      navigateTo:'/admin/students'
+
     },
     {
       title: 'Internships',
       number: 100,
-      iconSrc: 'assets/interns.svg'
+      iconSrc: 'assets/interns.svg',
+      navigateTo:'/admin/internships'
     }
 
   ]

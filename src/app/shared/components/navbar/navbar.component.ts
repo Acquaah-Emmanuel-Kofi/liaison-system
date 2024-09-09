@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, output, Renderer2, signal } from '@angular/core';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { BrandComponent } from '../brand/brand.component';
 import { setPageHeader } from '../../helpers/functions.helper';
@@ -10,22 +10,27 @@ import { HeaderTitleComponent } from '../header-title/header-title.component';
   standalone: true,
   imports: [ProfileCardComponent, BrandComponent, HeaderTitleComponent],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss',
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
   currentPage = signal<string>('');
   toggleSidebar = output<void>();
   isProfileToggled: boolean = false;
+  private _router = inject(Router);
+  private renderer = inject(Renderer2);
+  private hostElement = inject(ElementRef);
 
-  _router = inject(Router);
-
-  ngOnInit(): void {
-    this.routePage();
+  constructor() {
     this._router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.routePage();
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.routePage();
+    this.renderer.listen('document', 'click', (event) => this.onClickOutside(event));
   }
 
   public routePage(): void {
@@ -39,6 +44,12 @@ export class NavbarComponent implements OnInit {
 
   toggleProfile(): void {
     this.isProfileToggled = !this.isProfileToggled;
+  }
+
+  onClickOutside(event: Event) {
+    if (this.isProfileToggled && !this.hostElement.nativeElement.contains(event.target)) {
+      this.isProfileToggled = false;
+    }
   }
 
   onMouseLeave() {

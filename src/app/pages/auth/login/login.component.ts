@@ -13,6 +13,8 @@ import { AuthService } from '../services/auth/auth.service';
 import { ICredentials, ILoginResponse } from '../interfaces/auth.interface';
 import { Router } from '@angular/router';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import {ToastModule} from "primeng/toast";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'liaison-login',
@@ -26,12 +28,15 @@ import { LoaderComponent } from '../../../shared/components/loader/loader.compon
     ReactiveFormsModule,
     NgIf,
     Button,
-    LoaderComponent
+    LoaderComponent,
+    ToastModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  providers:[MessageService]
 })
 export class LoginComponent {
+  messageService = inject(MessageService)
   fb = inject(FormBuilder);
   public type: string = 'password';
   public isLoading: boolean = false;
@@ -67,7 +72,7 @@ export class LoginComponent {
         },
         error: (error) => {
           this.isLoading = false;
-          alert(error.message);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
         },
         complete: () => {
           this.isLoading = false;
@@ -75,7 +80,8 @@ export class LoginComponent {
       });
     } else {
       this.loginForm.markAsTouched();
-      alert('Form is invalid. Please check the fields.');
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Form is invalid. Please check the fields.' });
+
     }
   }
 
@@ -85,8 +91,8 @@ export class LoginComponent {
 
   handleResponse(response: ILoginResponse) {
     this.isLoading = false;
-    
-    alert(response.message);
+
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: response.message });
     this._router.navigate(['/admin']);
   }
 }

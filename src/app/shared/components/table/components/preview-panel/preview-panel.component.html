@@ -96,26 +96,38 @@
     </div>
 </div>
 
-<div class="my-5">
-  <h1 class="text-base font-bold text-black">About</h1>
+<!--<div class="my-5">-->
+<!--  <h1 class="text-base font-bold text-black">About</h1>-->
 
-  <div class="animate-pulse space-y-2 my-8">
-    <div class="w-full h-2 rounded-full bg-slate-200"></div>
-    <div class="w-full h-2 rounded-full bg-slate-200"></div>
-    <div class="w-1/4 h-2 rounded-full bg-slate-200"></div>
-  </div>
-</div>
+<!--  <div class="animate-pulse space-y-2 my-8">-->
+<!--    <div class="w-full h-2 rounded-full bg-slate-200"></div>-->
+<!--    <div class="w-full h-2 rounded-full bg-slate-200"></div>-->
+<!--    <div class="w-1/4 h-2 rounded-full bg-slate-200"></div>-->
+<!--  </div>-->
+<!--</div>-->
 
-<div class="flex justify-between items-center">
+<div class="flex justify-between items-center gap-3">
   <div>
     <h3 class="font-bold">Age</h3>
     <p class="text-[#19337E]">{{ data["age"] }}</p>
   </div>
 
-  <div>
+  <div class="relative group">
     <h3 class="font-bold">Department</h3>
-    <p class="text-[#19337E]">{{ data["department"] }}</p>
+    <p
+      class="text-[#19337E] max-w-[100px] overflow-hidden whitespace-nowrap truncate group-hover:overflow-hidden group-hover:white-space-normal"
+    >
+      {{ data["department"] }}
+    </p>
+
+    <div
+      *ngIf="data['department']"
+      class="absolute left-0 top-full mt-1 hidden group-hover:flex bg-white text-black border border-gray-300 rounded-md p-2 shadow-lg max-w-xs z-10"
+    >
+      {{ data["department"] }}
+    </div>
   </div>
+
 
   <div>
     <h3 class="font-bold">Gender</h3>

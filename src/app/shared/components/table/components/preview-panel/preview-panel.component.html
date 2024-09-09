@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="flex justify-end mb-4">
   <button (click)="onClosePanel()" class="text-gray-500 hover:text-gray-700 w-5 h-5 hover:bg-gray-100 flex justify-center rounded-full items-center">
     <svg
@@ -15,14 +16,24 @@
   </button>
 </div>
 <div class="flex flex-col justify-center items-center">
-  <label for="student_id" class="mb-5 text-[#19337E] font-bold text-sm"
-    >#D3434</label
+  <label [for]="data['student_id']" class="mb-5 text-[#19337E] font-bold text-sm"
+    >{{data["student_id"]}}</label
   >
-  <img src="./assets/images/profile.png" alt="Display Profile" />
-  <h1 class="my-3 font-bold text-black text-base">Brenda Jones</h1>
-  <p class="text-[#19337E] text-sm">BSc. Computer Science</p>
+  @if (data['imageUrl']){
+    <img [src]="data['imageUrl']" alt="Display Profile" />
+  } @else {
+    <div
+      class="h-28 w-28 rounded-full bg-gray-100 flex justify-center items-center text-gray-500 font-semibold text-[26px]"
+    >
+      {{ getNameInitials(data["name"]) }}
+    </div>
+  }
 
-  <div class="flex items-center gap-3 justify-center my-6">
+
+  <h1 class="my-3 font-bold text-black text-base">{{ data["name"] }}</h1>
+  <p class="text-[#19337E] text-sm">{{ data["course"] }}</p>
+
+  <div class="relative flex items-center gap-3 justify-center my-6">
     <button
       class="border-none outline-none bg-[#19337E] rounded-md w-7 h-7 flex justify-center items-center"
     >
@@ -56,7 +67,10 @@
       </svg>
     </button>
     <button
-      class="border-none outline-none bg-[#19337E] rounded-md w-7 h-7 flex justify-center items-center"
+      (click)="copyToClipboard(data['phone'])"
+      (mouseenter)="isTelephoneActive = true"
+      (mouseleave)="isTelephoneActive = false"
+      class="relative border-none outline-none bg-[#19337E] rounded-md w-7 h-7 flex justify-center items-center"
     >
       <svg
         width="18"
@@ -71,7 +85,15 @@
         />
       </svg>
     </button>
-  </div>
+
+    <!-- Telephone Tooltip -->
+    <div
+      *ngIf="isTelephoneActive"
+      class="absolute left-1/2 transform -translate-x-1/2 -translate-y-2 bg-white shadow-md border-2 border-[#19337E] rounded-lg px-3 py-2 mt-28 ml-10 text-sm text-[#19337E] flex items-center justify-center transition-all duration-300"
+    >
+      <span class="font-semibold">{{ data["phone"] }}</span>
+      <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white border-t border-l border-[#19337E] rotate-45"></div>
+    </div>
 </div>
 
 <div class="my-5">
@@ -87,17 +109,17 @@
 <div class="flex justify-between items-center">
   <div>
     <h3 class="font-bold">Age</h3>
-    <p class="text-[#19337E]">20</p>
+    <p class="text-[#19337E]">{{ data["age"] }}</p>
   </div>
 
   <div>
     <h3 class="font-bold">Department</h3>
-    <p class="text-[#19337E]">CITSA</p>
+    <p class="text-[#19337E]">{{ data["department"] }}</p>
   </div>
 
   <div>
     <h3 class="font-bold">Gender</h3>
-    <p class="text-[#19337E]">Female</p>
+    <p class="text-[#19337E]">{{ data["gender"] }}</p>
   </div>
 </div>
 
@@ -131,4 +153,5 @@
     </div>
     <span class="text-[#30478B] font-bold">+ 12 more</span>
   </div>
+</div>
 </div>

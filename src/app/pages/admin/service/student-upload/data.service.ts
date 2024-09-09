@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {uploadResponse} from "../../../../shared/interfaces/upload.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -68,18 +69,12 @@ export class DataService {
   sendFileToBackend(file: File, type: 'students') {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', type);
 
     const requestOptions = {
-      headers: new HttpHeaders({
-        'ngrok-skip-browser-warning': 'skip-browser-warning',
-        Authorization: 'Bearer ' + "jniojji",
-      }),
-
     };
 
     const backend = "https://ss7ffblh-8040.euw.devtunnels.ms";
-    return this.http.post(`${backend}/liaison/api/v1/admin/students`, formData, requestOptions);
+    return this.http.post<uploadResponse>(`${backend}/liaison/api/v1/admin/students`, formData, requestOptions);
   }
 
   assignLecturer(studentId: string, lecturerId: string) {

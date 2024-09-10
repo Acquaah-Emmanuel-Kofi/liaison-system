@@ -1,6 +1,7 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { ILinks } from '../../../../interfaces/links.interface';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../../../pages/auth/services/auth/auth.service';
 
 @Component({
   selector: 'liaison-profile-card',
@@ -11,6 +12,8 @@ import { RouterLink } from '@angular/router';
 })
 export class ProfileCardComponent {
   emitMenu = output<string>();
+
+  _authService = inject(AuthService);
 
   cardItems: ILinks[] = [
     {
@@ -25,5 +28,9 @@ export class ProfileCardComponent {
 
   onMenuClick(menu: string): void {
     this.emitMenu.emit(menu);
+  }
+
+  logout() {
+    this._authService.logout();
   }
 }

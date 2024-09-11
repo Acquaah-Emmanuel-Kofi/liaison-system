@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, OnInit, Signal} from '@angular/core';
+import { Component, computed, effect, inject, OnInit, Signal } from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
@@ -25,9 +25,10 @@ export class StudentsComponent {
   studentService = inject(StudentTableService);
   selectedRowData: TableData | null = null;
 
-  first:number| undefined = 0
-  pageSize: number| undefined = 0
-  totalData?: number
+  first: number | undefined = 0;
+  pageSize: number = 5; // Default to 5, to be adjusted based on screen size
+  totalData?: number;
+  pageNumber = 0;
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -38,21 +39,26 @@ export class StudentsComponent {
   ];
 
   constructor() {
+    // Adjust paginator rows based on screen size
+    this.adjustPaginatorRows();
+
     effect(() => {
       this.data = this.tableData();
     });
   }
 
+  // TanStack Query setup for fetching students with pagination
   query = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data()],
-    queryFn: () => this.studentService.getAllStudents(),
+    queryKey: [...studentsQueryKey.data(), this.pageNumber, this.pageSize],
+    queryFn: () => this.studentService.getAllStudents(this.pageNumber, this.pageSize),
   }));
 
+  // Computed signal to derive table data and manage pagination state
   tableData: Signal<TableData[]> = computed(() => {
     const data = this.query.data();
-    this.pageSize =data?.data?.pageSize
-    this.totalData = data?.data.totalData
-    this.first = data?.data.currentPage
+    this.pageSize = data?.data?.pageSize ?? this.pageSize; // Safeguard for undefined
+    this.totalData = data?.data.totalData;
+    this.first = data?.data.currentPage;
     return this.destructureStudents(data);
   });
 
@@ -76,7 +82,6 @@ export class StudentsComponent {
   isChildRouteActive(): boolean {
     return this.activatedRoute.firstChild !== null;
   }
-
 
   adjustPaginatorRows() {
     const screenWidth = window.innerWidth;

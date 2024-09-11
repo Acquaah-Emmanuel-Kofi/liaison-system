@@ -35,11 +35,11 @@ export class InternshipsComponent {
 
   query = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data()],
-    queryFn: () => this.studentService.getAllStudents(),
+    queryFn: () => this.studentService.getAllStudents(0,0),
   }));
 
   tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();    
+    const data = this.query.data();
     return this.destructureStudents(data);
   });
 

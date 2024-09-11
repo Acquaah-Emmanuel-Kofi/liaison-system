@@ -21,7 +21,7 @@ export class TableComponent implements OnInit {
 
   @Input() first: number | undefined  = 0;
   @Input() pageSize: number | undefined = 0;
-  @Input() totalData = 0;
+  @Input() totalData:number | undefined = 0;
   selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
 

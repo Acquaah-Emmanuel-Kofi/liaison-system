@@ -10,11 +10,9 @@ import { environment } from '../../../../../environments/environment.development
 export class StudentTableService {
   _http = inject(HttpClient);
 
-  getAllStudents(): Promise<IGetStudentResponse> {
-    return lastValueFrom(
-      this._http.get<IGetStudentResponse>(
-        `${environment.BACKEND_API_BASE_URL}/admin/students`
-      )
-    );
+  getAllStudents(pageNumber: number, pageSize: number): Promise<IGetStudentResponse> {
+    const url = `${environment.BACKEND_API_BASE_URL}/admin/students?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    return lastValueFrom(this._http.get<IGetStudentResponse>(url));
   }
-}
+  }
+

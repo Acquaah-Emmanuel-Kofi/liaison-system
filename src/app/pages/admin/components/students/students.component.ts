@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, OnInit, Signal} from '@angular/core';
+import { Component, computed, effect, inject, OnInit, Signal } from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
@@ -25,9 +25,10 @@ export class StudentsComponent {
   studentService = inject(StudentTableService);
   selectedRowData: TableData | null = null;
 
-  first = 0
-  pageSize = 0
-  totalData = 0
+  first: number | undefined = 0;
+  pageSize: number = 5; // Default to 5, to be adjusted based on screen size
+  totalData?: number;
+  pageNumber = 0;
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -38,25 +39,33 @@ export class StudentsComponent {
   ];
 
   constructor() {
+    // Adjust paginator rows based on screen size
+    this.adjustPaginatorRows();
+
     effect(() => {
       this.data = this.tableData();
     });
   }
 
+  // TanStack Query setup for fetching students with pagination
   query = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data()],
-    queryFn: () => this.studentService.getAllStudents(),
+    queryKey: [...studentsQueryKey.data(), this.pageNumber, this.pageSize],
+    queryFn: () => this.studentService.getAllStudents(this.pageNumber, this.pageSize),
   }));
 
+  // Computed signal to derive table data and manage pagination state
   tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();     
+    const data = this.query.data();
+    this.pageSize = data?.data?.pageSize ?? this.pageSize; // Safeguard for undefined
+    this.totalData = data?.data.totalData;
+    this.first = data?.data.currentPage;
     return this.destructureStudents(data);
   });
 
   data: TableData[] = [];
 
   destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
-    if (!response || !response.data.students) return [];    
+    if (!response || !response.data.students) return [];
 
     return response.data.students.map((student: IStudentData) => ({
       student_id: student.id,
@@ -72,6 +81,15 @@ export class StudentsComponent {
 
   isChildRouteActive(): boolean {
     return this.activatedRoute.firstChild !== null;
+  }
+
+  adjustPaginatorRows() {
+    const screenWidth = window.innerWidth;
+    if (screenWidth >= 1536) {
+      this.pageSize = 10;
+    } else {
+      this.pageSize = 5;
+    }
   }
 
   handleRowSelection(row: TableData): void {

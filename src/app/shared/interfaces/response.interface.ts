@@ -8,11 +8,11 @@ export interface IGetStudentResponse extends ICommonResponse {
 }
 
 interface IStudentResponseData {
-  currentPage: number;
-  pageSize: number;
+  currentPage: number | undefined;
+  pageSize: number | undefined;
   students: IStudentData[];
-  totalData: number;
-  totalPages: number;
+  totalData: number ;
+  totalPages: number | undefined;
 }
 
 export interface IStudentData {

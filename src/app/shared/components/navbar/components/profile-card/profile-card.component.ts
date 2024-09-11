@@ -1,5 +1,5 @@
 import { Component, inject, output } from '@angular/core';
-import { ILinks } from '../../../../interfaces/links.interface';
+import { ILinks } from '../../../../interfaces/constants.interface';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../../pages/auth/services/auth/auth.service';
 

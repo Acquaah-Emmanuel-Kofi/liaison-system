@@ -3,7 +3,14 @@ import { setUserDetails, setUserId, setUserRole } from './user.actions';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { IUser } from '../interfaces/user.interface';
 
-const initialUserState: IUser = {} as IUser;
+const initialUserState: IUser = {
+    firstName: '',
+    lastName: '',
+    role: '',
+    email: '',
+    phoneNumber: 0,
+    id: '',
+};
 
 export const UserStore = signalStore(
   { providedIn: 'root' },

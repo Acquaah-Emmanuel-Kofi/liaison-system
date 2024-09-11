@@ -51,9 +51,9 @@ export class InternshipsComponent {
 
 
   destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
-    if (!response || !response.data) return [];
+    if (!response || !response.data.students) return [];
 
-    return response.data.map((student: IStudentData) => ({
+    return response.data.students.map((student: IStudentData) => ({
       student_id: student.id,
       name: student.name,
       faculty: student.faculty,

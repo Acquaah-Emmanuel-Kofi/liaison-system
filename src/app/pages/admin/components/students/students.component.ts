@@ -24,6 +24,10 @@ export class StudentsComponent {
   studentService = inject(StudentTableService);
   selectedRowData: TableData | null = null;
 
+  first = 0
+  pageSize = 0
+  totalData = 0
+
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
     { label: 'Name', key: 'name' },

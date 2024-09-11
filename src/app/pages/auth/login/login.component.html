@@ -1,6 +1,6 @@
 <p-toast />
-<div class="w-full flex items-center h-screen">
-  <div class="w-full flex flex-col items-center gap-10">
+<div class="w-[100%] flex items-center h-screen justify-between">
+  <div class="w-[70%] flex flex-col items-center gap-10">
     <div class="flex items-center gap-0 cursor-pointer">
       <liaison-brand color="#19337E" [logoSize]="20" [textSize]="18"  ></liaison-brand>
     </div>
@@ -30,7 +30,7 @@
             <label for="email">Email address</label>
           </p-floatLabel>
         </div>
-        <div class="mb-5">
+        <div class="mb-5 relative">
           <p-floatLabel>
             <input
               [type]="type"
@@ -43,10 +43,10 @@
           </p-floatLabel>
 
           <div  (click)="hideShowPassword()">
-            <div  class="absolute right-10 mt-[-5%] cursor-pointer" *ngIf="type === 'text'">
+            <div  class="absolute right-10 top-2 cursor-pointer" *ngIf="type === 'text'">
               <img  src="assets/hide.svg" alt="hide">
             </div>
-            <div class="absolute right-10 mt-[-5%] cursor-pointer "  *ngIf="type === 'password'">
+            <div class="absolute right-10 top-2 cursor-pointer "  *ngIf="type === 'password'">
               <img src="assets/show.svg" alt="show">
             </div>
           </div>
@@ -102,8 +102,9 @@
       </form>
     </div>
   </div>
-  <div class="hidden md:block">
+  <div class="hidden md:block h-full w-[25%] absolute right-0 bg-Dark-Blue ">
     <img
+      class="h-[calc(990+200px)]"
       ngSrc="assets/ttulogo.svg"
       alt="login"
       width="516"

@@ -19,9 +19,9 @@ export class TableComponent implements OnInit {
   columns = input.required<TableColumn[]>();
   data = input.required<TableData[]>();
 
-  first: number | undefined  = 0;
-  rows: number | undefined = 10;
-  totalData = 30;
+  @Input() first: number | undefined  = 0;
+  @Input() pageSize: number | undefined = 0;
+  @Input() totalData = 0;
   selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
 
@@ -55,7 +55,7 @@ export class TableComponent implements OnInit {
 
   onPageChange(event: PaginatorState) {
     this.first = event.first;
-    this.rows = event.rows;
+    this.pageSize = event.rows;
   }
 
   onActionClick(row: TableData) {

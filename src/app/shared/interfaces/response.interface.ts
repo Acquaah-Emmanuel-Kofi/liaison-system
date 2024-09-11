@@ -4,7 +4,15 @@ export interface ICommonResponse {
 }
 
 export interface IGetStudentResponse extends ICommonResponse {
-  data: IStudentData[];
+  data: IStudentResponseData;
+}
+
+interface IStudentResponseData {
+  currentPage: number;
+  pageSize: number;
+  students: IStudentData[];
+  totalData: number;
+  totalPages: number;
 }
 
 export interface IStudentData {

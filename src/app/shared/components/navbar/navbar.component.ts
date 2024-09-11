@@ -1,9 +1,19 @@
-import { Component, ElementRef, HostListener, inject, OnInit, output, Renderer2, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  OnInit,
+  output,
+  Renderer2,
+  signal,
+} from '@angular/core';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { BrandComponent } from '../brand/brand.component';
 import { setPageHeader } from '../../helpers/functions.helper';
 import { NavigationEnd, Router } from '@angular/router';
 import { HeaderTitleComponent } from '../header-title/header-title.component';
+import { UserStore } from '../../store/user.store';
 
 @Component({
   selector: 'liaison-navbar',
@@ -20,6 +30,13 @@ export class NavbarComponent implements OnInit {
   private renderer = inject(Renderer2);
   private hostElement = inject(ElementRef);
 
+  private userStore = inject(UserStore);
+
+  public username = computed(
+    () => this.userStore.firstName() + ' ' + this.userStore.lastName()
+  );
+  public userRole = computed(() => this.userStore.role());
+
   constructor() {
     this._router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -30,7 +47,9 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.routePage();
-    this.renderer.listen('document', 'click', (event) => this.onClickOutside(event));
+    this.renderer.listen('document', 'click', (event) =>
+      this.onClickOutside(event)
+    );
   }
 
   public routePage(): void {
@@ -47,7 +66,10 @@ export class NavbarComponent implements OnInit {
   }
 
   onClickOutside(event: Event) {
-    if (this.isProfileToggled && !this.hostElement.nativeElement.contains(event.target)) {
+    if (
+      this.isProfileToggled &&
+      !this.hostElement.nativeElement.contains(event.target)
+    ) {
       this.isProfileToggled = false;
     }
   }

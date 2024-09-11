@@ -1,7 +1,7 @@
 import { signalStore, withState, withMethods, patchState } from '@ngrx/signals';
-import { setUserId, setUserRole } from './user.actions';
+import { setUserDetails, setUserId, setUserRole } from './user.actions';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
-import { IUser, Role } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user.interface';
 
 const initialUserState: IUser = {} as IUser;
 
@@ -10,7 +10,10 @@ export const UserStore = signalStore(
   withDevtools('user'),
   withState(initialUserState),
   withMethods((store) => ({
-    setUserRole: (payload: Role) => {
+    setUserDetails: (payload: IUser) => {
+      patchState(store, setUserDetails(payload));
+    },
+    setUserRole: (payload: string) => {
       patchState(store, setUserRole(payload));
     },
     setUserId: (payload: string) => {

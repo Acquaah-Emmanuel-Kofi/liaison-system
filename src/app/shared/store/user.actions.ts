@@ -1,6 +1,6 @@
 import { PartialStateUpdater } from '@ngrx/signals';
 import { produce } from 'immer';
-import { IUser, Role } from '../interfaces/user.interface';
+import { IUser } from '../interfaces/user.interface';
 
 export function setUserDetails(
   payloadUserState: IUser
@@ -17,7 +17,7 @@ export function setUserDetails(
     });
 }
 
-export function setUserRole(role: Role): PartialStateUpdater<IUser> {
+export function setUserRole(role: string): PartialStateUpdater<IUser> {
   return (baseState) =>
     produce(baseState, (draft) => {
       draft.role = role;

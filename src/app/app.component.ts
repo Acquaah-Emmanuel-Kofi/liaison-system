@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AngularQueryDevtools } from '@tanstack/angular-query-devtools-experimental';
-import { environment } from '../environments/environment.development';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +10,5 @@ import { environment } from '../environments/environment.development';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  devEnvironment: boolean = environment.DEVELOPMENT;
+  devEnvironment: boolean = isDevMode();
 }

@@ -27,7 +27,7 @@ export class StudentsComponent {
 
   first:number| undefined = 0
   pageSize: number| undefined = 0
-  totalData: number | undefined = 0
+  totalData?: number
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },

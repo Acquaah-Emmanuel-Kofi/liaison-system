@@ -11,7 +11,7 @@ interface IStudentResponseData {
   currentPage: number | undefined;
   pageSize: number | undefined;
   students: IStudentData[];
-  totalData: number | undefined;
+  totalData: number ;
   totalPages: number | undefined;
 }
 

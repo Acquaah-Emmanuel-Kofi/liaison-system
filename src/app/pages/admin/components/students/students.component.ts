@@ -6,8 +6,9 @@ import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { StudentTableService } from "../../service/students-table/student-table.service";
 import { ToastModule } from "primeng/toast";
 import { MessageService } from "primeng/api";
-import { getStudentResponse, studentData } from "../../../../shared/interfaces/upload.interface";
 import { injectQuery } from "@tanstack/angular-query-experimental";
+import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { IGetStudentResponse, IStudentData } from '../../../../shared/interfaces/response.interface';
 
 @Component({
   selector: 'liaison-students',
@@ -15,7 +16,7 @@ import { injectQuery } from "@tanstack/angular-query-experimental";
   imports: [HeaderComponent, TableComponent, RouterOutlet, ToastModule],
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.scss'],
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class StudentsComponent {
   messageService = inject(MessageService);
@@ -30,11 +31,16 @@ export class StudentsComponent {
     { label: 'Faculty', key: 'faculty' },
     { label: 'Department', key: 'department' },
     { label: 'Actions', key: 'action', isAction: true },
-
   ];
 
+  constructor() {
+    effect(() => {
+      this.data = this.tableData();
+    });
+  }
+
   query = injectQuery(() => ({
-    queryKey: ['All students'],
+    queryKey: [...studentsQueryKey.data()],
     queryFn: () => this.studentService.getAllStudents(),
   }));
 
@@ -45,17 +51,10 @@ export class StudentsComponent {
 
   data: TableData[] = [];
 
-  constructor() {
-    effect(() => {
-      this.data = this.tableData();
-    });
-  }
-
-
-  destructureStudents(response: getStudentResponse | undefined): TableData[] {
+  destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
     if (!response || !response.data) return [];
 
-    return response.data.map((student: studentData) => ({
+    return response.data.map((student: IStudentData) => ({
       student_id: student.id,
       name: student.name,
       faculty: student.faculty,
@@ -63,7 +62,7 @@ export class StudentsComponent {
       course: student.course,
       age: student.age,
       gender: student.gender,
-      phone: student.phone
+      phone: student.phone,
     }));
   }
 

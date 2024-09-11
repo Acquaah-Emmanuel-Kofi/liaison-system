@@ -1,14 +1,13 @@
-<p-toast></p-toast>
-@if (!isChildRouteActive()){<section >
-<liaison-header />
+<p-toast></p-toast> @if (!isChildRouteActive()){
+<section>
+  <liaison-header />
 
-<liaison-table
-[columns]="columns"
-[data]="data"
-(actionClicked)="handleActionClick($event)"
-/>
-</section>}
-
-
+  <liaison-table
+    [columns]="columns"
+    [data]="data"
+    (actionClicked)="handleActionClick($event)"
+  />
+</section>
+}
 
 <router-outlet></router-outlet>

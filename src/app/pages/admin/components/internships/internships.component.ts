@@ -39,7 +39,7 @@ export class InternshipsComponent {
   }));
 
   tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();
+    const data = this.query.data();    
     return this.destructureStudents(data);
   });
 
@@ -59,7 +59,7 @@ export class InternshipsComponent {
       faculty: student.faculty,
       department: student.department,
       course: student.course,
-      status: student.age,
+      status: student.status,
       end_start: formatDateToDDMMYYYY(student.endDate),
       start_date: formatDateToDDMMYYYY(student.startDate),
       place_of_internships: student.placeOfInternship,

@@ -28,4 +28,5 @@ export interface IStudentData {
   phone: string;
   placeOfInternship: string;
   startDate: string;
+  status: 'IN_PROGRESS' | 'COMPLETED'
 }

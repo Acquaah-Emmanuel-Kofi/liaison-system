@@ -6,8 +6,8 @@ import { Component, input } from '@angular/core';
   standalone: true,
   imports: [NgClass],
   templateUrl: './status-chip.component.html',
-  styleUrl: './status-chip.component.scss'
+  styleUrl: './status-chip.component.scss',
 })
 export class StatusChipComponent {
-  status = input.required<string>()
+  status = input.required<'IN_PROGRESS' | 'COMPLETED'>();
 }

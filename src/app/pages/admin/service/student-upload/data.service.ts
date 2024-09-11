@@ -1,24 +1,27 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { uploadResponse } from '../../../../shared/interfaces/upload.interface';
 import { lastValueFrom } from 'rxjs';
+import { ICommonResponse } from '../../../../shared/interfaces/response.interface';
+import { environment } from '../../../../../environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
   http = inject(HttpClient);
   students: any[] = [];
-  headers: string[] = []; // Store dynamic headers
-  backend = 'https://liaison-system-backend.onrender.com';
+  headers: string[] = [];
 
   // Use this function to send a file to the backend and return a Promise
-  sendFileToBackend(file: File): Promise<uploadResponse> {
+  sendFileToBackend(file: File): Promise<ICommonResponse> {
     const formData = new FormData();
     formData.append('file', file);
 
     return lastValueFrom(
-      this.http.post<uploadResponse>(`${this.backend}/liaison/api/v1/admin/students`, formData)
+      this.http.post<ICommonResponse>(
+        `${environment.BACKEND_API_BASE_URL}/admin/students`,
+        formData
+      )
     );
   }
 }

@@ -7,8 +7,9 @@ import {
 } from '../../../../shared/components/table/table.interface';
 import {StudentTableService} from "../../service/students-table/student-table.service";
 import {injectQuery} from "@tanstack/angular-query-experimental";
-import {getStudentResponse, studentData} from "../../../../shared/interfaces/upload.interface";
-import {formatDateToDDMMYYYY} from "./helpers/date";
+import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { IGetStudentResponse, IStudentData } from '../../../../shared/interfaces/response.interface';
+import { formatDateToDDMMYYYY } from '../../../../shared/helpers/constants.helper';
 
 @Component({
   selector: 'liaison-internships',
@@ -33,12 +34,12 @@ export class InternshipsComponent {
   data: TableData[] = [];
 
   query = injectQuery(() => ({
-    queryKey: ['All students'],
+    queryKey: [...studentsQueryKey.data()],
     queryFn: () => this.studentService.getAllStudents(),
   }));
 
   tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();
+    const data = this.query.data();    
     return this.destructureStudents(data);
   });
 
@@ -49,19 +50,19 @@ export class InternshipsComponent {
   }
 
 
-  destructureStudents(response: getStudentResponse | undefined): TableData[] {
-    if (!response || !response.data) return [];
+  destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
+    if (!response || !response.data.students) return [];
 
-    return response.data.map((student: studentData) => ({
+    return response.data.students.map((student: IStudentData) => ({
       student_id: student.id,
       name: student.name,
       faculty: student.faculty,
       department: student.department,
       course: student.course,
-      status: student.age,
+      status: student.status,
       end_start: formatDateToDDMMYYYY(student.endDate),
       start_date: formatDateToDDMMYYYY(student.startDate),
-      place_of_internships: student.placeOfInternship
+      place_of_internships: student.placeOfInternship,
     }));
   }
 

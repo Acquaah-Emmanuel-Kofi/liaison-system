@@ -1,21 +1,20 @@
-import {inject, Injectable} from '@angular/core';
-import {getStudentResponse} from "../../../../shared/interfaces/upload.interface";
-import {HttpClient} from "@angular/common/http";
-import {lastValueFrom} from "rxjs";
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
+import { IGetStudentResponse } from '../../../../shared/interfaces/response.interface';
+import { environment } from '../../../../../environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StudentTableService {
-   backend = "https://liaison-system-backend.onrender.com";
-  _http = inject(HttpClient)
+  _http = inject(HttpClient);
 
-
-  getAllStudents(): Promise<getStudentResponse>{
-    const requestOptions = {}
+  getAllStudents(): Promise<IGetStudentResponse> {
     return lastValueFrom(
-      this._http.get<getStudentResponse>(`${this.backend}/liaison/api/v1/admin/students`, requestOptions)
-  )
+      this._http.get<IGetStudentResponse>(
+        `${environment.BACKEND_API_BASE_URL}/admin/students`
+      )
+    );
   }
-
 }

@@ -79,7 +79,7 @@ export class LoginComponent {
         error: (error) => {
           this.isLoading = false;
           this.isModalOpen = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message});
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message});
         },
         complete: () => {
           this.isLoading = false;

@@ -2,10 +2,10 @@ import {Component, inject} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 import {Router} from "@angular/router";
 import {StatCardComponent} from "../../../../shared/components/stat-card/stat-card.component";
-import {startCard} from "../../../../shared/interfaces/stat-card.interface";
 import {AdminChartComponent} from "../admin-chart/admin-chart.component";
 import {TableComponent} from "../../../../shared/components/table/table.component";
 import {TableColumn, TableData} from "../../../../shared/components/table/table.interface";
+import { IStartCard } from '../../../../shared/interfaces/constants.interface';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -34,7 +34,7 @@ export class AdminDashboardComponent {
   }
 
 
-  statCard: startCard [] = [
+  statCard: IStartCard [] = [
     {
       title: 'Lectures',
       number: 100,

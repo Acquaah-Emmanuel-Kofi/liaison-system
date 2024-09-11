@@ -25,9 +25,9 @@ export class StudentsComponent {
   studentService = inject(StudentTableService);
   selectedRowData: TableData | null = null;
 
-  first = 0
-  pageSize = 0
-  totalData = 0
+  first:number| undefined = 0
+  pageSize: number| undefined = 0
+  totalData?: number
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -49,14 +49,17 @@ export class StudentsComponent {
   }));
 
   tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();     
+    const data = this.query.data();
+    this.pageSize =data?.data?.pageSize
+    this.totalData = data?.data.totalData
+    this.first = data?.data.currentPage
     return this.destructureStudents(data);
   });
 
   data: TableData[] = [];
 
   destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
-    if (!response || !response.data.students) return [];    
+    if (!response || !response.data.students) return [];
 
     return response.data.students.map((student: IStudentData) => ({
       student_id: student.id,
@@ -72,6 +75,16 @@ export class StudentsComponent {
 
   isChildRouteActive(): boolean {
     return this.activatedRoute.firstChild !== null;
+  }
+
+
+  adjustPaginatorRows() {
+    const screenWidth = window.innerWidth;
+    if (screenWidth >= 1536) {
+      this.pageSize = 10;
+    } else {
+      this.pageSize = 5;
+    }
   }
 
   handleRowSelection(row: TableData): void {

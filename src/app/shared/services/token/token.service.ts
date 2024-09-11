@@ -1,15 +1,20 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   ACCESS_TOKEN_KEY,
   getFromLocalStorage,
   removeFromLocalStorage,
   saveToLocalStorage,
 } from '../../helpers/constants.helper';
+import { jwtDecode } from 'jwt-decode';
+import { UserStore } from '../../store/user.store';
+import { PayLoadData } from '../../interfaces/constants.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
+  userStore = inject(UserStore);
+
   constructor() {}
 
   saveToken(token: string) {
@@ -20,9 +25,10 @@ export class TokenService {
     const token = getFromLocalStorage(ACCESS_TOKEN_KEY);
 
     if (token) {
-      const decodedToken = atob(token);
-
-      return decodedToken;
+      const decryptedToken = atob(token);
+      const decodedToken: PayLoadData = jwtDecode(decryptedToken);
+      this.setUserDetails(decodedToken);
+      return decryptedToken;
     }
 
     return null;
@@ -30,5 +36,16 @@ export class TokenService {
 
   removeToken() {
     removeFromLocalStorage(ACCESS_TOKEN_KEY);
+  }
+
+  setUserDetails(user: PayLoadData) {
+    this.userStore.setUserDetails({
+      firstName: user.firstname,
+      lastName: user.lastname,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      email: user.sub,
+      id: user.jti,
+    });
   }
 }

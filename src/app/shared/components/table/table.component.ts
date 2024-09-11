@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit, output } from '@angular/core';
+import {Component, EventEmitter, Input, input, OnInit, Output, output} from '@angular/core';
 import {PageEvent, TableColumn, TableData} from './table.interface';
 import { PreviewPanelComponent } from './components/preview-panel/preview-panel.component';
 import { CommonModule, NgClass } from '@angular/common';
@@ -24,6 +24,8 @@ export class TableComponent implements OnInit {
   @Input() totalData:number | undefined = 0;
   selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
+  @Output() pageChange = new EventEmitter<{ first: number; rows: number; page: number }>();
+
 
   sortOrder: 'asc' | 'desc' = 'asc';
 
@@ -53,9 +55,8 @@ export class TableComponent implements OnInit {
 
 
 
-  onPageChange(event: PaginatorState) {
-    this.first = event.first;
-    this.pageSize = event.rows;
+  onPageChange(event: any) {
+    this.pageChange.emit(event);
   }
 
   onActionClick(row: TableData) {

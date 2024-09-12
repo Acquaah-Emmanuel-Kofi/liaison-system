@@ -101,6 +101,7 @@ export class StudentsComponent implements OnInit{
       gender: student.gender,
       phone: student.phone,
     }));
+
   }
 
   isChildRouteActive(): boolean {
@@ -117,7 +118,8 @@ export class StudentsComponent implements OnInit{
   }
 
   async searchStudents() {
-    if (this.searchTerm.trim()) {
+    if (this.searchTerm) {
+      this.searchTerm.trim()
       try {
         const result = await this.studentService.searchStudent(this.searchTerm);
         this.data = this.destructureStudents(result);

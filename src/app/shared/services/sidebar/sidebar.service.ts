@@ -1,27 +1,50 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class SidebarService {
-
+  private isInternTypeSwitchedSubject = new BehaviorSubject<boolean>(false);
   private isCollapsedSubject = new BehaviorSubject<boolean>(false);
+  interTypeSubject =  new BehaviorSubject<string>('')
 
-  // Observable to track the collapsed state
+  isSwitched$ = this.isInternTypeSwitchedSubject.asObservable()
   isCollapsed$ = this.isCollapsedSubject.asObservable();
+  internType$ = this.interTypeSubject.asObservable()
 
-  // Toggle the collapsed state
+
+  toggleInterType(){
+    const currentState = this.isInternTypeSwitchedSubject.value;
+    this.isInternTypeSwitchedSubject.next(!currentState);
+    if (this.isSwitched$){
+      this.interTypeSubject.next('Semester out view')
+    }
+  }
+
+
   toggleCollapse(): void {
     const currentState = this.isCollapsedSubject.value;
     this.isCollapsedSubject.next(!currentState);
   }
 
-  // Method to set the collapsed state explicitly
+
+  setInternTypeState(state: boolean): void {
+    this.isInternTypeSwitchedSubject.next(state);
+  }
+
+  getInternState() {
+    return this.interTypeSubject.value;
+  }
+
+  getInternTypeState(): boolean {
+    return this.isInternTypeSwitchedSubject.value;
+  }
+
   setCollapseState(state: boolean): void {
     this.isCollapsedSubject.next(state);
   }
 
-  // Method to get the current state
+
   getCollapseState(): boolean {
     return this.isCollapsedSubject.value;
   }

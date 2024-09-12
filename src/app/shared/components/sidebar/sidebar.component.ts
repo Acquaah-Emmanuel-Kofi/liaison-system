@@ -10,16 +10,18 @@ import {
 import { filter, Subscription } from 'rxjs';
 import { BrandComponent } from '../brand/brand.component';
 import {SidebarService} from "../../services/sidebar/sidebar.service";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, NgClass} from "@angular/common";
+import {InputSwitchModule} from "primeng/inputswitch";
 
 @Component({
   selector: 'liaison-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, BrandComponent, AsyncPipe],
+  imports: [RouterLink, RouterLinkActive, BrandComponent, AsyncPipe, InputSwitchModule, NgClass],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnDestroy{
+  isInternTypeSwitch: boolean | undefined;
   closeEvent = output<void>();
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();
@@ -46,7 +48,12 @@ export class SidebarComponent implements OnDestroy{
     this.sidebarService.toggleCollapse();
   }
 
+  toggleInternType() {
+    this.sidebarService.toggleInterType();
+  }
+
   // Method to close the sidebar
+
   public closeSidebar() {
     this.closeEvent.emit();
   }

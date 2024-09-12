@@ -75,30 +75,41 @@
     </nav>
   </div>
 
+    <div class="flex flex-col items-center">
+      <div class="h-[1px] w-56 bg-gray-200"></div>
+    </div>
+    <div class="flex items-center justify-center gap-2 p-3 w-full" >
+      <p class="text-white font-medium" [class.hidden]="(sidebarService.isCollapsed$ | async)">Attachment</p>
+      <p-inputSwitch (click)="toggleInternType()" ></p-inputSwitch>
+      <p class="text-white font-medium"  [class.hidden]="(sidebarService.isCollapsed$ | async)" >Sem. Out</p>
+    </div>
+
+
   <!-- Toggle Button -->
-  <button
-    (click)="toggleCollapse()"
-    class="absolute bottom-20 -right-[10px] h-6 w-8 bg-[#DDAC25] rounded-md text-white hidden md:block"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="lucide lucide-chevrons-right"
+
+    <button
+      (click)="toggleCollapse()"
+      class="absolute top-10  -right-[10px] h-6 w-6 bg-[#DDAC25] rounded-md text-white hidden md:block"
     >
-      @if (!(sidebarService.isCollapsed$ | async)) {
-        <path d="m11 17-5-5 5-5" />
-        <path d="m18 17-5-5 5-5" />
-      } @else {
-        <path d="m6 17 5-5-5-5" />
-        <path d="m13 17 5-5-5-5" />
-      }
-    </svg>
-  </button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-chevrons-right"
+      >
+        @if (!(sidebarService.isCollapsed$ | async)) {
+          <path d="m11 17-5-5 5-5" />
+          <path d="m18 17-5-5 5-5" />
+        } @else {
+          <path d="m6 17 5-5-5-5" />
+          <path d="m13 17 5-5-5-5" />
+        }
+      </svg>
+    </button>
 </div>

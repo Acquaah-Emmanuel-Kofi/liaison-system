@@ -1,11 +1,16 @@
-import {Component, inject} from '@angular/core';
-import {NgForOf, NgOptimizedImage} from "@angular/common";
+import {Component, inject, OnInit} from '@angular/core';
+import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {Router} from "@angular/router";
 import {StatCardComponent} from "../../../../shared/components/stat-card/stat-card.component";
 import {AdminChartComponent} from "../admin-chart/admin-chart.component";
 import {TableComponent} from "../../../../shared/components/table/table.component";
 import {TableColumn, TableData} from "../../../../shared/components/table/table.interface";
 import { IStartCard } from '../../../../shared/interfaces/constants.interface';
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {InputSwitchModule} from "primeng/inputswitch";
+import {CascadeSelectModule} from "primeng/cascadeselect";
+import {FormsModule} from "@angular/forms";
+import {DropdownModule} from "primeng/dropdown";
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -17,15 +22,23 @@ import { IStartCard } from '../../../../shared/interfaces/constants.interface';
     StatCardComponent,
     AdminChartComponent,
     TableComponent,
+    ToggleButtonModule,
+    InputSwitchModule,
+    NgClass,
+    CascadeSelectModule,
+    FormsModule,
+    DropdownModule,
 
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit{
   route = inject(Router)
+  years: { name: string; value: string }[] = [];
+  selectedYear: string | null = null;
   currentYear: number = new Date().getFullYear();
-  years: number[] = [];
+  lastyear = this.currentYear -1;
   HideCheckbox = true;
   HidePagination = true;
 
@@ -33,6 +46,9 @@ export class AdminDashboardComponent {
     this.populateYears();
   }
 
+  ngOnInit() {
+
+  }
 
   statCard: IStartCard [] = [
     {
@@ -49,7 +65,7 @@ export class AdminDashboardComponent {
 
     },
     {
-      title: 'Internships',
+      title: 'Attachment',
       number: 100,
       iconSrc: 'assets/interns.svg',
       navigateTo:'/admin/internships'
@@ -96,10 +112,12 @@ export class AdminDashboardComponent {
   ];
 
 
+
   populateYears() {
     const startYear = 2020;
     for (let year = this.currentYear; year >= startYear; year--) {
-      this.years.push(year);
+      const academicYear = (year - 1) + '/' + year;
+      this.years.push({ name: academicYear, value: academicYear });
     }
   }
 

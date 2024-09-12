@@ -1,5 +1,5 @@
 <div class="px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
-  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full mb-6 sm:mb-8">
+  <div class="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full mb-6 sm:mb-8">
     <div class="flex flex-col gap-2 mb-4 sm:mb-0">
       <p class="text-Primary-Black text-lg sm:text-xl lg:text-2xl 2xl:text-[22px] font-medium relative">
         Welcome back James
@@ -8,21 +8,18 @@
       <p class="text-Dark-Blue text-sm sm:text-base">Here's an overview of your profile</p>
     </div>
 
-    <div class="flex items-center gap-3 sm:gap-5">
+    <div class="flex flex-col items-center mt-[-5px] gap-2  sm:gap-5">
       <!-- Dropdown for years -->
       <div class="relative cursor-pointer">
-        <select class="cursor-pointer border border-Dark-Blue rounded-full py-1 px-2 sm:px-3 text-sm sm:text-base text-Dark-Blue bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-        </select>
+          <p-dropdown
+            [options]="years"
+            [(ngModel)]="selectedYear"
+            optionLabel="name"
+            optionValue="value"
+            [placeholder]="lastyear.toString()+'/'+ currentYear.toString()">
+          </p-dropdown>
       </div>
 
-      <!-- Import Data Button -->
-<!--      <button-->
-<!--        (click)="navigateToUpload()"-->
-<!--        class="bg-Dark-Blue text-white rounded-full py-1 px-3 sm:px-4 text-sm sm:text-base flex items-center hover:bg-blue-900">-->
-<!--        Import Data-->
-<!--        <span class="ml-1 text-lg sm:text-xl">+</span>-->
-<!--      </button>-->
     </div>
   </div>
 
@@ -55,3 +52,4 @@
     </div>
   </div>
 </div>
+

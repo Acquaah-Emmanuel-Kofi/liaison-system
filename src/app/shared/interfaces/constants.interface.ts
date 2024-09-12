@@ -9,3 +9,13 @@ export interface IStartCard {
   iconSrc: string;
   navigateTo: string;
 }
+
+export interface PayLoadData {
+  jti: string;
+  role: string;
+  firstname: string;
+  lastname: string;
+  sub: string;
+  profilePicture: string;
+  phoneNumber: number;
+}

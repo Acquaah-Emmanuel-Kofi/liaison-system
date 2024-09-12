@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="flex justify-end mb-4">
+<div class="flex justify-end mb-4 ">
   <button (click)="onClosePanel()" class="text-gray-500 hover:text-gray-700 w-5 h-5 hover:bg-gray-100 flex justify-center rounded-full items-center">
     <svg
       width="9"
@@ -15,7 +15,7 @@
     </svg>
   </button>
 </div>
-<div class="flex flex-col justify-center items-center">
+<div class="flex flex-col  items-center border-2 border-red-700">
   <label [for]="data['student_id']" class="mb-5 text-[#19337E] font-bold text-sm"
     >{{data["student_id"]}}</label
   >
@@ -89,22 +89,19 @@
     <!-- Telephone Tooltip -->
     <div
       *ngIf="isTelephoneActive"
-      class="absolute left-1/2 transform -translate-x-1/2 -translate-y-2 bg-white shadow-md border-2 border-[#19337E] rounded-lg px-3 py-2 mt-28 ml-10 text-sm text-[#19337E] flex items-center justify-center transition-all duration-300"
+      class="absolute z-10 left-1/2 transform -translate-x-1/2 -translate-y-2 bg-white shadow-md border-2 border-[#19337E] rounded-lg px-3 py-2 mt-28 ml-10 text-sm text-[#19337E] flex items-center justify-center transition-all duration-300"
     >
       <span class="font-semibold">{{ data["phone"] }}</span>
       <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white border-t border-l border-[#19337E] rotate-45"></div>
     </div>
 </div>
 
-<!--<div class="my-5">-->
-<!--  <h1 class="text-base font-bold text-black">About</h1>-->
 
-<!--  <div class="animate-pulse space-y-2 my-8">-->
-<!--    <div class="w-full h-2 rounded-full bg-slate-200"></div>-->
-<!--    <div class="w-full h-2 rounded-full bg-slate-200"></div>-->
-<!--    <div class="w-1/4 h-2 rounded-full bg-slate-200"></div>-->
-<!--  </div>-->
-<!--</div>-->
+  <div class="flex flex-col w-full items-center">
+    <div class="h-[2px] bg-gray-200 w-[40%] my-[10%]">
+
+    </div>
+  </div>
 
 <div class="flex justify-between items-center gap-3">
   <div>

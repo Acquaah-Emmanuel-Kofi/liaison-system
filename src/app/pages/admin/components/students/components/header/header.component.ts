@@ -20,8 +20,6 @@ export class HeaderComponent {
   searchValue = ''
 
 
-
-
   filterOptions: string[] = [
     'Computer Science',
     'Engineering',
@@ -32,6 +30,7 @@ export class HeaderComponent {
     'Sculpture Design',
     'Graphic Design',
   ];
+
   query = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data(),],
     queryFn: () => this.studentService.searchStudent(this.searchValue),
@@ -52,8 +51,12 @@ export class HeaderComponent {
   handleSearchTerm(value: string) {
     this.searchValue = value
     if (this.searchValue) {
+      console.log(value)
       this.query.refetch().then(() => {
         const results = this.query.data();
+       const hold =this.studentService.updateSearchResults(results);
+        console.log(results)
+        console.log(hold)
         this.studentService.updateSearchResults(results);
       });
     }

@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, Signal} from '@angular/core';
+import {Component, computed, effect, HostListener, inject, Signal} from '@angular/core';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
@@ -20,6 +20,16 @@ import { formatDateToDDMMYYYY } from '../../../../shared/helpers/constants.helpe
 })
 export class InternshipsComponent {
   studentService = inject(StudentTableService);
+  first: number | undefined = 0;
+  pageSize: number = 10;
+  totalData?: number;
+  pageNumber = 1;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.adjustPaginatorRows();
+    this.query.refetch();
+  }
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -35,18 +45,31 @@ export class InternshipsComponent {
 
   query = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data()],
-    queryFn: () => this.studentService.getAllStudents(0,0),
+    queryFn: () => this.studentService.getAllStudents(this.pageNumber, this.pageSize),
   }));
 
   tableData: Signal<TableData[]> = computed(() => {
     const data = this.query.data();
+    this.pageSize = data?.data?.pageSize ?? this.pageSize;
+    this.first = data?.data.currentPage;
+    this.totalData = data?.data.totalData;
     return this.destructureStudents(data);
   });
 
   constructor() {
+    this.adjustPaginatorRows();
     effect(() => {
       this.data = this.tableData();
     });
+  }
+
+  adjustPaginatorRows() {
+    const screenWidth = window.innerWidth;
+    if (screenWidth <= 1536) {
+      this.pageSize = 5;
+    } else {
+      this.pageSize = 10;
+    }
   }
 
 
@@ -66,8 +89,11 @@ export class InternshipsComponent {
     }));
   }
 
-  handleRowSelection(row: TableData) {
-    console.log('Row selected:', row);
+  handlePageChange(event: any) {
+    this.pageNumber = event.page + 1;
+    this.pageSize = event.rows;
+    this.first = event.first;
+    this.query.refetch();
   }
 
   handleActionClick(row: TableData) {

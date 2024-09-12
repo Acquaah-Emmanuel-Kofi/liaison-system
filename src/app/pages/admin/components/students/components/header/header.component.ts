@@ -2,6 +2,9 @@ import {Component, inject} from '@angular/core';
 import { SelectFilterComponent } from '../../../../../../shared/components/select-filter/select-filter.component';
 import {Router, RouterLink} from "@angular/router";
 import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
+import {StudentTableService} from "../../../../service/students-table/student-table.service";
+import {injectQuery} from "@tanstack/angular-query-experimental";
+import {studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
 
 @Component({
   selector: 'liaison-header',
@@ -11,8 +14,11 @@ import { SearchbarComponent } from '../../../../../../shared/components/searchba
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+  studentService = inject(StudentTableService)
   toggledFilterButton: boolean = false;
   route = inject(Router);
+  searchValue = ''
+
 
   filterOptions: string[] = [
     'Computer Science',
@@ -24,6 +30,11 @@ export class HeaderComponent {
     'Sculpture Design',
     'Graphic Design',
   ];
+
+  query = injectQuery(() => ({
+    queryKey: [...studentsQueryKey.data(),],
+    queryFn: () => this.studentService.searchStudent(this.searchValue),
+  }));
 
   toggleFilterButton() {
     this.toggledFilterButton = !this.toggledFilterButton;
@@ -38,6 +49,17 @@ export class HeaderComponent {
   }
 
   handleSearchTerm(value: string) {
-    console.log(value);
+    this.searchValue = value
+    if (this.searchValue) {
+      console.log(value)
+      this.query.refetch().then(() => {
+        const results = this.query.data();
+       const hold =this.studentService.updateSearchResults(results);
+        console.log(results)
+        console.log(hold)
+        this.studentService.updateSearchResults(results);
+      });
+    }
+
   }
 }

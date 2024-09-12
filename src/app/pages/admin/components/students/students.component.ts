@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, Signal } from '@angular/core';
+import {Component, computed, effect, HostListener, inject, OnInit, Signal} from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
@@ -9,6 +9,7 @@ import { MessageService } from "primeng/api";
 import { injectQuery } from "@tanstack/angular-query-experimental";
 import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { IGetStudentResponse, IStudentData } from '../../../../shared/interfaces/response.interface';
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'liaison-students',
@@ -18,17 +19,25 @@ import { IGetStudentResponse, IStudentData } from '../../../../shared/interfaces
   styleUrls: ['./students.component.scss'],
   providers: [MessageService],
 })
-export class StudentsComponent {
+export class StudentsComponent implements OnInit{
   messageService = inject(MessageService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
   selectedRowData: TableData | null = null;
-
+  searchTerm: string = '';
   first: number | undefined = 0;
-  pageSize: number = 5; // Default to 5, to be adjusted based on screen size
+  pageSize: number = 10;
   totalData?: number;
-  pageNumber = 0;
+  pageNumber = 1;
+  private searchSubscription: Subscription;
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.adjustPaginatorRows();
+    this.query.refetch();
+  }
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -38,25 +47,40 @@ export class StudentsComponent {
     { label: 'Actions', key: 'action', isAction: true },
   ];
 
+  ngOnInit() {
+
+  }
+
   constructor() {
-    // Adjust paginator rows based on screen size
     this.adjustPaginatorRows();
+
+    this.searchSubscription = this.studentService.searchResults$.subscribe(
+      results => {
+        if (results) {
+          this.data = this.destructureStudents(results);
+          this.totalData = results.data.totalData;
+          this.first = results.data.currentPage;
+        } else {
+          this.query.refetch();
+        }
+      }
+    );
 
     effect(() => {
       this.data = this.tableData();
     });
   }
 
-  // TanStack Query setup for fetching students with pagination
   query = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data(), this.pageNumber, this.pageSize],
     queryFn: () => this.studentService.getAllStudents(this.pageNumber, this.pageSize),
   }));
 
-  // Computed signal to derive table data and manage pagination state
+
+
   tableData: Signal<TableData[]> = computed(() => {
     const data = this.query.data();
-    this.pageSize = data?.data?.pageSize ?? this.pageSize; // Safeguard for undefined
+    this.pageSize = data?.data?.pageSize ?? this.pageSize;
     this.totalData = data?.data.totalData;
     this.first = data?.data.currentPage;
     return this.destructureStudents(data);
@@ -77,6 +101,7 @@ export class StudentsComponent {
       gender: student.gender,
       phone: student.phone,
     }));
+
   }
 
   isChildRouteActive(): boolean {
@@ -85,20 +110,37 @@ export class StudentsComponent {
 
   adjustPaginatorRows() {
     const screenWidth = window.innerWidth;
-    if (screenWidth >= 1536) {
-      this.pageSize = 10;
-    } else {
+    if (screenWidth <= 1536) {
       this.pageSize = 5;
+    } else {
+      this.pageSize = 10;
     }
   }
 
-  handleRowSelection(row: TableData): void {
-    console.log('Row selected:', row);
+  async searchStudents() {
+    if (this.searchTerm) {
+      this.searchTerm.trim()
+      try {
+        const result = await this.studentService.searchStudent(this.searchTerm);
+        this.data = this.destructureStudents(result);
+        this.totalData = result.data.totalData;
+        this.pageNumber = 1;
+        this.first = 0;
+      } catch (error) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to search students' });
+      }
+    } else {
+      this.query.refetch();
+    }
   }
 
-  handleClosePanel() {
-    this.selectedRowData = null;
+  handlePageChange(event: any) {
+    this.pageNumber = event.page + 1;
+    this.pageSize = event.rows;
+    this.first = event.first;
+    this.query.refetch();
   }
+
 
   handleActionClick(row: TableData): void {
     this.selectedRowData = row;

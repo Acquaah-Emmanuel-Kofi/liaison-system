@@ -54,3 +54,71 @@ div::-webkit-scrollbar-thumb {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+
+/* Styling the PrimeNG Dropdown */
+.p-dropdown {
+  height: 30px;
+  border:  1px solid #1e3a8a;
+  border-radius: 9999px;
+  font-size: 0.475rem;
+  color: #1e3a8a;
+  background-color: white;
+}
+
+.p-dropdown .p-dropdown-trigger {
+  margin-top: 4px;
+  border-radius: 8px;
+  color: #1e3a8a;
+}
+
+.p-dropdown .p-dropdown-label {
+  margin-top: -7px;
+  color: #1e3a8a;
+}
+
+.p-dropdown:focus-within {
+  outline: none;
+  box-shadow: none;
+}
+
+.p-dropdown .p-inputtext:focus {
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.p-dropdown-panel {
+  border-color: #1e3a8a;
+  border-radius: 8px;
+}
+
+/* Corrected style for the PrimeNG InputSwitch Component */
+.p-inputswitch {
+  width: 48px;
+  height: 22px;
+  background-color: #e5e7eb;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+  position: relative;
+}
+
+/* Change the background color when checked */
+.p-inputswitch.p-inputswitch-checked {
+  background-color: #1e3a8a;
+}
+
+/* Style for the switch handle (slider) */
+.p-inputswitch-slider {
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+  box-shadow: none;
+}
+
+/* Remove focus outline and shadow */
+.p-inputswitch:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+

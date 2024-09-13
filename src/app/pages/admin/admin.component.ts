@@ -17,7 +17,7 @@ import {SidebarService} from "../../shared/services/sidebar/sidebar.service";
 export class AdminComponent {
   protected sidebarService = inject(SidebarService);
 
-  close = false
+  close = true
   isSidebarVisible: boolean = true;
 
   links: INavLinks[] = ADMIN_NAVLINKS;

@@ -1,4 +1,12 @@
-import {Component, inject, input, OnDestroy, output, signal} from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { INavLinks } from './sidebar.interface';
 import {
   Event,
@@ -9,24 +17,32 @@ import {
 } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { BrandComponent } from '../brand/brand.component';
-import {SidebarService} from "../../services/sidebar/sidebar.service";
-import {AsyncPipe, NgClass} from "@angular/common";
-import {InputSwitchModule} from "primeng/inputswitch";
+import { SidebarService } from '../../services/sidebar/sidebar.service';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
   selector: 'liaison-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, BrandComponent, AsyncPipe, InputSwitchModule, NgClass],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    BrandComponent,
+    AsyncPipe,
+    InputSwitchModule,
+    NgClass,
+  ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnDestroy{
+export class SidebarComponent implements OnInit, OnDestroy {
   isInternTypeSwitch: boolean | undefined;
   closeEvent = output<void>();
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();
 
-  // Remove local isCollapsed variable; use the service instead
+  dropdownState: { [key: string]: boolean } = {};
+
   currentRoute = signal<string>('');
 
   private _router = inject(Router);
@@ -43,7 +59,20 @@ export class SidebarComponent implements OnDestroy{
       });
   }
 
-  // Use the service to toggle collapse state
+  ngOnInit(): void {
+    this.links().forEach((navLink) => {
+      this.dropdownState[navLink.routerLink] = false;
+    });
+  }
+
+  isDropdownOpen(navLinkId: string) {
+    return this.dropdownState[navLinkId];
+  }
+
+  public openDropDownOnClick(navLinkId: string) {
+    this.dropdownState[navLinkId] = !this.dropdownState[navLinkId];
+  }
+
   toggleCollapse() {
     this.sidebarService.toggleCollapse();
   }
@@ -51,8 +80,6 @@ export class SidebarComponent implements OnDestroy{
   toggleInternType() {
     this.sidebarService.toggleInterType();
   }
-
-  // Method to close the sidebar
 
   public closeSidebar() {
     this.closeEvent.emit();

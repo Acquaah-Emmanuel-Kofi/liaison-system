@@ -1,4 +1,4 @@
-import { INavLinks } from "../components/sidebar/sidebar.interface";
+import { INavLinks } from '../components/sidebar/sidebar.interface';
 
 export const ADMIN_NAVLINKS: INavLinks[] = [
   {
@@ -25,5 +25,17 @@ export const ADMIN_NAVLINKS: INavLinks[] = [
     title: 'Access Control',
     defaultIconSrc: '/assets/icons/access_control.svg',
     routerLink: 'access-control',
+    children: [
+      {
+        title: 'Zones',
+        defaultIconSrc: '/assets/icons/zones.svg',
+        routerLink: 'zones',
+      },
+      {
+        title: 'Notification Settings',
+        defaultIconSrc: '/assets/icons/notifications.svg',
+        routerLink: 'notification-settings',
+      },
+    ],
   },
 ];

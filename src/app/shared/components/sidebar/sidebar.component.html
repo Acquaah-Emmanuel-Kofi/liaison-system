@@ -4,7 +4,6 @@
   [class.collapsed]="(sidebarService.isCollapsed$ | async) ? 'collapsed' : ''"
   class="absolute top-0 z-50 h-screen flex-col duration-500 w-[80%] ease-in md:relative md:flex bg-[#19337E] 2xl:w-72 transition-width md:w-64"
 >
-
   <!-- Brand -->
   <div class="hidden py-6 md:block pl-5">
     <liaison-brand
@@ -38,8 +37,69 @@
   <div class="flex flex-1 flex-col overflow-y-auto">
     <nav class="flex-1 pt-10 md:py-4">
       <ul class="space-y-3">
-        @for (navLink of links(); track $index) {
-        <li class="text-white" [title]="(sidebarService.isCollapsed$ | async) ? navLink.title : ''">
+        @for (navLink of links(); track $index) { @if (navLink.children) {
+        <li
+          class="text-white"
+          (click)="openDropDownOnClick(navLink.routerLink)"
+        >
+          <a
+            [routerLink]="navLink.children[0].routerLink"
+            (click)="closeSidebar()"
+            class="relative flex items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[4px] hover:before:h-full hover:before:bg-[#FDF2D4]"
+          >
+            <div
+              [style]="
+                currentRoute().includes(navLink.routerLink)
+                  ? 'background-color: #fff; -webkit-mask: url(' +
+                    navLink.defaultIconSrc +
+                    ') no-repeat center;'
+                  : 'background-color: #fff; -webkit-mask: url(' +
+                    navLink.defaultIconSrc +
+                    ') no-repeat center;'
+              "
+              class="w-8 h-8"
+            >
+              <img
+                [src]="navLink.defaultIconSrc"
+                alt="icon"
+                class="opacity-0"
+              />
+            </div>
+            <span
+              class="nav-text"
+              [class.hidden]="sidebarService.isCollapsed$ | async"
+            >
+              {{ navLink.title }}
+            </span>
+            <span class="ml-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-down"
+              >
+                @if (dropdownState[navLink.routerLink]) {
+                <path d="m6 9 6 6 6-6" />
+
+                } @else {
+                <path d="m18 15-6-6-6 6" />
+
+                }
+              </svg>
+            </span>
+          </a>
+        </li>
+        } @else {
+        <li
+          class="text-white"
+          [title]="(sidebarService.isCollapsed$ | async) ? navLink.title : ''"
+        >
           <a
             [routerLink]="navLink.routerLink"
             routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
@@ -57,59 +117,107 @@
                     navLink.defaultIconSrc +
                     ') no-repeat center;'
               "
-                class="w-8 h-8"
-              >
-                <img
-                  [src]="navLink.defaultIconSrc"
-                  alt="icon"
-                  class="opacity-0"
-                />
-              </div>
-              <span class="nav-text" [class.hidden]="(sidebarService.isCollapsed$ | async)">
+              class="w-8 h-8"
+            >
+              <img
+                [src]="navLink.defaultIconSrc"
+                alt="icon"
+                class="opacity-0"
+              />
+            </div>
+            <span
+              class="nav-text"
+              [class.hidden]="sidebarService.isCollapsed$ | async"
+            >
               {{ navLink.title }}
             </span>
-            </a>
-          </li>
-        }
+          </a>
+        </li>
+        } @if (navLink.children && isDropdownOpen(navLink.routerLink)) { @for
+        (childLink of navLink.children; track $index) {
+        <li class="text-white">
+          <a
+            [routerLink]="childLink.routerLink"
+            routerLinkActive="bg-[#DDAC25] text-white before:content-[''] before:flex-1 before:absolute before:top-0 before:left-0 before:w-[4px] before:h-full before:bg-[#FDF2D4]"
+            [routerLinkActiveOptions]="{ exact: false }"
+            (click)="closeSidebar()"
+            class="relative flex items-center gap-3 p-2 font-Archivo hover:bg-[#DDAC25] hover:before:content-[''] hover:before:flex-1 hover:before:absolute hover:before:top-0 hover:before:left-0 hover:before:w-[4px] hover:before:h-full hover:before:bg-[#FDF2D4]"
+          >
+            <div
+              [style]="
+                currentRoute().includes(childLink.routerLink)
+                  ? 'background-color: #fff; -webkit-mask: url(' +
+                    childLink.defaultIconSrc +
+                    ') no-repeat center;'
+                  : 'background-color: #fff; -webkit-mask: url(' +
+                    childLink.defaultIconSrc +
+                    ') no-repeat center;'
+              "
+              class="w-8 h-8"
+            >
+              <img
+                [src]="childLink.defaultIconSrc"
+                alt="icon"
+                class="opacity-0"
+              />
+            </div>
+            <span
+              class="nav-text"
+              [class.hidden]="sidebarService.isCollapsed$ | async"
+            >
+              {{ childLink.title }}
+            </span>
+          </a>
+        </li>
+        } } }
       </ul>
     </nav>
   </div>
 
-    <div class="flex flex-col items-center">
-      <div class="h-[1px] w-56 bg-gray-200"></div>
-    </div>
-    <div class="flex items-center justify-center gap-2 p-3 w-full" >
-      <p class="text-white font-medium" [class.hidden]="(sidebarService.isCollapsed$ | async)">Attachment</p>
-      <p-inputSwitch (click)="toggleInternType()" ></p-inputSwitch>
-      <p class="text-white font-medium"  [class.hidden]="(sidebarService.isCollapsed$ | async)" >Sem. Out</p>
-    </div>
-
+  <div class="flex flex-col items-center">
+    <div class="h-[1px] w-56 bg-gray-200"></div>
+  </div>
+  <div class="flex items-center justify-center gap-2 p-3 w-full">
+    <p
+      class="text-white font-medium"
+      [class.hidden]="sidebarService.isCollapsed$ | async"
+    >
+      Attachment
+    </p>
+    <p-inputSwitch (click)="toggleInternType()"></p-inputSwitch>
+    <p
+      class="text-white font-medium"
+      [class.hidden]="sidebarService.isCollapsed$ | async"
+    >
+      Sem. Out
+    </p>
+  </div>
 
   <!-- Toggle Button -->
 
-    <button
-      (click)="toggleCollapse()"
-      class="absolute top-10  -right-[10px] h-6 w-6 bg-[#DDAC25] rounded-md text-white hidden md:block"
+  <button
+    (click)="toggleCollapse()"
+    class="absolute top-10 -right-[10px] h-6 w-6 bg-[#DDAC25] rounded-md text-white hidden md:block"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-chevrons-right"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="lucide lucide-chevrons-right"
-      >
-        @if (!(sidebarService.isCollapsed$ | async)) {
-          <path d="m11 17-5-5 5-5" />
-          <path d="m18 17-5-5 5-5" />
-        } @else {
-          <path d="m6 17 5-5-5-5" />
-          <path d="m13 17 5-5-5-5" />
-        }
-      </svg>
-    </button>
+      @if (!(sidebarService.isCollapsed$ | async)) {
+      <path d="m11 17-5-5 5-5" />
+      <path d="m18 17-5-5 5-5" />
+      } @else {
+      <path d="m6 17 5-5-5-5" />
+      <path d="m13 17 5-5-5-5" />
+      }
+    </svg>
+  </button>
 </div>

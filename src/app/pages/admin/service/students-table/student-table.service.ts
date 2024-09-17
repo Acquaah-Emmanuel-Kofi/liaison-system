@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import {
   IGetLecturersResponse,
@@ -41,11 +41,19 @@ export class StudentTableService {
     this.searchResultsSubject.next(results);
   }
 
-  getAllLeturers(): Observable<IGetLecturersResponse> {
+  getAllLecturers(
+    page: number,
+    size: number
+  ): Observable<IGetLecturersResponse> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
     return this._http.get<IGetLecturersResponse>(
       `${
         environment.BACKEND_API_BASE_URL
-      }/admin/${this.userStore.id()}/lecturers`
+      }/admin/${this.userStore.id()}/lecturers`,
+      { params }
     );
   }
 }

@@ -15,8 +15,16 @@ export const removeFromLocalStorage = (key: string) => {
 };
 
 
-export function formatDateToDDMMYYYY(date: string): string {
+export const formatDateToDDMMYYYY = (date: string): string => {
   const parsedDate = new Date(date);
   if (isNaN(parsedDate.getTime())) return date; // Return original if invalid date
   return formatDate(parsedDate, 'dd/MM/yyyy', 'en-US'); // Format date
+}
+
+export function searchArray<T>(array: T[], searchTerm: string, keys: (keyof T)[]): T[] {
+  return array.filter(item =>
+    keys.some(key => 
+      item[key]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 }

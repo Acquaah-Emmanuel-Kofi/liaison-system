@@ -50,4 +50,5 @@ export interface ILecturersData extends IUser {
   dp: string;
   department: string;
   faculty: string;
+  lecturerId: string;
 }

@@ -18,10 +18,10 @@
 <ng-template #table>
   <liaison-table
     [columns]="columns"
-    [data]="filteredData().length ? filteredData() : lecturersQuery.data()!"
-    [first]="currentPage"
-    [pageSize]="pageSize"
-    [totalData]="totalData"
+    [data]="searchTerm() ? filteredData() : lecturersQuery.data()!"
+    [first]="currentPage()"
+    [pageSize]="pageSize()"
+    [totalData]="totalData()"
     (actionClicked)="handleActionClick($event)"
     (pageChange)="handlePageChange($event)"
   />

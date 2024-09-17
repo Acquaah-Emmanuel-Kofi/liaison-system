@@ -32,24 +32,25 @@ export class LecturersComponent {
     { label: '', key: 'action', isAction: true },
   ];
 
-  currentPage!: number;
-  totalData!: number;
-  pageSize!: number;
+  currentPage = signal<number>(1);
+  totalData = signal<number>(10);
+  pageSize = signal<number>(10);
+  searchTerm = signal<string>('');
 
   filteredData = signal<TableData[]>([]);
 
   private _dataServices = inject(StudentTableService);
 
   lecturersQuery = injectQuery(() => ({
-    queryKey: [...lecturersQueryKey.data(this.currentPage, this.totalData)],
+    queryKey: [...lecturersQueryKey.data(this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await lastValueFrom<IGetLecturersResponse>(
-        this._dataServices.getAllLecturers(this.currentPage, this.pageSize)
+        this._dataServices.getAllLecturers(this.currentPage(), this.pageSize())
       );
 
-      this.currentPage = response.data.currentPage!;
-      this.totalData = response.data.totalData!;
-      this.pageSize = response.data.pageSize!;
+      this.currentPage.set(response.data.currentPage ?? 1);
+      this.totalData.set(response.data.totalData ?? 10);
+      this.pageSize.set(response.data.pageSize ?? 45);
 
       return this.destructureStudents(response.data.page.content);
     },
@@ -75,6 +76,8 @@ export class LecturersComponent {
   }
 
   handleSearchTerm(value: string) {
+    this.searchTerm.set(value);
+  
     const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
       'name',
       'department',
@@ -85,8 +88,8 @@ export class LecturersComponent {
   }
 
   handlePageChange(data: { first: number; rows: number; page: number }) {
-    this.currentPage = data.first;
-    this.pageSize = data.rows;
-    this.totalData = data.page + 1;
+    this.currentPage.set(data.first);
+    this.pageSize.set(data.rows);
+    this.totalData.set(data.page + 1);
   }
 }

@@ -5,5 +5,6 @@ export const studentsQueryKey = {
 
 export const lecturersQueryKey = {
   all: ['lecturers'] as const,
-  data: () => [...lecturersQueryKey.all, 'all-lecturers'] as const,
+  data: (currentPage: number, totalData: number) =>
+    [...lecturersQueryKey.all, 'all-lecturers'] as const,
 };

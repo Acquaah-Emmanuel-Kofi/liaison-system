@@ -2,17 +2,16 @@
 <section>
   <liaison-header />
 
-<liaison-table
-[columns]="columns"
-[data]="data"
-[first] = 'first'
-[pageSize] = 'pageSize'
-[totalData] ='totalData'
-(actionClicked)="handleActionClick($event)"
-(pageChange)="handlePageChange($event)"
-/>
-</section>}
-
-
+  <liaison-table
+    [columns]="columns"
+    [data]="data"
+    [first]="first"
+    [pageSize]="pageSize"
+    [totalData]="totalData"
+    (actionClicked)="handleActionClick($event)"
+    (pageChange)="handlePageChange($event)"
+  />
+</section>
+}
 
 <router-outlet></router-outlet>

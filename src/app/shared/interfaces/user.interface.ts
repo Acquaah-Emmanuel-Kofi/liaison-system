@@ -6,10 +6,10 @@ export enum Role {
 
 export interface IUser {
   firstName: string;
-  middleName?: string;
+  otherName?: string;
   lastName: string;
   role: string;
   email: string;
-  phoneNumber: number;
+  phone: string;
   id: string;
 }

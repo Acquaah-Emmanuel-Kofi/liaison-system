@@ -17,5 +17,5 @@ export interface PayLoadData {
   lastname: string;
   sub: string;
   profilePicture: string;
-  phoneNumber: number;
+  phone: string;
 }

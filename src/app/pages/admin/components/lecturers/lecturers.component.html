@@ -1,9 +1,28 @@
 <section>
-  <liaison-header />
+  <liaison-header (searchValue)="handleSearchTerm($event)" />
 
+  @switch (lecturersQuery.status()) { @case ('pending') { @if
+  (lecturersQuery.data()) {
+  <ng-container *ngTemplateOutlet="table" />
+
+  } @else {
+  <h1>Loading...</h1>
+  } } @case ('error') {
+  <h1>An error occurred: {{ lecturersQuery.error() }}</h1>
+  } @case ('success') {
+  <ng-container *ngTemplateOutlet="table" />
+
+  } }
+</section>
+
+<ng-template #table>
   <liaison-table
     [columns]="columns"
-    [data]="data"
+    [data]="searchTerm() ? filteredData() : lecturersQuery.data()!"
+    [first]="currentPage()"
+    [pageSize]="pageSize()"
+    [totalData]="totalData()"
     (actionClicked)="handleActionClick($event)"
+    (pageChange)="handlePageChange($event)"
   />
-</section>
+</ng-template>

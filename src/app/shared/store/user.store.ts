@@ -4,12 +4,12 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { IUser } from '../interfaces/user.interface';
 
 const initialUserState: IUser = {
-    firstName: '',
-    lastName: '',
-    role: '',
-    email: '',
-    phoneNumber: 0,
-    id: '',
+  firstName: '',
+  lastName: '',
+  role: '',
+  email: '',
+  phone: '',
+  id: '',
 };
 
 export const UserStore = signalStore(

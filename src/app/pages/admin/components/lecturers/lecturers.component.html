@@ -1,5 +1,5 @@
 <section>
-  <liaison-header />
+  <liaison-header (searchValue)="handleSearchTerm($event)" />
 
   @switch (lecturersQuery.status()) { @case ('pending') { @if
   (lecturersQuery.data()) {
@@ -18,10 +18,10 @@
 <ng-template #table>
   <liaison-table
     [columns]="columns"
-    [data]="lecturersQuery.data()!"
-    [first]="currentPage()"
-    [pageSize]="pageSize()"
-    [totalData]="totalData()"
+    [data]="filteredData().length ? filteredData() : lecturersQuery.data()!"
+    [first]="currentPage"
+    [pageSize]="pageSize"
+    [totalData]="totalData"
     (actionClicked)="handleActionClick($event)"
     (pageChange)="handlePageChange($event)"
   />

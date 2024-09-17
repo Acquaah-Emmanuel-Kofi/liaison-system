@@ -14,6 +14,7 @@ import {
 } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
+import { searchArray } from '../../../../shared/helpers/constants.helper';
 
 @Component({
   selector: 'liaison-lecturers',
@@ -31,22 +32,24 @@ export class LecturersComponent {
     { label: '', key: 'action', isAction: true },
   ];
 
-  currentPage = signal<number>(1);
-  totalData = signal<number>(10);
-  pageSize = signal<number>(10);
+  currentPage!: number;
+  totalData!: number;
+  pageSize!: number;
+
+  filteredData = signal<TableData[]>([]);
 
   private _dataServices = inject(StudentTableService);
 
   lecturersQuery = injectQuery(() => ({
-    queryKey: [...lecturersQueryKey.data(this.currentPage(), this.totalData())],
+    queryKey: [...lecturersQueryKey.data(this.currentPage, this.totalData)],
     queryFn: async () => {
       const response = await lastValueFrom<IGetLecturersResponse>(
-        this._dataServices.getAllLecturers(this.currentPage(), this.pageSize())
+        this._dataServices.getAllLecturers(this.currentPage, this.pageSize)
       );
 
-      this.currentPage.set(response.data.currentPage ?? 1);
-      this.totalData.set(response.data.totalData ?? 10);
-      this.pageSize.set(response.data.pageSize ?? 10);
+      this.currentPage = response.data.currentPage!;
+      this.totalData = response.data.totalData!;
+      this.pageSize = response.data.pageSize!;
 
       return this.destructureStudents(response.data.page.content);
     },
@@ -56,7 +59,7 @@ export class LecturersComponent {
     if (!data) return [];
 
     return data.map((lecturer: ILecturersData) => ({
-      staff_id: lecturer.id,
+      staff_id: lecturer.lecturerId,
       name: `${lecturer.firstName} ${lecturer.lastName}`,
       faculty: lecturer.faculty,
       department: lecturer.department,
@@ -71,9 +74,19 @@ export class LecturersComponent {
     console.log('Action clicked for row:', row);
   }
 
+  handleSearchTerm(value: string) {
+    const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
+      'name',
+      'department',
+      'faculty',
+    ]);
+
+    this.filteredData.set(filteredLecturers ?? []);
+  }
+
   handlePageChange(data: { first: number; rows: number; page: number }) {
-    this.currentPage.set(data.first);
-    this.pageSize.set(data.rows);
-    this.totalData.set(data.page);
+    this.currentPage = data.first;
+    this.pageSize = data.rows;
+    this.totalData = data.page + 1;
   }
 }

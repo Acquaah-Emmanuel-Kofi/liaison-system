@@ -31,14 +31,22 @@ export class LecturersComponent {
     { label: '', key: 'action', isAction: true },
   ];
 
+  currentPage = signal<number>(1);
+  totalData = signal<number>(10);
+  pageSize = signal<number>(10);
+
   private _dataServices = inject(StudentTableService);
 
   lecturersQuery = injectQuery(() => ({
-    queryKey: [...lecturersQueryKey.data()],
+    queryKey: [...lecturersQueryKey.data(this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await lastValueFrom<IGetLecturersResponse>(
-        this._dataServices.getAllLeturers()
+        this._dataServices.getAllLecturers(this.currentPage(), this.pageSize())
       );
+
+      this.currentPage.set(response.data.currentPage ?? 1);
+      this.totalData.set(response.data.totalData ?? 10);
+      this.pageSize.set(response.data.pageSize ?? 10);
 
       return this.destructureStudents(response.data.page.content);
     },
@@ -61,5 +69,11 @@ export class LecturersComponent {
 
   handleActionClick(row: TableData) {
     console.log('Action clicked for row:', row);
+  }
+
+  handlePageChange(data: { first: number; rows: number; page: number }) {
+    this.currentPage.set(data.first);
+    this.pageSize.set(data.rows);
+    this.totalData.set(data.page);
   }
 }

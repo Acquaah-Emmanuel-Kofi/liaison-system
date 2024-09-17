@@ -19,6 +19,10 @@
   <liaison-table
     [columns]="columns"
     [data]="lecturersQuery.data()!"
+    [first]="currentPage()"
+    [pageSize]="pageSize()"
+    [totalData]="totalData()"
     (actionClicked)="handleActionClick($event)"
+    (pageChange)="handlePageChange($event)"
   />
 </ng-template>

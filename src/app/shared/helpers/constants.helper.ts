@@ -23,7 +23,7 @@ export const formatDateToDDMMYYYY = (date: string): string => {
 
 export function searchArray<T>(array: T[], searchTerm: string, keys: (keyof T)[]): T[] {
   return array.filter(item =>
-    keys.some(key => 
+    keys?.some(key => 
       item[key]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );

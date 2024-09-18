@@ -114,7 +114,6 @@ export class HeaderComponent {
   onSubmit() {
     if (this.addAssignLecturerForm.valid) {
       console.log(this.addAssignLecturerForm.value);
-      // Handle form submission
     }
   }
 }

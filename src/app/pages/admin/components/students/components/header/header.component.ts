@@ -49,14 +49,11 @@ export class HeaderComponent {
   }
 
   handleSearchTerm(value: string) {
-    this.searchValue = value
+    this.searchValue = value;
     if (this.searchValue) {
-      console.log(value)
+      // Refetch student search results based on search term
       this.query.refetch().then(() => {
         const results = this.query.data();
-       const hold =this.studentService.updateSearchResults(results);
-        console.log(results)
-        console.log(hold)
         this.studentService.updateSearchResults(results);
       });
     }

@@ -130,7 +130,7 @@ export class StudentsComponent implements OnInit{
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to search students' });
       }
     } else {
-      this.query.refetch();
+      await this.query.refetch();
     }
   }
 

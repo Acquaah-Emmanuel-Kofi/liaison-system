@@ -19,7 +19,7 @@
   <liaison-table
     [columns]="columns"
     [data]="searchTerm() ? filteredData() : lecturersQuery.data()!"
-    [first]="currentPage()"
+    [first]="first()"
     [pageSize]="pageSize()"
     [totalData]="totalData()"
     (actionClicked)="handleActionClick($event)"

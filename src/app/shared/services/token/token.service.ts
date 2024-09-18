@@ -42,7 +42,7 @@ export class TokenService {
     this.userStore.setUserDetails({
       firstName: user.firstname,
       lastName: user.lastname,
-      phoneNumber: user.phoneNumber,
+      phone: user.phone,
       role: user.role,
       email: user.sub,
       id: user.jti,

@@ -8,10 +8,10 @@ export function setUserDetails(
   return (baseState) =>
     produce(baseState, (draft) => {
       draft.firstName = payloadUserState.firstName;
-      draft.middleName = payloadUserState.middleName;
+      draft.otherName = payloadUserState.otherName;
       draft.lastName = payloadUserState.lastName;
       draft.email = payloadUserState.email;
-      draft.phoneNumber = payloadUserState.phoneNumber;
+      draft.phone = payloadUserState.phone;
       draft.role = payloadUserState.role;
       draft.id = payloadUserState.id;
     });

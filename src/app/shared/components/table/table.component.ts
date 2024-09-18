@@ -22,7 +22,7 @@ export class TableComponent implements OnInit {
   @Input() first: number | undefined  = 0;
   @Input() pageSize: number | undefined = 0;
   @Input() totalData:number | undefined = 0;
-  selectedRow: TableData | null = null;
+  @Input() selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
   @Output() pageChange = new EventEmitter<{ first: number; rows: number; page: number }>();
 

@@ -15,6 +15,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { searchArray } from '../../../../shared/helpers/constants.helper';
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'liaison-lecturers',
@@ -22,8 +23,10 @@ import { searchArray } from '../../../../shared/helpers/constants.helper';
   imports: [HeaderComponent, TableComponent, CommonModule],
   templateUrl: './lecturers.component.html',
   styleUrl: './lecturers.component.scss',
+  providers: [MessageService]
 })
 export class LecturersComponent {
+  selectedRowData: TableData | null = null;
   columns: TableColumn[] = [
     { label: 'Staff ID', key: 'staff_id' },
     { label: 'Name', key: 'name' },
@@ -72,12 +75,13 @@ export class LecturersComponent {
   }
 
   handleActionClick(row: TableData) {
-    console.log('Action clicked for row:', row);
+      this.selectedRowData = row;
+     console.log('Action clicked for row:', row);
   }
 
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
-  
+
     const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
       'name',
       'department',

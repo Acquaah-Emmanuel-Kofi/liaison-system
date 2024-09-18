@@ -1,0 +1,15 @@
+<section>
+  <liaison-zone-header>
+
+  </liaison-zone-header>
+
+  <liaison-table
+    [columns]="columns"
+    [data]="data"
+    [first] = 'first'
+    [pageSize] = 'pageSize'
+    [totalData] ='totalData'
+    (actionClicked)="handleActionClick($event)"
+  />
+
+</section>

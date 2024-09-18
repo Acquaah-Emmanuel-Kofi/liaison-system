@@ -13,3 +13,8 @@ export const lecturersQueryKey = {
       totalData,
     ] as const,
 };
+
+export const lecturerListQueryKey = {
+  all: ['Lecturers list'] as const,
+  data: () => [...lecturerListQueryKey.all, 'list'] as const,
+};

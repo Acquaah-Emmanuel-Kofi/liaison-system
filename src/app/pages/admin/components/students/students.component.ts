@@ -24,11 +24,18 @@ import {
   IStudentData,
 } from '../../../../shared/interfaces/response.interface';
 import { searchArray } from '../../../../shared/helpers/constants.helper';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'liaison-students',
   standalone: true,
-  imports: [HeaderComponent, TableComponent, RouterOutlet, ToastModule],
+  imports: [
+    HeaderComponent,
+    TableComponent,
+    RouterOutlet,
+    ToastModule,
+    CommonModule,
+  ],
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.scss'],
   providers: [MessageService],
@@ -87,9 +94,6 @@ export class StudentsComponent {
 
   destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
     if (!response?.data?.students) return [];
-
-    console.log('Data: ', response?.data?.students);
-    
 
     return response.data.students.map((student: IStudentData) => ({
       student_id: student.id,

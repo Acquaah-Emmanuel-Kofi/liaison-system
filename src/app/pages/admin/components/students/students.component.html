@@ -1,17 +1,34 @@
 <p-toast></p-toast> @if (!isChildRouteActive()){
 <section>
-  <liaison-header (searchValue)="handleSearchTerm($event)"/>
+  <liaison-header (searchValue)="handleSearchTerm($event)" />
 
+  @switch (query.status()) { @case ('pending') { @if (query.data()) {
+  <ng-container *ngTemplateOutlet="table" />
+  } @else {
   <liaison-table
     [columns]="columns"
-    [data]="searchTerm() ? filteredData() :query.data()?.data?.students!"
+    [data]="searchTerm() ? filteredData() : query.data()?.data?.students!"
+    [dataIsLoading]="true"
+  />
+  } } @case ('error') {
+  <h1>An error occurred: {{ query.error() }}</h1>
+  } @case ('success') {
+  <ng-container *ngTemplateOutlet="table" />
+
+  } }
+</section>
+
+<ng-template #table>
+  <liaison-table
+    [columns]="columns"
+    [data]="searchTerm() ? filteredData() : query.data()?.data?.students!"
     [first]="first"
     [pageSize]="pageSize"
     [totalData]="totalData"
     (actionClicked)="handleActionClick($event)"
     (pageChange)="handlePageChange($event)"
   />
-</section>
+</ng-template>
 }
 
 <router-outlet></router-outlet>

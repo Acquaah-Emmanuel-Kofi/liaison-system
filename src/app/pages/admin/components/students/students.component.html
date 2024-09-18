@@ -4,7 +4,7 @@
 
   <liaison-table
     [columns]="columns"
-    [data]="data ? filteredData() :query.data()?.data?.students!"
+    [data]="searchTerm() ? filteredData() :query.data()?.data?.students!"
     [first]="first"
     [pageSize]="pageSize"
     [totalData]="totalData"

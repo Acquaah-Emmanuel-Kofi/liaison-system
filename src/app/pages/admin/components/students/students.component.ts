@@ -30,10 +30,11 @@ export class StudentsComponent implements OnInit{
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
   selectedRowData: TableData | null = null;
-  searchTerm: string = '';
+  searchTerm = signal<string>('');
   first: number | undefined = 0;
   pageSize: number = 10;
   totalData?: number;
+
   filteredData = signal<TableData[]>([]);
   pageNumber = 1;
   private searchSubscription: Subscription;
@@ -126,7 +127,7 @@ export class StudentsComponent implements OnInit{
   }
 
   handleSearchTerm(value: string) {
-    this.searchTerm = value;
+    this.searchTerm.set(value);
 
     const data = this.query.data()?.data?.students || [];
     if (data.length > 0) {

@@ -6,7 +6,11 @@
   <ng-container *ngTemplateOutlet="table" />
 
   } @else {
-  <h1>Loading...</h1>
+  <liaison-table
+    [columns]="columns"
+    [data]="searchTerm() ? filteredData() : lecturersQuery.data()!"
+    [dataIsLoading]="true"
+  />
   } } @case ('error') {
   <h1>An error occurred: {{ lecturersQuery.error() }}</h1>
   } @case ('success') {

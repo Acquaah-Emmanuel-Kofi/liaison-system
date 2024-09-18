@@ -34,7 +34,7 @@ export class TableComponent implements OnInit {
   data = input.required<TableData[]>();
   numberOfPlaceholderRows: number[] = new Array<number>(10);
   dataIsLoading = input<boolean>(false);
-  selectedRow: TableData | null = null;
+  @Input() selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
 
   @Input() first: number | undefined = 0;

@@ -22,7 +22,7 @@ export class PreviewPanelComponent {
   @Input() data!: TableData;
   @Output() closeEvent = new EventEmitter<void>();
   isTelephoneActive: boolean = false;
-   isCopied!: boolean;
+  isCopied!: boolean;
 
 
   onClosePanel() {

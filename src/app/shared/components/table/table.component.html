@@ -128,7 +128,7 @@
       <div class="card flex justify-content-center">
         <p-paginator
           (onPageChange)="onPageChange($event)"
-          [first]="0"
+          [first]="first || 0"
           [rows]="pageSize"
           [totalRecords]="totalData"
           [showCurrentPageReport]="true"

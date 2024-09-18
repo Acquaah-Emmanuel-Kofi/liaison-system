@@ -35,11 +35,11 @@ export interface IGetLecturersResponse extends ICommonResponse {
 }
 
 interface ILecturersResponseData {
-  currentPage: number | undefined;
-  pageSize: number | undefined;
+  currentPage: number;
+  pageSize: number;
   page: ILecturerContentData;
   totalData: number;
-  totalPages: number | undefined;
+  totalPages: number;
 }
 
 interface ILecturerContentData {

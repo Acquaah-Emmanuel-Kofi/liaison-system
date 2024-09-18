@@ -36,6 +36,7 @@ export class LecturersComponent {
   ];
 
   currentPage = signal<number>(1);
+  first = signal<number>(1);
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   searchTerm = signal<string>('');
@@ -51,9 +52,8 @@ export class LecturersComponent {
         this._dataServices.getAllLecturers(this.currentPage(), this.pageSize())
       );
 
-      this.currentPage.set(response.data.currentPage ?? 1);
-      this.totalData.set(response.data.totalData ?? 10);
-      this.pageSize.set(response.data.pageSize ?? 45);
+      this.currentPage.set(response.data.currentPage);
+      this.totalData.set(response.data.totalData);
 
       return this.destructureStudents(response.data.page.content);
     },
@@ -83,6 +83,7 @@ export class LecturersComponent {
     this.searchTerm.set(value);
 
     const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
+      'staff_id',
       'name',
       'department',
       'faculty',
@@ -92,8 +93,10 @@ export class LecturersComponent {
   }
 
   handlePageChange(data: { first: number; rows: number; page: number }) {
-    this.currentPage.set(data.first);
+    this.first.set(data.first);
+
+    this.currentPage.set(data.page + 1);
+
     this.pageSize.set(data.rows);
-    this.totalData.set(data.page + 1);
   }
 }

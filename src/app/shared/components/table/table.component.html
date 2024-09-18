@@ -112,11 +112,10 @@
             <td
               class="px-4 py-4 whitespace-nowrap text-sm overflow-hidden truncate max-w-[150px]"
             >
-              @if (column.key.toLowerCase().includes('id')) { @if
-              (row['imageUrl']) {
+              @if (column.key.toLowerCase().includes('id')) { @if (row['dp']) {
               <div class="flex items-center gap-3">
                 <img
-                  [src]="row['imageUrl']"
+                  [src]="row['dp']"
                   alt="Student Display Profile"
                   class="h-8 w-8 rounded-full"
                 />
@@ -139,8 +138,22 @@
               <button
                 type="button"
                 (click)="onSelectRow(row)"
-                class="text-indigo-600 hover:text-indigo-900 underline"
+                class="text-[#19337E] hover:text-indigo-500 flex items-center gap-1 underline"
               >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12l4-4m0 0l-4-4m4 4H9m6 8l4-4m0 0l-4-4m4 4H9m6 8l4-4m0 0l-4-4m4 4H9m6 8l4-4m0 0l-4-4m4 4H9"
+                  />
+                </svg>
                 View
               </button>
               } @else {

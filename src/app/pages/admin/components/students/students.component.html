@@ -7,7 +7,7 @@
   } @else {
   <liaison-table
     [columns]="columns"
-    [data]="searchTerm() ? filteredData() : query.data()?.data?.students!"
+    [data]="searchTerm() ? filteredData() : data"
     [dataIsLoading]="true"
   />
   } } @case ('error') {
@@ -21,11 +21,10 @@
 <ng-template #table>
   <liaison-table
     [columns]="columns"
-    [data]="searchTerm() ? filteredData() : query.data()?.data?.students!"
+    [data]="searchTerm() ? filteredData() : data"
     [first]="first"
     [pageSize]="pageSize"
     [totalData]="totalData"
-    (actionClicked)="handleActionClick($event)"
     (pageChange)="handlePageChange($event)"
   />
 </ng-template>

@@ -45,7 +45,6 @@ export class StudentsComponent {
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
-  selectedRowData: TableData | null = null;
   searchTerm = signal<string>('');
   first: number | undefined = 0;
   pageSize: number = 10;
@@ -143,7 +142,4 @@ export class StudentsComponent {
     this.query.refetch();
   }
 
-  handleActionClick(row: TableData): void {
-    this.selectedRowData = row;
-  }
 }

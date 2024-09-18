@@ -4,13 +4,14 @@ import {SelectFilterComponent} from "../../../../../../shared/components/select-
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
 import {Router} from "@angular/router";
 import {injectQuery} from "@tanstack/angular-query-experimental";
-import {studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
+import {lecturerListQueryKey, studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
 import {ModalContainerComponent} from "../../../../../../shared/components/modal-container/modal-container.component";
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {RegionService} from "../../../../../../shared/services/regions/regions.service";
 import {ZoneService} from "../../service/zone.service";
 import {lectureListResponse} from "../../zone.interface";
+import {reset} from "@angular-architects/ngrx-toolkit/lib/with-devtools";
 
 @Component({
   selector: 'liaison-zone-header',
@@ -50,7 +51,6 @@ export class ZoneHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.regions = this.regionService.getRegions();
-    console.log(this.lecturesQuery.data())
   }
 
   filterOptions: string[] = [
@@ -66,8 +66,12 @@ export class ZoneHeaderComponent implements OnInit {
 
 
   lecturesQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data()],
-    queryFn: () => this.zoneService.getAllLectures(),
+    queryKey: [...lecturerListQueryKey.data()],
+    queryFn: async () => {
+      const  response = await this.zoneService.getAllLectures()
+      this.lecturers = response.data
+      return response
+    }
   }));
 
 

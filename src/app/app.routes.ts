@@ -8,6 +8,7 @@ import { InternshipsComponent } from './pages/admin/components/internships/inter
 import { UploadStudentComponent } from './pages/admin/components/students/components/uploadStudent/upload-student/upload-student.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { ErrorPageComponent } from './pages/404/error-page/error-page.component';
+import {ZonesComponent} from "./pages/admin/components/zones/zones.component";
 
 export const routes: Routes = [
   {
@@ -54,6 +55,10 @@ export const routes: Routes = [
         path: 'internships',
         component: InternshipsComponent,
       },
+      {
+        path: "zones",
+        component: ZonesComponent
+      }
     ],
   },
   {

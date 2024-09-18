@@ -1,10 +1,10 @@
 <p-toast></p-toast> @if (!isChildRouteActive()){
 <section>
-  <liaison-header />
+  <liaison-header (searchValue)="handleSearchTerm($event)"/>
 
   <liaison-table
     [columns]="columns"
-    [data]="data"
+    [data]="data ? filteredData() :query.data()?.data?.students!"
     [first]="first"
     [pageSize]="pageSize"
     [totalData]="totalData"

@@ -1,4 +1,4 @@
-import {Component, computed, effect, HostListener, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, effect, HostListener, inject, OnInit, signal, Signal} from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
@@ -7,9 +7,14 @@ import { StudentTableService } from "../../service/students-table/student-table.
 import { ToastModule } from "primeng/toast";
 import { MessageService } from "primeng/api";
 import { injectQuery } from "@tanstack/angular-query-experimental";
-import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
-import { IGetStudentResponse, IStudentData } from '../../../../shared/interfaces/response.interface';
-import {Subscription} from "rxjs";
+import {lecturersQueryKey, studentsQueryKey} from '../../../../shared/helpers/query-keys.helper';
+import {
+  IGetLecturersResponse,
+  IGetStudentResponse,
+  IStudentData
+} from '../../../../shared/interfaces/response.interface';
+import {lastValueFrom, Subscription} from "rxjs";
+import {searchArray} from "../../../../shared/helpers/constants.helper";
 
 @Component({
   selector: 'liaison-students',
@@ -29,6 +34,7 @@ export class StudentsComponent implements OnInit{
   first: number | undefined = 0;
   pageSize: number = 10;
   totalData?: number;
+  filteredData = signal<TableData[]>([]);
   pageNumber = 1;
   private searchSubscription: Subscription;
 
@@ -70,6 +76,8 @@ export class StudentsComponent implements OnInit{
       this.data = this.tableData();
     });
   }
+
+
 
   query = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data(), this.pageNumber, this.pageSize],
@@ -117,22 +125,17 @@ export class StudentsComponent implements OnInit{
     }
   }
 
-  async searchStudents() {
-    if (this.searchTerm) {
-      this.searchTerm.trim()
-      try {
-        const result = await this.studentService.searchStudent(this.searchTerm);
-        this.data = this.destructureStudents(result);
-        this.totalData = result.data.totalData;
-        this.pageNumber = 1;
-        this.first = 0;
-      } catch (error) {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to search students' });
-      }
-    } else {
-      await this.query.refetch();
+  handleSearchTerm(value: string) {
+    this.searchTerm = value;
+
+    const data = this.query.data()?.data?.students || [];
+    if (data.length > 0) {
+      const filteredStudents = searchArray(data, value, ['name', 'department', 'faculty']);
+
+      this.filteredData.set(filteredStudents);
     }
   }
+
 
   handlePageChange(event: any) {
     this.pageNumber = event.page + 1;

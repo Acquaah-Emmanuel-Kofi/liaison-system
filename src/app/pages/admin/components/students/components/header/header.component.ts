@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
-import { SelectFilterComponent } from '../../../../../../shared/components/select-filter/select-filter.component';
+import {Component, inject, output} from '@angular/core';
+import {SelectFilterComponent} from '../../../../../../shared/components/select-filter/select-filter.component';
 import {Router, RouterLink} from "@angular/router";
-import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
+import {SearchbarComponent} from '../../../../../../shared/components/searchbar/searchbar.component';
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
 import {injectQuery} from "@tanstack/angular-query-experimental";
 import {studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
@@ -17,7 +17,7 @@ export class HeaderComponent {
   studentService = inject(StudentTableService)
   toggledFilterButton: boolean = false;
   route = inject(Router);
-  searchValue = ''
+  searchValue = output<string>();
 
 
   filterOptions: string[] = [
@@ -31,10 +31,6 @@ export class HeaderComponent {
     'Graphic Design',
   ];
 
-  query = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(),],
-    queryFn: () => this.studentService.searchStudent(this.searchValue),
-  }));
 
   toggleFilterButton() {
     this.toggledFilterButton = !this.toggledFilterButton;
@@ -49,14 +45,6 @@ export class HeaderComponent {
   }
 
   handleSearchTerm(value: string) {
-    this.searchValue = value;
-    if (this.searchValue) {
-      // Refetch student search results based on search term
-      this.query.refetch().then(() => {
-        const results = this.query.data();
-        this.studentService.updateSearchResults(results);
-      });
-    }
-
+    this.searchValue.emit(value);
   }
 }

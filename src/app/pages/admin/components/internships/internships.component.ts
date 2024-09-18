@@ -1,4 +1,4 @@
-import {Component, computed, effect, HostListener, inject, Signal} from '@angular/core';
+import {Component, computed, effect, HostListener, inject, signal, Signal} from '@angular/core';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
@@ -9,12 +9,13 @@ import {StudentTableService} from "../../service/students-table/student-table.se
 import {injectQuery} from "@tanstack/angular-query-experimental";
 import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { IGetStudentResponse, IStudentData } from '../../../../shared/interfaces/response.interface';
-import { formatDateToDDMMYYYY } from '../../../../shared/helpers/constants.helper';
+import { formatDateToDDMMYYYY, searchArray } from '../../../../shared/helpers/constants.helper';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'liaison-internships',
   standalone: true,
-  imports: [HeaderComponent, TableComponent],
+  imports: [HeaderComponent, TableComponent, CommonModule],
   templateUrl: './internships.component.html',
   styleUrl: './internships.component.scss',
 })
@@ -24,6 +25,10 @@ export class InternshipsComponent {
   pageSize: number = 10;
   totalData?: number;
   pageNumber = 1;
+  searchTerm = signal<string>('');
+
+  data: TableData[] = [];
+  filteredData = signal<TableData[]>([]);
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
@@ -41,11 +46,17 @@ export class InternshipsComponent {
     { label: 'Status', key: 'status' },
   ];
 
-  data: TableData[] = [];
+  constructor() {
+    this.adjustPaginatorRows();
+    effect(() => {
+      this.data = this.tableData();
+    });
+  }
 
   query = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data()],
-    queryFn: () => this.studentService.getAllStudents(this.pageNumber, this.pageSize),
+    queryFn: () =>
+      this.studentService.getAllStudents(this.pageNumber, this.pageSize),
   }));
 
   tableData: Signal<TableData[]> = computed(() => {
@@ -56,13 +67,6 @@ export class InternshipsComponent {
     return this.destructureStudents(data);
   });
 
-  constructor() {
-    this.adjustPaginatorRows();
-    effect(() => {
-      this.data = this.tableData();
-    });
-  }
-
   adjustPaginatorRows() {
     const screenWidth = window.innerWidth;
     if (screenWidth <= 1536) {
@@ -72,9 +76,8 @@ export class InternshipsComponent {
     }
   }
 
-
   destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
-    if (!response || !response.data.students) return [];
+    if (!response?.data?.students) return [];
 
     return response.data.students.map((student: IStudentData) => ({
       student_id: student.id,
@@ -89,14 +92,26 @@ export class InternshipsComponent {
     }));
   }
 
+  handleSearchTerm(value: string) {
+    this.searchTerm.set(value);
+
+    const data = this.query.data()?.data?.students || [];
+
+    if (data.length > 0) {
+      const filteredStudents = searchArray(data, value, [
+        'name',
+        'department',
+        'faculty',
+      ]);
+
+      this.filteredData.set(filteredStudents);
+    }
+  }
+
   handlePageChange(event: any) {
     this.pageNumber = event.page + 1;
     this.pageSize = event.rows;
     this.first = event.first;
     this.query.refetch();
-  }
-
-  handleActionClick(row: TableData) {
-    console.log('Action clicked for row:', row);
   }
 }

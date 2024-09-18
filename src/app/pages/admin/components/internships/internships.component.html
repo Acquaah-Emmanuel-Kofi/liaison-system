@@ -1,13 +1,29 @@
 <section>
   <liaison-header />
 
+  @switch (query.status()) { @case ('pending') { @if (query.data()) {
+  <ng-container *ngTemplateOutlet="table" />
+  } @else {
   <liaison-table
     [columns]="columns"
-    [data]="data"
-    [first] = 'first'
-    [pageSize] = 'pageSize'
-    [totalData] ='totalData'
-    (actionClicked)="handleActionClick($event)"
+    [data]="searchTerm() ? filteredData() : data"
+    [dataIsLoading]="true"
+  />
+  } } @case ('error') {
+  <h1>An error occurred: {{ query.error() }}</h1>
+  } @case ('success') {
+  <ng-container *ngTemplateOutlet="table" />
+
+  } }
+</section>
+
+<ng-template #table>
+  <liaison-table
+    [columns]="columns"
+    [data]="searchTerm() ? filteredData() : data"
+    [first]="first"
+    [pageSize]="pageSize"
+    [totalData]="totalData"
     (pageChange)="handlePageChange($event)"
   />
-</section>
+</ng-template>

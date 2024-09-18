@@ -56,6 +56,47 @@
       </thead>
 
       <tbody class="bg-[#F9FBFD] divide-[#D1D9E2] divide-y">
+        @if (dataIsLoading()) {
+        <!-- Skeleton loading rows -->
+        @for (item of numberOfPlaceholderRows; track $index) {
+        <tr>
+          <!-- Skeleton checkbox -->
+          <td class="w-[60px] pl-5">
+            <div
+              class="form-checkbox h-4 w-4 bg-gray-200 rounded animate-pulse"
+            ></div>
+          </td>
+
+          @for (column of columns(); track $index) {
+          <ng-container>
+            <td
+              class="px-4 py-4 whitespace-nowrap text-sm overflow-hidden truncate max-w-[150px]"
+            >
+              <!-- Skeleton for image and ID column -->
+              @if (column.key.toLowerCase().includes('id')) {
+              <div class="flex items-center gap-3">
+                <div
+                  class="h-8 w-8 rounded-full bg-gray-300 animate-pulse"
+                ></div>
+                <span class="h-4 w-24 bg-gray-200 rounded animate-pulse"></span>
+              </div>
+              } @else if(column.key === 'status') {
+              <!-- Skeleton for status chip -->
+              <div class="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
+              } @else if (column.isAction) {
+              <!-- Skeleton for action button -->
+              <div class="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+              } @else {
+              <!-- Skeleton for other text columns -->
+              <span class="h-4 w-32 bg-gray-200 rounded block animate-pulse">
+              </span>
+              }
+            </td>
+          </ng-container>
+          }
+        </tr>
+        } } @else {
+        <!-- Actual data rows when not loading -->
         @for (row of data(); track $index) {
         <tr>
           <td class="w-[60px] pl-5">
@@ -94,7 +135,6 @@
               </div>
               } } @else if(column.key === 'status') {
               <liaison-status-chip [status]="row['status']" />
-
               } @else if (column.isAction) {
               <button
                 type="button"
@@ -108,19 +148,21 @@
               }
             </td>
           </ng-container>
-
           }
         </tr>
-        }
+        } @empty {
+        <div class="flex flex-col justify-center items-center min-h-[400px]">
+          <img src="assets/empty-data.svg" alt="empty table" />
+          <p class="text-Primary-Black font-medium text-[20px]">
+            No data found
+          </p>
+          <p>You will see all data here when you add one</p>
+        </div>
+        } }
       </tbody>
     </table>
-    @if (data().length === 0){
-    <div class="flex flex-col justify-center items-center min-h-[400px]">
-      <img src="assets/empty-data.svg" alt="empty table" />
-      <p class="text-Primary-Black font-medium text-[20px]">No data found</p>
-      <p>You will see all data here when you add one</p>
-    </div>
-    } @if (totalData! > 10){
+    
+    @if (totalData! > 10){
     <div
       class="flex right-0 items-center justify-end"
       [ngClass]="{ hidden: HidePagination }"

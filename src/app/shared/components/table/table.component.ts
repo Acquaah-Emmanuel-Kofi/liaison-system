@@ -32,6 +32,8 @@ export class TableComponent implements OnInit {
   @Input() HidePagination!: boolean;
   columns = input.required<TableColumn[]>();
   data = input.required<TableData[]>();
+  numberOfPlaceholderRows: number[] = new Array<number>(10);
+  dataIsLoading = input<boolean>(true);
   selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
 

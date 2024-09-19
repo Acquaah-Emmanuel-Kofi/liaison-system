@@ -1,4 +1,4 @@
-import { formatDate } from "@angular/common";
+import { formatDate } from '@angular/common';
 
 export const ACCESS_TOKEN_KEY: string = 'LIAISON_SYSTEM_TOKEN';
 
@@ -14,17 +14,23 @@ export const removeFromLocalStorage = (key: string) => {
   return localStorage.removeItem(key);
 };
 
+const routeValueKey: { [key: string]: string } = {
+  dashboard: 'Dashboard',
+  lecturers: 'Lecturers',
+  students: 'Students',
+  internships: 'Internships',
+  'access-control': 'Access Control',
+  courses: 'Courses',
+  location: 'Location',
+  annoucements: 'Annoucements',
+  zones: 'Zones',
+};
 
-export const formatDateToDDMMYYYY = (date: string): string => {
-  const parsedDate = new Date(date);
-  if (isNaN(parsedDate.getTime())) return date; // Return original if invalid date
-  return formatDate(parsedDate, 'dd/MM/yyyy', 'en-US'); // Format date
-}
-
-export function searchArray<T>(array: T[], searchTerm: string, keys: (keyof T)[]): T[] {
-  return array.filter(item =>
-    keys?.some(key => 
-      item[key]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+export function setPageHeader(currentRoute: string): string {
+  for (const key in routeValueKey) {
+    if (currentRoute.includes(key)) {
+      return routeValueKey[key];
+    }
+  }
+  return '';
 }

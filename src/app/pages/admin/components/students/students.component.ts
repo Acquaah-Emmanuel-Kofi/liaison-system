@@ -1,12 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  HostListener,
-  inject,
-  signal,
-  Signal,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import {
@@ -19,10 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
-import {
-  IGetStudentResponse,
-  IStudentData,
-} from '../../../../shared/interfaces/response.interface';
+import { IStudentData } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { searchArray } from '../../../../shared/helpers/functions.helper';
 
@@ -45,19 +34,14 @@ export class StudentsComponent {
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
+
+  currentPage = signal<number>(1);
+  first = signal<number>(1);
+  totalData = signal<number>(10);
+  pageSize = signal<number>(10);
   searchTerm = signal<string>('');
-  first: number | undefined = 0;
-  pageSize: number = 10;
-  totalData?: number;
 
   filteredData = signal<TableData[]>([]);
-  pageNumber = 1;
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.adjustPaginatorRows();
-    this.query.refetch();
-  }
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -67,34 +51,24 @@ export class StudentsComponent {
     { label: 'Actions', key: 'action', isAction: true },
   ];
 
-  constructor() {
-    this.adjustPaginatorRows();
+  studentsQuery = injectQuery(() => ({
+    queryKey: [...studentsQueryKey.data(this.currentPage(), this.totalData())],
+    queryFn: async () => {
+      const response = await this.studentService.getAllStudents(
+        this.currentPage(),
+        this.pageSize()
+      );
 
-    effect(() => {
-      this.data = this.tableData();
-    });
-  }
+      this.totalData.set(response.data.totalData);
 
-  query = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(), this.pageNumber, this.pageSize],
-    queryFn: () =>
-      this.studentService.getAllStudents(this.pageNumber, this.pageSize),
+      return this.destructureStudents(response.data.students);
+    },
   }));
 
-  tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();
-    this.pageSize = data?.data?.pageSize ?? this.pageSize;
-    this.totalData = data?.data.totalData;
-    this.first = data?.data.currentPage;
-    return this.destructureStudents(data);
-  });
+  destructureStudents(data: IStudentData[]): TableData[] {
+    if (!data) return [];
 
-  data: TableData[] = [];
-
-  destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
-    if (!response?.data?.students) return [];
-
-    return response.data.students.map((student: IStudentData) => ({
+    return data.map((student: IStudentData) => ({
       student_id: student.id,
       name: student.name,
       faculty: student.faculty,
@@ -112,34 +86,25 @@ export class StudentsComponent {
 
   adjustPaginatorRows() {
     const screenWidth = window.innerWidth;
-    if (screenWidth <= 1536) {
-      this.pageSize = 5;
-    } else {
-      this.pageSize = 10;
-    }
+    screenWidth <= 1536 ? this.pageSize.set(5) : this.pageSize.set(10);
   }
 
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
-    const data = this.query.data()?.data?.students || [];
+    const filteredLecturers = searchArray(this.studentsQuery.data()!, value, [
+      'name',
+      'student_id',
+    ]);
 
-    if (data.length > 0) {
-      const filteredStudents = searchArray(data, value, [
-        'name',
-        'department',
-        'faculty',
-      ]);
-
-      this.filteredData.set(filteredStudents);
-    }
+    this.filteredData.set(filteredLecturers ?? []);
   }
 
-  handlePageChange(event: any) {
-    this.pageNumber = event.page + 1;
-    this.pageSize = event.rows;
-    this.first = event.first;
-    this.query.refetch();
-  }
+  handlePageChange(data: { first: number; rows: number; page: number }) {
+    this.first.set(data.first);
 
+    this.currentPage.set(data.page + 1);
+
+    this.pageSize.set(data.rows);
+  }
 }

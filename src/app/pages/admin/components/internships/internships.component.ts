@@ -1,15 +1,18 @@
-import {Component, computed, effect, HostListener, inject, signal, Signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
   TableColumn,
   TableData,
 } from '../../../../shared/components/table/table.interface';
-import {StudentTableService} from "../../service/students-table/student-table.service";
-import {injectQuery} from "@tanstack/angular-query-experimental";
+import { StudentTableService } from '../../service/students-table/student-table.service';
+import { injectQuery } from '@tanstack/angular-query-experimental';
 import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
-import { IGetStudentResponse, IStudentData } from '../../../../shared/interfaces/response.interface';
-import { formatDateToDDMMYYYY, searchArray } from '../../../../shared/helpers/constants.helper';
+import { IStudentData } from '../../../../shared/interfaces/response.interface';
+import {
+  formatDateToDDMMYYYY,
+  searchArray,
+} from '../../../../shared/helpers/constants.helper';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -20,21 +23,15 @@ import { CommonModule } from '@angular/common';
   styleUrl: './internships.component.scss',
 })
 export class InternshipsComponent {
-  studentService = inject(StudentTableService);
-  first: number | undefined = 0;
-  pageSize: number = 10;
-  totalData?: number;
-  pageNumber = 1;
+  currentPage = signal<number>(1);
+  first = signal<number>(1);
+  totalData = signal<number>(10);
+  pageSize = signal<number>(10);
   searchTerm = signal<string>('');
 
-  data: TableData[] = [];
   filteredData = signal<TableData[]>([]);
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.adjustPaginatorRows();
-    this.query.refetch();
-  }
+  studentService = inject(StudentTableService);
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -46,40 +43,24 @@ export class InternshipsComponent {
     { label: 'Status', key: 'status' },
   ];
 
-  constructor() {
-    this.adjustPaginatorRows();
-    effect(() => {
-      this.data = this.tableData();
-    });
-  }
+  studentsQuery = injectQuery(() => ({
+    queryKey: [...studentsQueryKey.data(this.currentPage(), this.totalData())],
+    queryFn: async () => {
+      const response = await this.studentService.getAllStudents(
+        this.currentPage(),
+        this.pageSize()
+      );
 
-  query = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data()],
-    queryFn: () =>
-      this.studentService.getAllStudents(this.pageNumber, this.pageSize),
+      this.totalData.set(response.data.totalData);
+
+      return this.destructureStudents(response.data.students);
+    },
   }));
 
-  tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();
-    this.pageSize = data?.data?.pageSize ?? this.pageSize;
-    this.first = data?.data.currentPage;
-    this.totalData = data?.data.totalData;
-    return this.destructureStudents(data);
-  });
+  destructureStudents(data: IStudentData[]): TableData[] {
+    if (!data) return [];
 
-  adjustPaginatorRows() {
-    const screenWidth = window.innerWidth;
-    if (screenWidth <= 1536) {
-      this.pageSize = 5;
-    } else {
-      this.pageSize = 10;
-    }
-  }
-
-  destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
-    if (!response?.data?.students) return [];
-
-    return response.data.students.map((student: IStudentData) => ({
+    return data.map((student: IStudentData) => ({
       student_id: student.id,
       name: student.name,
       faculty: student.faculty,
@@ -95,23 +76,20 @@ export class InternshipsComponent {
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
-    const data = this.query.data()?.data?.students || [];
+    const filteredLecturers = searchArray(this.studentsQuery.data()!, value, [
+      'name',
+      'placeOfInternship',
+      'student_id',
+    ]);
 
-    if (data.length > 0) {
-      const filteredStudents = searchArray(data, value, [
-        'name',
-        'department',
-        'faculty',
-      ]);
-
-      this.filteredData.set(filteredStudents);
-    }
+    this.filteredData.set(filteredLecturers ?? []);
   }
 
-  handlePageChange(event: any) {
-    this.pageNumber = event.page + 1;
-    this.pageSize = event.rows;
-    this.first = event.first;
-    this.query.refetch();
+  handlePageChange(data: { first: number; rows: number; page: number }) {
+    this.first.set(data.first);
+
+    this.currentPage.set(data.page + 1);
+
+    this.pageSize.set(data.rows);
   }
 }

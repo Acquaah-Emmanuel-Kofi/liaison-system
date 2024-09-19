@@ -1,16 +1,17 @@
 <section>
   <liaison-header (searchValue)="handleSearchTerm($event)" />
 
-  @switch (studentsQuery.status()) { @case ('pending') { @if (studentsQuery.data()) {
+  @switch (lecturersQuery.status()) { @case ('pending') { @if
+  (lecturersQuery.data()) {
   <ng-container *ngTemplateOutlet="table" />
   } @else {
   <liaison-table
     [columns]="columns"
-    [data]="searchTerm() ? filteredData() : studentsQuery.data()!"
+    [data]="searchTerm() ? filteredData() : lecturersQuery.data()!"
     [dataIsLoading]="true"
   />
   } } @case ('error') {
-  <h1>An error occurred: {{ studentsQuery.error() }}</h1>
+  <h1>An error occurred: {{ lecturersQuery.error() }}</h1>
   } @case ('success') {
   <ng-container *ngTemplateOutlet="table" />
 
@@ -20,7 +21,7 @@
 <ng-template #table>
   <liaison-table
     [columns]="columns"
-    [data]="searchTerm() ? filteredData() : studentsQuery.data()!"
+    [data]="searchTerm() ? filteredData() : lecturersQuery.data()!"
     [first]="first()"
     [pageSize]="pageSize()"
     [totalData]="totalData()"

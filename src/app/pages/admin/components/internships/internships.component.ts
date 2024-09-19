@@ -40,7 +40,7 @@ export class InternshipsComponent {
     { label: 'Status', key: 'status' },
   ];
 
-  studentsQuery = injectQuery(() => ({
+  lecturersQuery = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data(this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await this.studentService.getAllStudents(
@@ -73,7 +73,7 @@ export class InternshipsComponent {
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
-    const filteredLecturers = searchArray(this.studentsQuery.data()!, value, [
+    const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
       'name',
       'placeOfInternship',
       'student_id',

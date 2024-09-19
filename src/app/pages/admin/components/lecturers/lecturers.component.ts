@@ -14,8 +14,8 @@ import {
 } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
-import { searchArray } from '../../../../shared/helpers/constants.helper';
 import { MessageService } from 'primeng/api';
+import { searchArray } from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-lecturers',
@@ -74,8 +74,6 @@ export class LecturersComponent {
     const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
       'staff_id',
       'name',
-      'department',
-      'faculty',
     ]);
 
     this.filteredData.set(filteredLecturers ?? []);

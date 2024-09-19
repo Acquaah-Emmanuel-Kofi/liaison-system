@@ -23,8 +23,8 @@ import {
   IGetStudentResponse,
   IStudentData,
 } from '../../../../shared/interfaces/response.interface';
-import { searchArray } from '../../../../shared/helpers/constants.helper';
 import { CommonModule } from '@angular/common';
+import { searchArray } from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-students',

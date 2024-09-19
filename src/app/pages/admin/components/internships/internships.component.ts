@@ -9,11 +9,8 @@ import { StudentTableService } from '../../service/students-table/student-table.
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { IStudentData } from '../../../../shared/interfaces/response.interface';
-import {
-  formatDateToDDMMYYYY,
-  searchArray,
-} from '../../../../shared/helpers/constants.helper';
 import { CommonModule } from '@angular/common';
+import { formatDateToDDMMYYYY, searchArray } from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-internships',

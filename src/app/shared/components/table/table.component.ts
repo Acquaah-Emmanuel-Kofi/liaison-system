@@ -13,6 +13,7 @@ import { CommonModule, NgClass } from '@angular/common';
 import { StatusChipComponent } from '../status-chip/status-chip.component';
 import { getFirstTwoInitials, sortByKey } from '../../helpers/functions.helper';
 import { PaginatorModule } from 'primeng/paginator';
+import { ErrorOccurredComponent } from './components/error-occurred/error-occurred.component';
 
 @Component({
   selector: 'liaison-table',
@@ -23,6 +24,7 @@ import { PaginatorModule } from 'primeng/paginator';
     CommonModule,
     StatusChipComponent,
     PaginatorModule,
+    ErrorOccurredComponent,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -34,6 +36,7 @@ export class TableComponent implements OnInit {
   data = input.required<TableData[]>();
   numberOfPlaceholderRows: number[] = new Array<number>(10);
   dataIsLoading = input<boolean>(false);
+  errorOccurred = input<boolean>(false);
   @Input() selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
 

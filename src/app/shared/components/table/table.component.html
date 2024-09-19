@@ -95,7 +95,16 @@
           </ng-container>
           }
         </tr>
-        } } @else {
+        } } @else if (errorOccurred()) {
+        <tr>
+          <td colspan="100%">
+            <liaison-error-occurred
+              [isError]="true"
+              [errorMessage]="'Unable to load data for the table.'"
+            />
+          </td>
+        </tr>
+        } @else {
         <!-- Actual data rows when not loading -->
         @for (row of data(); track $index) {
         <tr>
@@ -164,19 +173,16 @@
           }
         </tr>
         } @empty {
+
         <tr>
           <td colspan="100%">
-            <div
-              class="flex flex-col justify-center items-center min-h-[400px]"
-            >
-              <img src="assets/empty-data.svg" alt="empty table" />
-              <p class="text-Primary-Black font-medium text-[20px]">
-                No data found
-              </p>
-              <p>You will see all data here when you add one</p>
-            </div>
+            <liaison-error-occurred
+              [isError]="false"
+              [errorMessage]="'You will see all data here when you add one.'"
+            />
           </td>
         </tr>
+
         } }
       </tbody>
     </table>

@@ -14,8 +14,8 @@ import {
 } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
-import { searchArray } from '../../../../shared/helpers/constants.helper';
-import {MessageService} from "primeng/api";
+import { MessageService } from 'primeng/api';
+import { searchArray } from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-lecturers',
@@ -23,10 +23,9 @@ import {MessageService} from "primeng/api";
   imports: [HeaderComponent, TableComponent, CommonModule],
   templateUrl: './lecturers.component.html',
   styleUrl: './lecturers.component.scss',
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class LecturersComponent {
-  selectedRowData: TableData | null = null;
   columns: TableColumn[] = [
     { label: 'Staff ID', key: 'staff_id' },
     { label: 'Name', key: 'name' },
@@ -52,14 +51,13 @@ export class LecturersComponent {
         this._dataServices.getAllLecturers(this.currentPage(), this.pageSize())
       );
 
-      this.currentPage.set(response.data.currentPage);
       this.totalData.set(response.data.totalData);
 
       return this.destructureStudents(response.data.page.content);
     },
   }));
 
-  destructureStudents(data: ILecturersData[] | undefined): TableData[] {
+  destructureStudents(data: ILecturersData[]): TableData[] {
     if (!data) return [];
 
     return data.map((lecturer: ILecturersData) => ({
@@ -70,23 +68,12 @@ export class LecturersComponent {
     }));
   }
 
-  handleRowSelection(row: TableData) {
-    console.log('Row selected:', row);
-  }
-
-  handleActionClick(row: TableData) {
-      this.selectedRowData = row;
-     console.log('Action clicked for row:', row);
-  }
-
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
     const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
       'staff_id',
       'name',
-      'department',
-      'faculty',
     ]);
 
     this.filteredData.set(filteredLecturers ?? []);

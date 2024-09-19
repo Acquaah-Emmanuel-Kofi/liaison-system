@@ -1,50 +1,47 @@
-import {Component, computed, effect, HostListener, inject, OnInit, signal, Signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
-import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
-import { StudentTableService } from "../../service/students-table/student-table.service";
-import { ToastModule } from "primeng/toast";
-import { MessageService } from "primeng/api";
-import { injectQuery } from "@tanstack/angular-query-experimental";
-import {lecturersQueryKey, studentsQueryKey} from '../../../../shared/helpers/query-keys.helper';
 import {
-  IGetLecturersResponse,
-  IGetStudentResponse,
-  IStudentData
-} from '../../../../shared/interfaces/response.interface';
-import {lastValueFrom, Subscription} from "rxjs";
-import {searchArray} from "../../../../shared/helpers/constants.helper";
+  TableColumn,
+  TableData,
+} from '../../../../shared/components/table/table.interface';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { StudentTableService } from '../../service/students-table/student-table.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { IStudentData } from '../../../../shared/interfaces/response.interface';
+import { CommonModule } from '@angular/common';
+import { searchArray } from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-students',
   standalone: true,
-  imports: [HeaderComponent, TableComponent, RouterOutlet, ToastModule],
+  imports: [
+    HeaderComponent,
+    TableComponent,
+    RouterOutlet,
+    ToastModule,
+    CommonModule,
+  ],
   templateUrl: './students.component.html',
   styleUrls: ['./students.component.scss'],
   providers: [MessageService],
 })
-export class StudentsComponent implements OnInit{
+export class StudentsComponent {
   messageService = inject(MessageService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
-  selectedRowData: TableData | null = null;
+
+  currentPage = signal<number>(1);
+  first = signal<number>(1);
+  totalData = signal<number>(10);
+  pageSize = signal<number>(10);
   searchTerm = signal<string>('');
-  first: number | undefined = 0;
-  pageSize: number = 10;
-  totalData?: number;
 
   filteredData = signal<TableData[]>([]);
-  pageNumber = 1;
-  private searchSubscription: Subscription;
-
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.adjustPaginatorRows();
-    this.query.refetch();
-  }
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -54,53 +51,24 @@ export class StudentsComponent implements OnInit{
     { label: 'Actions', key: 'action', isAction: true },
   ];
 
-  ngOnInit() {
+  studentsQuery = injectQuery(() => ({
+    queryKey: [...studentsQueryKey.data(this.currentPage(), this.totalData())],
+    queryFn: async () => {
+      const response = await this.studentService.getAllStudents(
+        this.currentPage(),
+        this.pageSize()
+      );
 
-  }
+      this.totalData.set(response.data.totalData);
 
-  constructor() {
-    this.adjustPaginatorRows();
-
-    this.searchSubscription = this.studentService.searchResults$.subscribe(
-      results => {
-        if (results) {
-          this.data = this.destructureStudents(results);
-          this.totalData = results.data.totalData;
-          this.first = results.data.currentPage;
-        } else {
-          this.query.refetch();
-        }
-      }
-    );
-
-    effect(() => {
-      this.data = this.tableData();
-    });
-  }
-
-
-
-  query = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(), this.pageNumber, this.pageSize],
-    queryFn: () => this.studentService.getAllStudents(this.pageNumber, this.pageSize),
+      return this.destructureStudents(response.data.students);
+    },
   }));
 
+  destructureStudents(data: IStudentData[]): TableData[] {
+    if (!data) return [];
 
-
-  tableData: Signal<TableData[]> = computed(() => {
-    const data = this.query.data();
-    this.pageSize = data?.data?.pageSize ?? this.pageSize;
-    this.totalData = data?.data.totalData;
-    this.first = data?.data.currentPage;
-    return this.destructureStudents(data);
-  });
-
-  data: TableData[] = [];
-
-  destructureStudents(response: IGetStudentResponse | undefined): TableData[] {
-    if (!response || !response.data.students) return [];
-
-    return response.data.students.map((student: IStudentData) => ({
+    return data.map((student: IStudentData) => ({
       student_id: student.id,
       name: student.name,
       faculty: student.faculty,
@@ -110,7 +78,6 @@ export class StudentsComponent implements OnInit{
       gender: student.gender,
       phone: student.phone,
     }));
-
   }
 
   isChildRouteActive(): boolean {
@@ -119,34 +86,25 @@ export class StudentsComponent implements OnInit{
 
   adjustPaginatorRows() {
     const screenWidth = window.innerWidth;
-    if (screenWidth <= 1536) {
-      this.pageSize = 5;
-    } else {
-      this.pageSize = 10;
-    }
+    screenWidth <= 1536 ? this.pageSize.set(5) : this.pageSize.set(10);
   }
 
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
-    const data = this.query.data()?.data?.students || [];
-    if (data.length > 0) {
-      const filteredStudents = searchArray(data, value, ['name', 'department', 'faculty']);
+    const filteredLecturers = searchArray(this.studentsQuery.data()!, value, [
+      'name',
+      'student_id',
+    ]);
 
-      this.filteredData.set(filteredStudents);
-    }
+    this.filteredData.set(filteredLecturers ?? []);
   }
 
+  handlePageChange(data: { first: number; rows: number; page: number }) {
+    this.first.set(data.first);
 
-  handlePageChange(event: any) {
-    this.pageNumber = event.page + 1;
-    this.pageSize = event.rows;
-    this.first = event.first;
-    this.query.refetch();
-  }
+    this.currentPage.set(data.page + 1);
 
-
-  handleActionClick(row: TableData): void {
-    this.selectedRowData = row;
+    this.pageSize.set(data.rows);
   }
 }

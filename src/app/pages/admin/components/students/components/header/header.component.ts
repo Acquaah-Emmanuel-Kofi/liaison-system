@@ -3,8 +3,6 @@ import {SelectFilterComponent} from '../../../../../../shared/components/select-
 import {Router, RouterLink} from "@angular/router";
 import {SearchbarComponent} from '../../../../../../shared/components/searchbar/searchbar.component';
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
-import {injectQuery} from "@tanstack/angular-query-experimental";
-import {studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
 
 @Component({
   selector: 'liaison-header',

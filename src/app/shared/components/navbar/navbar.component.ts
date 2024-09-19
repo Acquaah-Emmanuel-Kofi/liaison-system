@@ -10,10 +10,10 @@ import {
 } from '@angular/core';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { BrandComponent } from '../brand/brand.component';
-import { setPageHeader } from '../../helpers/functions.helper';
 import { NavigationEnd, Router } from '@angular/router';
 import { HeaderTitleComponent } from '../header-title/header-title.component';
 import { UserStore } from '../../store/user.store';
+import { setPageHeader } from '../../helpers/constants.helper';
 
 @Component({
   selector: 'liaison-navbar',

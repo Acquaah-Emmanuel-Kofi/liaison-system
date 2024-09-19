@@ -1,0 +1,28 @@
+<svg width="208" height="163" viewBox="0 0 208 163" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g style="mix-blend-mode:multiply">
+    <circle cx="8.5" cy="26.8203" r="5.5" fill="#EDEEF1" />
+  </g>
+  <g style="mix-blend-mode:multiply">
+    <circle cx="11.5" cy="135.82" r="11.5" fill="#EDEEF1" />
+  </g>
+  <g style="mix-blend-mode:multiply">
+    <circle cx="197" cy="52.3203" r="11" fill="#EDEEF1" />
+  </g>
+  <path
+    d="M94.6057 31.1237C92.029 28.547 88.5709 27.123 84.9771 27.123H49.9208C42.462 27.123 36.4272 33.2257 36.4272 40.6845L36.3594 122.053C36.3594 129.512 42.462 135.614 49.9208 135.614H158.412C165.871 135.614 171.974 129.512 171.974 122.053V54.2459C171.974 46.7871 165.871 40.6845 158.412 40.6845H104.166L94.6057 31.1237Z"
+    fill="#B1B0B2" />
+  <circle cx="103.722" cy="86.2595" r="28.4568" fill="#CCCCCC" />
+  
+  <path
+    d="M108 80 L98 95 H108 L98 120 L118 95 H108 L118 80 Z"
+    fill="gray"
+    stroke="black"
+    stroke-width="2"
+    />
+    
+  <path opacity="0.5" d="M105.453 73.4946V76.7368C105.453 79.7935 105.453 81.3225 106.402 82.2718C107.352 83.2211 108.881 83.2211 111.937 83.2211H117.125"
+    stroke="white" stroke-width="1.5" />
+  <g style="mix-blend-mode:multiply">
+    <circle cx="158.5" cy="20.8203" r="4.5" fill="#EDEEF1" />
+  </g>
+</svg>

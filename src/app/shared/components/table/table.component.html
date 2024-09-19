@@ -95,7 +95,16 @@
           </ng-container>
           }
         </tr>
-        } } @else {
+        } } @else if (errorOccurred()) {
+        <tr>
+          <td colspan="100%">
+            <liaison-error-occurred
+              [isError]="true"
+              [errorMessage]="'Unable to load data for the table.'"
+            />
+          </td>
+        </tr>
+        } @else {
         <!-- Actual data rows when not loading -->
         @for (row of data(); track $index) {
         <tr>
@@ -112,11 +121,10 @@
             <td
               class="px-4 py-4 whitespace-nowrap text-sm overflow-hidden truncate max-w-[150px]"
             >
-              @if (column.key.toLowerCase().includes('id')) { @if
-              (row['imageUrl']) {
+              @if (column.key.toLowerCase().includes('id')) { @if (row['dp']) {
               <div class="flex items-center gap-3">
                 <img
-                  [src]="row['imageUrl']"
+                  [src]="row['dp']"
                   alt="Student Display Profile"
                   class="h-8 w-8 rounded-full"
                 />
@@ -139,8 +147,22 @@
               <button
                 type="button"
                 (click)="onSelectRow(row)"
-                class="text-indigo-600 hover:text-indigo-900 underline"
+                class="text-[#19337E] hover:text-indigo-500 flex items-center gap-1 underline"
               >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12l4-4m0 0l-4-4m4 4H9m6 8l4-4m0 0l-4-4m4 4H9m6 8l4-4m0 0l-4-4m4 4H9m6 8l4-4m0 0l-4-4m4 4H9"
+                  />
+                </svg>
                 View
               </button>
               } @else {
@@ -151,19 +173,16 @@
           }
         </tr>
         } @empty {
+
         <tr>
           <td colspan="100%">
-            <div
-              class="flex flex-col justify-center items-center min-h-[400px]"
-            >
-              <img src="assets/empty-data.svg" alt="empty table" />
-              <p class="text-Primary-Black font-medium text-[20px]">
-                No data found
-              </p>
-              <p>You will see all data here when you add one</p>
-            </div>
+            <liaison-error-occurred
+              [isError]="false"
+              [errorMessage]="'You will see all data here when you add one.'"
+            />
           </td>
         </tr>
+
         } }
       </tbody>
     </table>

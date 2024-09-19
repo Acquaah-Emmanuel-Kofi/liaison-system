@@ -1,6 +1,9 @@
 <p-toast></p-toast>
-<div class="flex justify-end mb-4 ">
-  <button (click)="onClosePanel()" class="text-gray-500 hover:text-gray-700 w-5 h-5 hover:bg-gray-100 flex justify-center rounded-full items-center">
+<div class="flex justify-end mb-4">
+  <button
+    (click)="onClosePanel()"
+    class="text-gray-500 hover:text-gray-700 w-5 h-5 hover:bg-gray-100 flex justify-center rounded-full items-center"
+  >
     <svg
       width="9"
       height="10"
@@ -15,20 +18,21 @@
     </svg>
   </button>
 </div>
-<div class="flex flex-col  items-center">
-  <label [for]="data['student_id']" class="mb-5 text-[#19337E] font-bold text-sm"
-    >{{data["student_id"]}}</label
+<div class="flex flex-col items-center">
+  <label
+    [for]="data['student_id'] || data['staff_id']"
+    class="mb-5 text-[#19337E] font-bold text-sm"
+    >{{ data["student_id"] || data["staff_id"] }}</label
   >
-  @if (data['imageUrl']){
-    <img [src]="data['imageUrl']" alt="Display Profile" />
+  @if (data['dp']){
+  <img [src]="data['dp']" alt="Display Profile" />
   } @else {
-    <div
-      class="h-28 w-28 rounded-full bg-gray-100 flex justify-center items-center text-gray-500 font-semibold text-[26px]"
-    >
-      {{ getNameInitials(data["name"]) }}
-    </div>
+  <div
+    class="h-28 w-28 rounded-full bg-gray-100 flex justify-center items-center text-gray-500 font-semibold text-[26px]"
+  >
+    {{ getNameInitials(data["name"]) }}
+  </div>
   }
-
 
   <h1 class="my-3 font-bold text-black text-base">{{ data["name"] }}</h1>
   <p class="text-[#19337E] text-sm">{{ data["course"] }}</p>
@@ -92,75 +96,73 @@
       class="absolute z-10 left-1/2 transform -translate-x-1/2 -translate-y-2 bg-white shadow-md border-2 border-[#19337E] rounded-lg px-3 py-2 mt-28 ml-10 text-sm text-[#19337E] flex items-center justify-center transition-all duration-300"
     >
       <span class="font-semibold">{{ data["phone"] }}</span>
-      <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white border-t border-l border-[#19337E] rotate-45"></div>
+      <div
+        class="absolute bottom-full left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white border-t border-l border-[#19337E] rotate-45"
+      ></div>
     </div>
-</div>
-
+  </div>
 
   <div class="flex flex-col w-full items-center">
-    <div class="h-[2px] bg-gray-200 w-[40%] my-[10%]">
+    <div class="h-[2px] bg-gray-200 w-[40%] my-[10%]"></div>
+  </div>
 
+  <div class="flex justify-between items-center gap-3">
+    <div>
+      <h3 class="font-bold">Age</h3>
+      <p class="text-[#19337E]">{{ data["age"] }}</p>
+    </div>
+
+    <div class="relative group">
+      <h3 class="font-bold">Department</h3>
+      <p
+        class="text-[#19337E] max-w-[100px] overflow-hidden whitespace-nowrap truncate group-hover:overflow-hidden group-hover:white-space-normal"
+      >
+        {{ data["department"] }}
+      </p>
+
+      <div
+        *ngIf="data['department']"
+        class="absolute left-0 top-full mt-1 hidden group-hover:flex bg-white text-black border border-gray-300 rounded-md p-2 shadow-lg max-w-xs z-10"
+      >
+        {{ data["department"] }}
+      </div>
+    </div>
+
+    <div>
+      <h3 class="font-bold">Gender</h3>
+      <p class="text-[#19337E]">{{ data["gender"] }}</p>
     </div>
   </div>
 
-<div class="flex justify-between items-center gap-3">
-  <div>
-    <h3 class="font-bold">Age</h3>
-    <p class="text-[#19337E]">{{ data["age"] }}</p>
-  </div>
+  <div class="my-7">
+    <h1 class="text-base font-bold text-black mb-5">
+      People from the same class
+    </h1>
 
-  <div class="relative group">
-    <h3 class="font-bold">Department</h3>
-    <p
-      class="text-[#19337E] max-w-[100px] overflow-hidden whitespace-nowrap truncate group-hover:overflow-hidden group-hover:white-space-normal"
-    >
-      {{ data["department"] }}
-    </p>
-
-    <div
-      *ngIf="data['department']"
-      class="absolute left-0 top-full mt-1 hidden group-hover:flex bg-white text-black border border-gray-300 rounded-md p-2 shadow-lg max-w-xs z-10"
-    >
-      {{ data["department"] }}
+    <div class="flex items-center gap-2">
+      <div class="flex">
+        <img
+          src="https://demos.creative-tim.com/notus-js/assets/img/team-1-800x800.jpg"
+          alt="..."
+          class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
+        />
+        <img
+          src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
+          alt="..."
+          class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-2"
+        />
+        <img
+          src="https://demos.creative-tim.com/notus-js/assets/img/team-3-800x800.jpg"
+          alt="..."
+          class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-2"
+        />
+        <img
+          src="https://demos.creative-tim.com/notus-js/assets/img/team-4-470x470.png"
+          alt="..."
+          class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-2"
+        />
+      </div>
+      <span class="text-[#30478B] font-bold">+ 12 more</span>
     </div>
   </div>
-
-
-  <div>
-    <h3 class="font-bold">Gender</h3>
-    <p class="text-[#19337E]">{{ data["gender"] }}</p>
-  </div>
-</div>
-
-<div class="my-7">
-  <h1 class="text-base font-bold text-black mb-5">
-    People from the same class
-  </h1>
-
-  <div class="flex items-center gap-2">
-    <div class="flex">
-      <img
-        src="https://demos.creative-tim.com/notus-js/assets/img/team-1-800x800.jpg"
-        alt="..."
-        class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
-      />
-      <img
-        src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-        alt="..."
-        class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-2"
-      />
-      <img
-        src="https://demos.creative-tim.com/notus-js/assets/img/team-3-800x800.jpg"
-        alt="..."
-        class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-2"
-      />
-      <img
-        src="https://demos.creative-tim.com/notus-js/assets/img/team-4-470x470.png"
-        alt="..."
-        class="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow -ml-2"
-      />
-    </div>
-    <span class="text-[#30478B] font-bold">+ 12 more</span>
-  </div>
-</div>
 </div>

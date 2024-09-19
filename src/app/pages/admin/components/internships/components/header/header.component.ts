@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { SelectFilterComponent } from '../../../../../../shared/components/select-filter/select-filter.component';
 import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
 
@@ -10,6 +10,7 @@ import { SearchbarComponent } from '../../../../../../shared/components/searchba
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+  searchValue = output<string>();
   toggledFilterButton: boolean = false;
 
   filterOptions: string[] = [
@@ -32,6 +33,6 @@ export class HeaderComponent {
   }
 
   handleSearchTerm(value: string) {
-    console.log(value);
+    this.searchValue.emit(value);
   }
 }

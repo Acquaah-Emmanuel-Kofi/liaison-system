@@ -18,6 +18,9 @@ export class TokenService {
   constructor() {}
 
   saveToken(token: string) {
+    const decryptedToken = atob(token);
+    const decodedToken: PayLoadData = jwtDecode(decryptedToken);
+    this.setUserDetails(decodedToken);
     saveToLocalStorage(ACCESS_TOKEN_KEY, token);
   }
 

@@ -115,12 +115,12 @@ export class AdminDashboardComponent implements OnInit {
   private _dashboardService = inject(DashboardService);
 
   constructor() {
-    console.log('selectedYear: ', this.selectedYear);
-    
     this.populateYears();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.updateCountsFromApiResponse(this.analyticsQuery.data()!);
+  }
 
   populateYears() {
     const startYear = 2020;
@@ -145,7 +145,7 @@ export class AdminDashboardComponent implements OnInit {
 
       this.updateCountsFromApiResponse(response.data);
 
-      return response;
+      return response.data;
     },
   }));
 

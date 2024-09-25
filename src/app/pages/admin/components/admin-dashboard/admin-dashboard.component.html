@@ -1,43 +1,48 @@
 <div class="px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
-  <div class="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full mb-6 sm:mb-8">
-    <div class="flex flex-col gap-4 mb-4 sm:mb-0">
-      <p class="text-Primary-Black text-lg sm:text-xl lg:text-2xl 2xl:text-[26px] font-medium relative">
-        Welcome back
-        <img class="absolute top-0 2xl:right-10 sm:right-14 mt-[-20px] sm:mt-[5px]" ngSrc="assets/🦆%20emoji%20_waving%20hand%20sign_.svg" width="21" height="21" alt="wave">
+  <div
+    class="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full mb-6 sm:mb-8"
+  >
+    <div class="flex flex-col gap-2 mb-4 sm:mb-0">
+      <p
+        class="text-Primary-Black text-lg sm:text-xl lg:text-2xl 2xl:text-[26px] font-medium relative flex gap-2"
+      >
+        Welcome back {{ username() }}
+        <img src="/assets/icons/waving_hand.svg" alt="Waving Hand" />
       </p>
-      <p class="text-Dark-Blue text-sm sm:text-base">Here's an overview of your profile</p>
+      <p class="text-Dark-Blue text-lg">Here's an overview of your profile</p>
     </div>
 
-    <div class="flex flex-col items-center mt-[-5px] gap-2  sm:gap-5">
+    <div class="flex flex-col items-center mt-[-5px] gap-2 sm:gap-5">
       <!-- Dropdown for years -->
       <div class="relative cursor-pointer">
-          <p-dropdown
-            [options]="years"
-            [(ngModel)]="selectedYear"
-            optionLabel="name"
-            optionValue="value"
-            [placeholder]="lastyear.toString()+'/'+ currentYear.toString()">
-          </p-dropdown>
+        <p-dropdown
+          [options]="years"
+          [(ngModel)]="selectedYear"
+          optionLabel="name"
+          optionValue="value"
+          [placeholder]="lastyear.toString() + '/' + currentYear.toString()"
+        >
+        </p-dropdown>
       </div>
-
     </div>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 xl:gap-72 2xl:gap-[30%]">
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 xl:gap-72 2xl:gap-[30%]"
+  >
     @for (card of statCard; track $index) {
-      <liaison-stat-card
-        [iconSrc]="card.iconSrc"
-        [title]="card.title"
-        [count]="card.number"
-        [navigateTo]="card.navigateTo"
-      >
-      </liaison-stat-card>
+    <liaison-stat-card
+      [iconSrc]="card.iconSrc"
+      [title]="card.title"
+      [count]="card.number"
+      [navigateTo]="card.navigateTo"
+    >
+    </liaison-stat-card>
     }
   </div>
 
   <div class="mt-8 sm:mt-10">
-    <liaison-admin-chart>
-    </liaison-admin-chart>
+    <liaison-admin-chart> </liaison-admin-chart>
   </div>
 
   <div class="mt-8 sm:mt-10">
@@ -45,11 +50,11 @@
     <div class="overflow-x-auto">
       <liaison-table
         [HideCheckbox]="HideCheckbox"
-        [HidePagination] = "HidePagination"
+        [HidePagination]="HidePagination"
         [columns]="columns"
-        [data]="data">
+        [data]="data"
+      >
       </liaison-table>
     </div>
   </div>
 </div>
-

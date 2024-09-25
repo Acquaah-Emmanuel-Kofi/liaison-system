@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, computed, inject, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {Router} from "@angular/router";
 import {StatCardComponent} from "../../../../shared/components/stat-card/stat-card.component";
@@ -11,6 +11,7 @@ import {InputSwitchModule} from "primeng/inputswitch";
 import {CascadeSelectModule} from "primeng/cascadeselect";
 import {FormsModule} from "@angular/forms";
 import {DropdownModule} from "primeng/dropdown";
+import { UserStore } from '../../../../shared/store/user.store';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -28,64 +29,65 @@ import {DropdownModule} from "primeng/dropdown";
     CascadeSelectModule,
     FormsModule,
     DropdownModule,
-
   ],
   templateUrl: './admin-dashboard.component.html',
-  styleUrl: './admin-dashboard.component.scss'
+  styleUrl: './admin-dashboard.component.scss',
 })
-export class AdminDashboardComponent implements OnInit{
-  route = inject(Router)
+export class AdminDashboardComponent implements OnInit {
+  route = inject(Router);
   years: { name: string; value: string }[] = [];
   selectedYear: string | null = null;
   currentYear: number = new Date().getFullYear();
-  lastyear = this.currentYear -1;
+  lastyear = this.currentYear - 1;
   HideCheckbox = true;
   HidePagination = true;
+
+  readonly userStore = inject(UserStore);
+
+  public username = computed(
+    () => this.userStore.firstName()
+  );
 
   constructor() {
     this.populateYears();
   }
 
-  ngOnInit() {
+  ngOnInit() {}
 
-  }
-
-  statCard: IStartCard [] = [
+  statCard: IStartCard[] = [
     {
       title: 'Lectures',
       number: 100,
       iconSrc: 'assets/lectures.svg',
-      navigateTo:'/admin/lecturers'
+      navigateTo: '/admin/lecturers',
     },
     {
       title: 'Students',
       number: 100,
       iconSrc: 'assets/students.svg',
-      navigateTo:'/admin/students'
-
+      navigateTo: '/admin/students',
     },
     {
       title: 'Attachment',
       number: 100,
       iconSrc: 'assets/interns.svg',
-      navigateTo:'/admin/internships'
-    }
-
-  ]
+      navigateTo: '/admin/internships',
+    },
+  ];
   columns: TableColumn[] = [
     {
-      label: "Regions",
-      key: "Region",
+      label: 'Regions',
+      key: 'Region',
     },
     {
-      label: "Sub-Zones",
-      key: "sub_zones",
+      label: 'Sub-Zones',
+      key: 'sub_zones',
     },
     {
-      label: "No of Students",
-      key: "No_of_Students",
-    }
-  ]
+      label: 'No of Students',
+      key: 'No_of_Students',
+    },
+  ];
 
   data: TableData[] = [
     {
@@ -107,25 +109,18 @@ export class AdminDashboardComponent implements OnInit{
       Region: 'Eastern',
       sub_zones: 10,
       No_of_Students: 400,
-    }
-
+    },
   ];
-
-
 
   populateYears() {
     const startYear = 2020;
     for (let year = this.currentYear; year >= startYear; year--) {
-      const academicYear = (year - 1) + '/' + year;
+      const academicYear = year - 1 + '/' + year;
       this.years.push({ name: academicYear, value: academicYear });
     }
   }
 
-
   navigateToUpload() {
-    this.route.navigate(['admin/upload'])
+    this.route.navigate(['admin/upload']);
   }
-
-
-
 }

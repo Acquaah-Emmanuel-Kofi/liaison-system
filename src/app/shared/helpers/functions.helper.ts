@@ -51,3 +51,22 @@ export function searchArray<T>(
     )
   );
 }
+
+export const getYears = (
+  range: string
+): { startYear: number; endYear: number } | null => {
+  const years = range.split('/');
+
+  if (
+    years.length === 2 &&
+    !isNaN(Number(years[0])) &&
+    !isNaN(Number(years[1]))
+  ) {
+    return {
+      startYear: Number(years[0]),
+      endYear: Number(years[1]),
+    };
+  } else {
+    return null;
+  }
+};

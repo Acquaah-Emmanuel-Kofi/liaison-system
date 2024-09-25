@@ -5,7 +5,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-
 html::-webkit-scrollbar {
   @apply bg-slate-200;
   width: 5px;
@@ -55,26 +54,21 @@ div::-webkit-scrollbar-thumb {
   scrollbar-width: none; /* Firefox */
 }
 
-
 /* Styling the PrimeNG Dropdown */
 .p-dropdown {
-  height: 30px;
-  border:  1px solid #1e3a8a;
-  border-radius: 9999px;
-  font-size: 0.475rem;
-  color: #1e3a8a;
+  border: 1px solid #19337e;
+  @apply rounded-full h-9;
+  color: #19337e;
   background-color: white;
 }
 
 .p-dropdown .p-dropdown-trigger {
-  margin-top: 4px;
-  border-radius: 8px;
-  color: #1e3a8a;
+  color: #19337e;
 }
 
 .p-dropdown .p-dropdown-label {
   margin-top: -7px;
-  color: #1e3a8a;
+  color: #19337e;
 }
 
 .p-dropdown:focus-within {
@@ -88,7 +82,7 @@ div::-webkit-scrollbar-thumb {
 }
 
 .p-dropdown-panel {
-  border-color: #1e3a8a;
+  border-color: #19337e;
   border-radius: 8px;
 }
 
@@ -104,7 +98,7 @@ div::-webkit-scrollbar-thumb {
 
 /* Change the background color when checked */
 .p-inputswitch.p-inputswitch-checked {
-  background-color: #1e3a8a;
+  background-color: #19337e;
 }
 
 /* Style for the switch handle (slider) */
@@ -121,4 +115,19 @@ div::-webkit-scrollbar-thumb {
   box-shadow: none;
 }
 
+/* Tailwind Skeleton Styles */
+.skeleton {
+  @apply bg-slate-300 animate-pulse;
+}
 
+.skeleton-text {
+  @apply rounded-md;
+}
+
+.skeleton-circle {
+  @apply rounded-full;
+}
+
+.skeleton-button {
+  @apply rounded;
+}

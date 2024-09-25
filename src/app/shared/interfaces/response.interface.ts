@@ -51,3 +51,13 @@ export interface ILecturersData extends IUser {
   faculty: string;
   lecturerId: string;
 }
+
+export interface IStartAnalytics {
+  lectures: number;
+  students: number;
+  internships: number;
+}
+export interface IStatAnalyticsResponse extends ICommonResponse {
+  data: IStartAnalytics;
+}
+

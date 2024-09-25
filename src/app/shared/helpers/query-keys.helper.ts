@@ -19,3 +19,15 @@ export const lecturerListQueryKey = {
   all: ['Lecturers list'] as const,
   data: () => [...lecturerListQueryKey.all, 'list'] as const,
 };
+
+export const statAnalyticsQueryKey = {
+  all: ['stat analytics'] as const,
+  data: (internshipType: string, startYear: number, endYear: number) =>
+    [
+      ...statAnalyticsQueryKey.all,
+      'all-stats',
+      internshipType,
+      startYear,
+      endYear,
+    ] as const,
+};

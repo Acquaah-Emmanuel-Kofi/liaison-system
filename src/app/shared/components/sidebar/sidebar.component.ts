@@ -36,7 +36,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  isInternTypeSwitch: boolean | undefined;
   closeEvent = output<void>();
   toggled = input.required<boolean>();
   links = input.required<INavLinks[]>();

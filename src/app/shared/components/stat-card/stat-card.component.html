@@ -1,8 +1,25 @@
 <div class="border border-Lighter-Blue bg-Lighter-Gray p-4 rounded-lg">
   <div class="flex justify-between">
-    <div>
+    <div class="space-y-2">
       <h1 class="text-lg text-black">{{ title }}</h1>
+      @if(isLoading()) {
+
+      <div class="flex h-9 w-12 flex-col justify-center gap-1">
+        <div
+          class="h-1 w-3/4 skeleton skeleton-text rounded-lg bg-gray-border"
+        ></div>
+        <div
+          class="h-1 w-2/4 skeleton skeleton-text rounded-lg bg-gray-border"
+        ></div>
+        <div
+          class="h-1 w-1/4 skeleton skeleton-text rounded-lg bg-gray-border"
+        ></div>
+      </div>
+
+      } @else {
       <h2 class="text-3xl font-bold text-black">{{ count }}</h2>
+
+      }
     </div>
 
     <div

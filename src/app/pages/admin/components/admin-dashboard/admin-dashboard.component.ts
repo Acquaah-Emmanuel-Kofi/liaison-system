@@ -44,9 +44,7 @@ export class AdminDashboardComponent implements OnInit {
 
   readonly userStore = inject(UserStore);
 
-  public username = computed(
-    () => this.userStore.firstName()
-  );
+  public username = computed(() => this.userStore.firstName());
 
   constructor() {
     this.populateYears();
@@ -56,7 +54,7 @@ export class AdminDashboardComponent implements OnInit {
 
   statCard: IStartCard[] = [
     {
-      title: 'Lectures',
+      title: 'Lecturers',
       number: 100,
       iconSrc: 'assets/lectures.svg',
       navigateTo: '/admin/lecturers',

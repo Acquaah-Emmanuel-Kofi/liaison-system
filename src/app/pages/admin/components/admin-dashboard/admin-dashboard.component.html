@@ -27,9 +27,7 @@
     </div>
   </div>
 
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 xl:gap-72 2xl:gap-[30%]"
-  >
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     @for (card of statCard; track $index) {
     <liaison-stat-card
       [iconSrc]="card.iconSrc"

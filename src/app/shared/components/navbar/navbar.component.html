@@ -32,7 +32,6 @@
     />
 
     <liaison-header-title [title]="currentPage()" class="hidden md:block" />
-
   </div>
   <div class="flex items-center gap-2">
     <button
@@ -66,8 +65,12 @@
           />
 
           <div class="hidden md:block">
-            <p class="text-xs font-semibold text-black">{{username()}}</p>
-            <p class="text-xs font-semibold text-[#19337E]">{{userRole()}}</p>
+            <p class="text-xs font-semibold text-black">
+              {{ username() || "Full Name" }}
+            </p>
+            <p class="text-xs font-semibold text-[#19337E]">
+              {{ userRole() || "Role" }}
+            </p>
           </div>
 
           <span class="hidden md:block ml-2">

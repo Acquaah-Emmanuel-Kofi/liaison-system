@@ -18,6 +18,7 @@
         <p-dropdown
           [options]="years"
           [(ngModel)]="selectedYear"
+          (ngModelChange)="getYears()"
           optionLabel="name"
           optionValue="value"
           [placeholder]="lastyear.toString() + '/' + currentYear.toString()"

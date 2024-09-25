@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgClass, NgForOf, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
@@ -19,6 +19,8 @@ import { injectQuery } from '@tanstack/angular-query-experimental';
 import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { DashboardService } from '../../service/dashboard/dashboard.service';
 import { IStartAnalytics } from '../../../../shared/interfaces/response.interface';
+import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
+import { getYears } from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -113,12 +115,23 @@ export class AdminDashboardComponent implements OnInit {
   public username = computed(() => this.userStore.firstName());
 
   private _dashboardService = inject(DashboardService);
+  private _sidebarService = inject(SidebarService);
+
+  internshipType = signal<'SEMESTER_OUT' | 'INTERNSHIP'>('INTERNSHIP');
+  startYear = signal<number | undefined>(this.lastyear);
+  endYear = signal<number | undefined>(this.currentYear);
 
   constructor() {
     this.populateYears();
   }
 
   ngOnInit() {
+    this._sidebarService.isSwitched$.subscribe((value: boolean) => {
+      value
+        ? this.internshipType.set('SEMESTER_OUT')
+        : this.internshipType.set('INTERNSHIP');
+    });
+
     this.updateCountsFromApiResponse(this.analyticsQuery.data()!);
   }
 
@@ -130,17 +143,31 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  getYears() {
+    if (this.selectedYear) {
+      const year = getYears(this.selectedYear);
+      this.startYear.set(year?.startYear);
+      this.endYear.set(year?.endYear);
+    }
+  }
+
   navigateToUpload() {
     this.route.navigate(['admin/upload']);
   }
 
   analyticsQuery = injectQuery(() => ({
-    queryKey: [...statAnalyticsQueryKey.data('SEMESTER_OUT', 2020, 2024)],
+    queryKey: [
+      ...statAnalyticsQueryKey.data(
+        this.internshipType(),
+        this.startYear() ?? this.lastyear,
+        this.endYear() ?? this.currentYear
+      ),
+    ],
     queryFn: async () => {
       const response = await this._dashboardService.getStatAnalytics(
-        'SEMESTER_OUT',
-        2020,
-        2024
+        this.internshipType(),
+        this.startYear() ?? 0,
+        this.endYear() ?? 0
       );
 
       this.updateCountsFromApiResponse(response.data);

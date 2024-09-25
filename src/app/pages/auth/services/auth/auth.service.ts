@@ -72,6 +72,10 @@ export class AuthService {
         tap((response: ILoginResponse) => {
           if (response.status === 200) {
             this._tokenService.saveToken(response.data.token);
+            const decryptedToken = atob(response.data.token);
+            const userDetails = this._jwtHelper.decodeToken(decryptedToken);
+
+            this._router.navigate([userDetails.role.toLowerCase()]);
           }
         })
       );

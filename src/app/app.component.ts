@@ -1,4 +1,4 @@
-import { Component, inject, isDevMode, OnDestroy } from '@angular/core';
+import { Component, inject, isDevMode } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AngularQueryDevtools } from '@tanstack/angular-query-devtools-experimental';
 import { AuthService } from './pages/auth/services/auth/auth.service';
@@ -15,7 +15,7 @@ import { jwtDecode } from 'jwt-decode';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent {
   devEnvironment: boolean = isDevMode();
 
   _authService = inject(AuthService);
@@ -45,9 +45,5 @@ export class AppComponent implements OnDestroy {
       email: user.sub,
       id: user.jti,
     });
-  }
-
-  ngOnDestroy() {
-    this._authService.destroyStorageListener();
   }
 }

@@ -29,8 +29,6 @@ export class TokenService {
 
     if (token) {
       const decryptedToken = atob(token);
-      const decodedToken: PayLoadData = jwtDecode(decryptedToken);
-      this.setUserDetails(decodedToken);
       return decryptedToken;
     }
 

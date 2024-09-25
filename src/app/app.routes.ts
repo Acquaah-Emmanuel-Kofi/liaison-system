@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { ErrorPageComponent } from './pages/404/error-page/error-page.component';
 import { authGuard } from './guards/auth/auth.guard';
 import { roleGuard } from './guards/role/role.guard';
+import { guestGuard } from './guards/guest/guest.guard';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,7 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [guestGuard],
   },
   {
     path: 'admin',

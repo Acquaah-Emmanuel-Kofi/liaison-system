@@ -1,17 +1,24 @@
-import {Component, computed, inject, OnInit} from '@angular/core';
-import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
-import {Router} from "@angular/router";
-import {StatCardComponent} from "../../../../shared/components/stat-card/stat-card.component";
-import {AdminChartComponent} from "../admin-chart/admin-chart.component";
-import {TableComponent} from "../../../../shared/components/table/table.component";
-import {TableColumn, TableData} from "../../../../shared/components/table/table.interface";
+import { Component, computed, inject, OnInit } from '@angular/core';
+import { NgClass, NgForOf, NgOptimizedImage } from '@angular/common';
+import { Router } from '@angular/router';
+import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
+import { AdminChartComponent } from '../admin-chart/admin-chart.component';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import {
+  TableColumn,
+  TableData,
+} from '../../../../shared/components/table/table.interface';
 import { IStartCard } from '../../../../shared/interfaces/constants.interface';
-import {ToggleButtonModule} from "primeng/togglebutton";
-import {InputSwitchModule} from "primeng/inputswitch";
-import {CascadeSelectModule} from "primeng/cascadeselect";
-import {FormsModule} from "@angular/forms";
-import {DropdownModule} from "primeng/dropdown";
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 import { UserStore } from '../../../../shared/store/user.store';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { DashboardService } from '../../service/dashboard/dashboard.service';
+import { IStartAnalytics } from '../../../../shared/interfaces/response.interface';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -42,36 +49,27 @@ export class AdminDashboardComponent implements OnInit {
   HideCheckbox = true;
   HidePagination = true;
 
-  readonly userStore = inject(UserStore);
-
-  public username = computed(() => this.userStore.firstName());
-
-  constructor() {
-    this.populateYears();
-  }
-
-  ngOnInit() {}
-
   statCard: IStartCard[] = [
     {
       title: 'Lecturers',
-      number: 100,
+      count: 0,
       iconSrc: 'assets/lectures.svg',
       navigateTo: '/admin/lecturers',
     },
     {
       title: 'Students',
-      number: 100,
+      count: 0,
       iconSrc: 'assets/students.svg',
       navigateTo: '/admin/students',
     },
     {
       title: 'Attachment',
-      number: 100,
+      count: 0,
       iconSrc: 'assets/interns.svg',
       navigateTo: '/admin/internships',
     },
   ];
+
   columns: TableColumn[] = [
     {
       label: 'Regions',
@@ -110,6 +108,20 @@ export class AdminDashboardComponent implements OnInit {
     },
   ];
 
+  readonly userStore = inject(UserStore);
+
+  public username = computed(() => this.userStore.firstName());
+
+  private _dashboardService = inject(DashboardService);
+
+  constructor() {
+    console.log('selectedYear: ', this.selectedYear);
+    
+    this.populateYears();
+  }
+
+  ngOnInit() {}
+
   populateYears() {
     const startYear = 2020;
     for (let year = this.currentYear; year >= startYear; year--) {
@@ -120,5 +132,35 @@ export class AdminDashboardComponent implements OnInit {
 
   navigateToUpload() {
     this.route.navigate(['admin/upload']);
+  }
+
+  analyticsQuery = injectQuery(() => ({
+    queryKey: [...statAnalyticsQueryKey.data('SEMESTER_OUT', 2020, 2024)],
+    queryFn: async () => {
+      const response = await this._dashboardService.getStatAnalytics(
+        'SEMESTER_OUT',
+        2020,
+        2024
+      );
+
+      this.updateCountsFromApiResponse(response.data);
+
+      return response;
+    },
+  }));
+
+  updateCountsFromApiResponse(data: IStartAnalytics) {
+    this.statCard = this.statCard.map((card) => {
+      switch (card.title) {
+        case 'Lecturers':
+          return { ...card, count: data.lectures };
+        case 'Students':
+          return { ...card, count: data.students };
+        case 'Attachment':
+          return { ...card, count: data.internships };
+        default:
+          return card;
+      }
+    });
   }
 }

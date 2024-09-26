@@ -70,6 +70,15 @@ export class HeaderComponent implements OnInit {
     this.filterValues.emit(selectedData);
   }
 
+  refetchData() {
+    this.refetch.emit();
+  }
+
+  clearFilters() {
+    this.selectedFaculty = null;
+    this.selectedDepartment = null;
+  }
+
   navigate() {
     this.route.navigate(['admin/students/upload']);
   }

@@ -21,6 +21,7 @@ import { CalendarModule } from 'primeng/calendar';
 })
 export class HeaderComponent implements OnInit {
   searchValue = output<string>();
+  statusFilterValue = output<string>();
   filterValues = output<{ faculty: string; department: string }>();
   refetch = output<void>();
 
@@ -36,6 +37,19 @@ export class HeaderComponent implements OnInit {
     {};
 
   rangeDates: Date[] | undefined;
+
+  statusFilterOptions: { name: string; value: string }[] = [
+    {
+      name: 'Completed',
+      value: 'COMPLETED',
+    },
+    {
+      name: 'In Progress',
+      value: 'IN_PROGRESS',
+    },
+  ];
+
+  selectedStatus: string | null = null;
 
   constructor() {
     this.facultiesAndDepartments = facultiesAndDepartments;
@@ -68,6 +82,10 @@ export class HeaderComponent implements OnInit {
     this.filterValues.emit(selectedData);
   }
 
+  emitStatusValue(value: string) {
+    this.statusFilterValue.emit(value);
+  }
+
   refetchData() {
     this.refetch.emit();
   }
@@ -76,6 +94,7 @@ export class HeaderComponent implements OnInit {
     this.selectedFaculty = null;
     this.selectedDepartment = null;
     this.rangeDates = undefined;
+    this.selectedStatus = null;
   }
 
   handleSearchTerm(value: string) {

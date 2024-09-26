@@ -67,7 +67,7 @@
       (ngModelChange)="emitFilterValue()"
       optionLabel="name"
       optionValue="value"
-      [placeholder]="'Filter by Department'"
+      placeholder="Filter by Department"
     ></p-dropdown>
 
     <p-calendar
@@ -76,6 +76,15 @@
       [readonlyInput]="true"
       placeholder="Start Date -  End Date"
     />
+
+    <p-dropdown
+      [options]="statusFilterOptions"
+      [(ngModel)]="selectedStatus"
+      (ngModelChange)="emitStatusValue($event)"
+      optionLabel="name"
+      optionValue="value"
+      placeholder="Filter by Status"
+    ></p-dropdown>
   </div>
 
   <div class="flex gap-4">

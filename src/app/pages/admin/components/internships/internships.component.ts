@@ -89,4 +89,8 @@ export class InternshipsComponent {
 
     this.pageSize.set(data.rows);
   }
+
+  refetchData() {
+    this.lecturersQuery.refetch()
+  }
 }

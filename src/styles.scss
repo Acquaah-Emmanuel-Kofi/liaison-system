@@ -86,6 +86,30 @@ div::-webkit-scrollbar-thumb {
   border-radius: 8px;
 }
 
+.p-calendar {
+  border: 1px solid #19337e;
+  @apply rounded-full h-9 pl-4;
+  color: #19337e;
+  background-color: white;
+  outline: none;
+}
+
+.p-calendar .p-inputtext {
+  outline: none;
+  color: #19337e;
+  background: transparent;
+}
+
+.p-calendar:focus-within {
+  outline: none;
+  box-shadow: none;
+}
+
+.p-calendar .p-inputtext:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 /* Corrected style for the PrimeNG InputSwitch Component */
 .p-inputswitch {
   width: 48px;

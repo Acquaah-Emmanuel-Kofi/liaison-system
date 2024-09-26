@@ -15,7 +15,10 @@ import {
 import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { searchArray } from '../../../../shared/helpers/functions.helper';
+import {
+  filterFacultyDepartment,
+  searchArray,
+} from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-lecturers',
@@ -29,8 +32,8 @@ export class LecturersComponent {
   columns: TableColumn[] = [
     { label: 'Staff ID', key: 'staff_id' },
     { label: 'Name', key: 'name' },
-    { label: 'Department', key: 'department' },
     { label: 'Faculty', key: 'faculty' },
+    { label: 'Department', key: 'department' },
     { label: '', key: 'action', isAction: true },
   ];
 
@@ -79,11 +82,27 @@ export class LecturersComponent {
     this.filteredData.set(filteredLecturers ?? []);
   }
 
+  handleFilterValue(selection: { faculty: string; department: string }) {
+    this.searchTerm.set(selection.faculty);
+
+    const filteredLecturers = filterFacultyDepartment(
+      this.lecturersQuery.data()!,
+      selection.faculty,
+      selection.department
+    );
+
+    this.filteredData.set(filteredLecturers ?? []);
+  }
+
   handlePageChange(data: { first: number; rows: number; page: number }) {
     this.first.set(data.first);
 
     this.currentPage.set(data.page + 1);
 
     this.pageSize.set(data.rows);
+  }
+
+  refetchData() {
+    this.lecturersQuery.refetch();
   }
 }

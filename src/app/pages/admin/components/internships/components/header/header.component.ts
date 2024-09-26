@@ -75,6 +75,7 @@ export class HeaderComponent implements OnInit {
   clearFilters() {
     this.selectedFaculty = null;
     this.selectedDepartment = null;
+    this.rangeDates = undefined;
   }
 
   handleSearchTerm(value: string) {

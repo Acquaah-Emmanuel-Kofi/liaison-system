@@ -4,9 +4,9 @@ import { TableData } from '../components/table/table.interface';
 
 export const getFirstTwoInitials = (name: string) => {
   return name
-    .split(' ')
-    .map((name) => name.charAt(0).toUpperCase())
-    .join('');
+    ?.split(' ')
+    ?.map((name) => name.charAt(0)?.toUpperCase())
+    ?.join('');
 };
 
 /**
@@ -57,7 +57,7 @@ export function searchArray<T>(
 export const getYears = (
   range: string
 ): { startYear: number; endYear: number } | null => {
-  const years = range.split('/');
+  const years = range?.split('/');
 
   if (
     years.length === 2 &&
@@ -78,20 +78,20 @@ export const filterFacultyDepartment = (
   faculty: string,
   department: string
 ) => {
-  const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, '-');
+  const normalize = (str: string) => str?.toLowerCase()?.replace(/\s+/g, '-');
 
   let filteredLecturers = lecturers;
 
   if (faculty) {
     const normalizedFaculty = normalize(faculty);
-    filteredLecturers = filteredLecturers.filter(
+    filteredLecturers = filteredLecturers?.filter(
       (lecturer) => normalize(lecturer['faculty']) === normalizedFaculty
     );
   }
 
   if (department) {
     const normalizedDepartment = normalize(department);
-    filteredLecturers = filteredLecturers.filter(
+    filteredLecturers = filteredLecturers?.filter(
       (lecturer) => normalize(lecturer['department']) === normalizedDepartment
     );
   }
@@ -107,10 +107,17 @@ export const filterStudentsByDateRange = (
   const startDate = new Date(start);
   const endDate = new Date(end);
 
-  return students.filter((student) => {
+  return students?.filter((student) => {
     const studentStartDate = new Date(student.startDate);
     const studentEndDate = new Date(student.endDate);
 
     return studentStartDate >= startDate && studentEndDate <= endDate;
   });
+};
+
+export const filterStudentsByStatus = (
+  students: IStudentData[],
+  status: 'IN_PROGRESS' | 'COMPLETED'
+): IStudentData[] => {
+  return students?.filter((student) => student.status === status);
 };

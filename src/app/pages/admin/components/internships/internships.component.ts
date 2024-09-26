@@ -12,6 +12,7 @@ import { IStudentData } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import {
   filterStudentsByDateRange,
+  filterStudentsByStatus,
   formatDateToDDMMYYYY,
   searchArray,
 } from '../../../../shared/helpers/functions.helper';
@@ -93,6 +94,22 @@ export class InternshipsComponent {
       dates.endDate
     );
 
+    console.log('dates: ', dates);
+    console.log('filteredStudents: ', filteredStudents);
+
+    this.filteredData.set(filteredStudents ?? []);
+  }
+
+  handleStatusFilter(status: 'IN_PROGRESS' | 'COMPLETED') {
+    const filteredStudents = filterStudentsByStatus(
+      this.studentsQuery.data() as IStudentData[],
+      status
+    );
+
+    console.log('Status: ', status);
+    console.log('filteredStudents: ', filteredStudents);
+    
+    
     this.filteredData.set(filteredStudents ?? []);
   }
 

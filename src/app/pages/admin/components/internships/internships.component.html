@@ -1,5 +1,10 @@
 <section>
-  <liaison-header (searchValue)="handleSearchTerm($event)" (refetch)="refetchData()" (dateFilterValue)="handleDateFilter($event)" />
+  <liaison-header
+    (searchValue)="handleSearchTerm($event)"
+    (refetch)="refetchData()"
+    (dateFilterValue)="handleDateFilter($event)"
+    (statusFilterValue)="handleStatusFilter($event)"
+  />
 
   @switch (studentsQuery.status()) { @case ('pending') { @if
   (studentsQuery.data()) {

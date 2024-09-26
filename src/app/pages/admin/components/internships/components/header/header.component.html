@@ -74,6 +74,7 @@
       [(ngModel)]="rangeDates"
       selectionMode="range"
       [readonlyInput]="true"
+      (ngModelChange)="emitDateValue($event)"
       placeholder="Start Date -  End Date"
     />
 

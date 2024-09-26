@@ -22,6 +22,7 @@ import { CalendarModule } from 'primeng/calendar';
 export class HeaderComponent implements OnInit {
   searchValue = output<string>();
   statusFilterValue = output<string>();
+  dateFilterValue = output<{ startDate: string; endDate: string }>();
   filterValues = output<{ faculty: string; department: string }>();
   refetch = output<void>();
 
@@ -80,6 +81,15 @@ export class HeaderComponent implements OnInit {
     };
 
     this.filterValues.emit(selectedData);
+  }
+
+  emitDateValue(dates: string[]) {
+    const datesValues = {
+      startDate: dates[0],
+      endDate: dates[1],
+    };
+
+    this.dateFilterValue.emit(datesValues);
   }
 
   emitStatusValue(value: string) {

@@ -24,7 +24,7 @@ export class StudentTableService {
     pageNumber: number,
     pageSize: number
   ): Promise<IGetStudentResponse> {
-    const url = `${environment.BACKEND_API_BASE_URL}/admin/students?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    const url = `${environment.BACKEND_API_BASE_URL}/admin/students?internship=true&pageNumber=${pageNumber}&pageSize=${pageSize}`;
     return lastValueFrom(this._http.get<IGetStudentResponse>(url));
   }
 

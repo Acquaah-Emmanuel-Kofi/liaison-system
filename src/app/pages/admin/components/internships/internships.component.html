@@ -1,8 +1,8 @@
 <section>
-  <liaison-header (searchValue)="handleSearchTerm($event)" (refetch)="refetchData()" />
+  <liaison-header (searchValue)="handleSearchTerm($event)" (refetch)="refetchData()" (dateFilterValue)="handleDateFilter($event)" />
 
-  @switch (lecturersQuery.status()) { @case ('pending') { @if
-  (lecturersQuery.data()) {
+  @switch (studentsQuery.status()) { @case ('pending') { @if
+  (studentsQuery.data()) {
   <ng-container *ngTemplateOutlet="table" />
   } @else {
   <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" />
@@ -17,7 +17,7 @@
 <ng-template #table>
   <liaison-table
     [columns]="columns"
-    [data]="searchTerm() ? filteredData() : lecturersQuery.data()!"
+    [data]="searchTerm() ? filteredData() : studentsQuery.data()!"
     [first]="first()"
     [pageSize]="pageSize()"
     [totalData]="totalData()"

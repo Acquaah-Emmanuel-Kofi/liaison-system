@@ -10,7 +10,11 @@ import { injectQuery } from '@tanstack/angular-query-experimental';
 import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { IStudentData } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
-import { formatDateToDDMMYYYY, searchArray } from '../../../../shared/helpers/functions.helper';
+import {
+  filterStudentsByDateRange,
+  formatDateToDDMMYYYY,
+  searchArray,
+} from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-internships',
@@ -40,7 +44,7 @@ export class InternshipsComponent {
     { label: 'Status', key: 'status' },
   ];
 
-  lecturersQuery = injectQuery(() => ({
+  studentsQuery = injectQuery(() => ({
     queryKey: [...studentsQueryKey.data(this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await this.studentService.getAllStudents(
@@ -73,13 +77,23 @@ export class InternshipsComponent {
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
-    const filteredLecturers = searchArray(this.lecturersQuery.data()!, value, [
+    const filteredStudents = searchArray(this.studentsQuery.data()!, value, [
       'name',
       'placeOfInternship',
       'student_id',
     ]);
 
-    this.filteredData.set(filteredLecturers ?? []);
+    this.filteredData.set(filteredStudents ?? []);
+  }
+
+  handleDateFilter(dates: { startDate: string; endDate: string }) {
+    const filteredStudents = filterStudentsByDateRange(
+      this.studentsQuery.data() as IStudentData[],
+      dates.startDate,
+      dates.endDate
+    );
+
+    this.filteredData.set(filteredStudents ?? []);
   }
 
   handlePageChange(data: { first: number; rows: number; page: number }) {
@@ -91,6 +105,6 @@ export class InternshipsComponent {
   }
 
   refetchData() {
-    this.lecturersQuery.refetch()
+    this.studentsQuery.refetch();
   }
 }

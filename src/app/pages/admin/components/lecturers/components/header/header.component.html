@@ -1,19 +1,41 @@
 <header class="flex md:flex-row flex-col items-center justify-between my-6">
-  <liaison-searchbar placeholder="Search by name, id" (searchTermValue)="handleSearchTerm($event)" />
-
-  <div class="flex items-center gap-2">
-    <liaison-select-filter
-      selection="Select Filter"
-      [options]="filterOptions"
-      (optionSelected)="getOptionSelected($event)"
+  <div class="flex gap-4">
+    <liaison-searchbar
+      placeholder="Search by name, id"
+      (searchTermValue)="handleSearchTerm($event)"
     />
 
     <button
+      type="button"
+      (click)="toggleFilter()"
+      [style.color]="toggledFilters ? '#19337E' : '#000000'"
+      class="flex items-center gap-2 rounded-lg border border-[#D1D6E5] text-sm px-5 py-2 md:h-9 md:px-3"
+    >
+      Filters
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-chevron-down"
+      >
+        <path [attr.d]="toggledFilters ? 'M6 9l6 6 6-6' : 'M18 15l-6-6-6 6'" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <button
       (click)="isModalOpened = !isModalOpened"
-      class="text-white border-2 rounded-full bg-[#19337E] border-[#19337E] font-medium text-sm px-6 py-1.5 text-center inline-flex items-center"
+      class="text-white border-2 rounded-full bg-[#19337E] border-[#6d82c0a9] font-medium text-sm px-6 py-1.5 text-center inline-flex items-center"
       type="button"
     >
-
       Assign Lecturer(s)
 
       <svg
@@ -28,29 +50,137 @@
   </div>
 </header>
 
+@if(toggledFilters) {
+<div
+  class="my-6 flex justify-between items-center pr-5 animate-fade-down animate-once"
+>
+  <div class="flex gap-4">
+    <p-dropdown
+      [options]="facultyFilterOptions"
+      [(ngModel)]="selectedFaculty"
+      (ngModelChange)="onFacultyChange($event)"
+      optionLabel="name"
+      optionValue="value"
+      [placeholder]="'Filter by Faculty'"
+    ></p-dropdown>
 
-<liaison-modal-container [isOpen]="isModalOpened" [title]="'Assign Lecturer to zones'" (closeModal)="closeModal()">
-  <form [formGroup]="addAssignLecturerForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-md mx-auto px-10">
+    <p-dropdown
+      [options]="departmentsFilterOptions"
+      [(ngModel)]="selectedDepartment"
+      (ngModelChange)="emitFilterValue()"
+      optionLabel="name"
+      optionValue="value"
+      [placeholder]="'Filter by Department'"
+    ></p-dropdown>
+  </div>
+
+  <div class="flex gap-4">
+    <button type="button" title="Reload Data" (click)="refetchData()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#19337E"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-list-restart"
+      >
+        <path d="M21 6H3" />
+        <path d="M7 12H3" />
+        <path d="M7 18H3" />
+        <path
+          d="M12 18a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L11 14"
+        />
+        <path d="M11 10v4h4" />
+      </svg>
+    </button>
+
+    <button
+      type="button"
+      title="Clear Filters"
+      (click)="clearFilters()"
+      class="flex gap-1 items-center text-[#19337E]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#19337E"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-circle-x"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <path d="m15 9-6 6" />
+        <path d="m9 9 6 6" />
+      </svg>
+      Clear
+    </button>
+  </div>
+</div>
+}
+
+<liaison-modal-container
+  [isOpen]="isModalOpened"
+  [title]="'Assign Lecturer to zones'"
+  (closeModal)="closeModal()"
+>
+  <form
+    [formGroup]="addAssignLecturerForm"
+    (ngSubmit)="onSubmit()"
+    class="space-y-6 w-full max-w-md mx-auto px-10"
+  >
     <div formArrayName="assignLectures">
-      <div *ngFor="let lecturer of assignLectures.controls; let i = index" [formGroupName]="i">
+      <div
+        *ngFor="let lecturer of assignLectures.controls; let i = index"
+        [formGroupName]="i"
+      >
         @if(isAddMoreTriggered){
-          <div class="flex items-center justify-between mt-5">
-            <p class="text-Dark-Blue [font-family:Roboto] text-md font-bold leading-[normal] mb-[32px]">Assign form {{i + 1}}</p>
-            @if (i !== 0){
-              <div class="mt-[32px] cursor-pointer" (click)="removeAssignLecturer(i)">
-                <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M14.5005 24.3596C9.23647 24.3596 4.98047 19.9516 4.98047 14.4996C4.98047 9.04765 9.23647 4.63965 14.5005 4.63965C19.7645 4.63965 24.0205 9.04765 24.0205 14.4996C24.0205 19.9516 19.7645 24.3596 14.5005 24.3596ZM14.5005 5.79965C9.85247 5.79965 6.10047 9.68565 6.10047 14.4996C6.10047 19.3136 9.85247 23.1996 14.5005 23.1996C19.1485 23.1996 22.9005 19.3136 22.9005 14.4996C22.9005 9.68565 19.1485 5.79965 14.5005 5.79965Z" fill="#707070"/>
-                  <path d="M9.46094 13.9199H19.5409V15.0799H9.46094V13.9199Z" fill="#707070"/>
-                </svg>
-              </div>
-            }
+        <div class="flex items-center justify-between mt-5">
+          <p
+            class="text-Dark-Blue [font-family:Roboto] text-md font-bold leading-[normal] mb-[32px]"
+          >
+            Assign form {{ i + 1 }}
+          </p>
+          @if (i !== 0){
+          <div
+            class="mt-[32px] cursor-pointer"
+            (click)="removeAssignLecturer(i)"
+          >
+            <svg
+              width="29"
+              height="29"
+              viewBox="0 0 29 29"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14.5005 24.3596C9.23647 24.3596 4.98047 19.9516 4.98047 14.4996C4.98047 9.04765 9.23647 4.63965 14.5005 4.63965C19.7645 4.63965 24.0205 9.04765 24.0205 14.4996C24.0205 19.9516 19.7645 24.3596 14.5005 24.3596ZM14.5005 5.79965C9.85247 5.79965 6.10047 9.68565 6.10047 14.4996C6.10047 19.3136 9.85247 23.1996 14.5005 23.1996C19.1485 23.1996 22.9005 19.3136 22.9005 14.4996C22.9005 9.68565 19.1485 5.79965 14.5005 5.79965Z"
+                fill="#707070"
+              />
+              <path
+                d="M9.46094 13.9199H19.5409V15.0799H9.46094V13.9199Z"
+                fill="#707070"
+              />
+            </svg>
           </div>
+          }
+        </div>
         }
         <div class="flex flex-col gap-2">
-
           <div class="w-full">
             <div class="w-full flex flex-col items-start">
-              <label for="region" class="font-medium text-base mb-2 text-Dark-Primary">Select Region</label>
+              <label
+                for="region"
+                class="font-medium text-base mb-2 text-Dark-Primary"
+                >Select Region</label
+              >
               <div class="relative w-full">
                 <select
                   id="region"
@@ -62,9 +192,17 @@
                   <option value="" disabled selected>Select a region</option>
                   <option></option>
                 </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368"/>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                >
+                  <svg
+                    width="11"
+                    height="6"
+                    viewBox="0 0 11 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368" />
                   </svg>
                 </div>
               </div>
@@ -73,70 +211,102 @@
 
           <div class="w-full">
             <div class="w-full flex flex-col items-start">
-              <label for="zoneLead" class="font-medium text-base mb-2 text-Dark-Primary">Select Zone</label>
+              <label
+                for="zoneLead"
+                class="font-medium text-base mb-2 text-Dark-Primary"
+                >Select Zone</label
+              >
               <div class="relative w-full">
                 <button
                   id="zoneLead"
                   formControlName="zoneLead"
                   name="zoneLead"
                   required
-                  class="appearance-none  w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
-                >
-                  <span class="-ml-[50%] 2xl:-ml-[56%]">Select a zone </span>
-
-                </button>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368"/>
-                  </svg>
-                </div>
-              </div>
-
-          <div class="w-full">
-            <div class="w-full flex flex-col items-start">
-              <label for="lecturers" class="font-medium text-base mb-2 text-Dark-Primary">Select Lecturer(s)</label>
-              <div class="relative w-full">
-                <button
-                  (click)="isLeadListOpened = !isLeadListOpened"
-
-                  id="lecturers"
-                  formControlName="lecturerIds"
-                  name="lecturers"
-                  required
                   class="appearance-none w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
                 >
-                  <span class="-ml-[20%] 2xl:-ml-[35%]">Select one or more lecturers </span>
-
+                  <span class="-ml-[50%] 2xl:-ml-[56%]">Select a zone </span>
                 </button>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368"/>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                >
+                  <svg
+                    width="11"
+                    height="6"
+                    viewBox="0 0 11 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368" />
                   </svg>
                 </div>
               </div>
-              @if(isLeadListOpened){
-                <div class="absolute mt-20 flex flex-col py-5  items-center w-[65%] 2xl:w-1/2 border-2 border-Dark-Blue rounded-[10px] h-56 max-h-72 bg-white z-10 overflow-y-auto overflow-x-hidden">
-                  @for (lecturer of lecturers; track $index){
-                    <div class="flex my-1 items-center justify-between w-[80%] h-10 py-3 px-3 bg-gray-200 rounded-[4px]">
+
+              <div class="w-full">
+                <div class="w-full flex flex-col items-start">
+                  <label
+                    for="lecturers"
+                    class="font-medium text-base mb-2 text-Dark-Primary"
+                    >Select Lecturer(s)</label
+                  >
+                  <div class="relative w-full">
+                    <button
+                      (click)="isLeadListOpened = !isLeadListOpened"
+                      id="lecturers"
+                      formControlName="lecturerIds"
+                      name="lecturers"
+                      required
+                      class="appearance-none w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
+                    >
+                      <span class="-ml-[20%] 2xl:-ml-[35%]"
+                        >Select one or more lecturers
+                      </span>
+                    </button>
+                    <div
+                      class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                    >
+                      <svg
+                        width="11"
+                        height="6"
+                        viewBox="0 0 11 6"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z"
+                          fill="#5F6368"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  @if(isLeadListOpened){
+                  <div
+                    class="absolute mt-20 flex flex-col py-5 items-center w-[65%] 2xl:w-1/2 border-2 border-Dark-Blue rounded-[10px] h-56 max-h-72 bg-white z-10 overflow-y-auto overflow-x-hidden"
+                  >
+                    @for (lecturer of lecturers; track $index){
+                    <div
+                      class="flex my-1 items-center justify-between w-[80%] h-10 py-3 px-3 bg-gray-200 rounded-[4px]"
+                    >
                       <div class="flex justify-center gap-5">
                         @if (lecturer.dp) {
-                          <div class="flex items-center gap-3">
-                            <img
-                              [src]="lecturer.dp"
-                              alt="Student Display Profile"
-                              class="h-8 w-8 rounded-full"
-                            />
-                          </div>
+                        <div class="flex items-center gap-3">
+                          <img
+                            [src]="lecturer.dp"
+                            alt="Student Display Profile"
+                            class="h-8 w-8 rounded-full"
+                          />
+                        </div>
                         } @else {
-                          <div class="flex items-center gap-3">
-                            <div
-                              class="h-8 w-8 rounded-full bg-gray-100 flex justify-center items-center text-gray-500 font-semibold"
-                            >
-                              {{ getNameInitials(lecturer.name) }}
-                            </div>
+                        <div class="flex items-center gap-3">
+                          <div
+                            class="h-8 w-8 rounded-full bg-gray-100 flex justify-center items-center text-gray-500 font-semibold"
+                          >
+                            {{ getNameInitials(lecturer.name) }}
                           </div>
+                        </div>
                         }
-                        <span class="font-medium text-Primary-Blue mt-1 ">{{ lecturer.name }}</span>
+                        <span class="font-medium text-Primary-Blue mt-1">{{
+                          lecturer.name
+                        }}</span>
                       </div>
                       <div>
                         <input
@@ -146,35 +316,58 @@
                       </div>
                     </div>
 
-                  }
-                  <div class="flex">
-                    <button (click)="isLeadListOpened = false" class="bg-Dark-Blue text-white p-2 rounded">Done</button>
-
+                    }
+                    <div class="flex">
+                      <button
+                        (click)="isLeadListOpened = false"
+                        class="bg-Dark-Blue text-white p-2 rounded"
+                      >
+                        Done
+                      </button>
+                    </div>
                   </div>
+                  }
                 </div>
-              }
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="flex justify-center items-center my-5">
-        <div class="flex items-center gap-2 cursor-pointer text-Dark-Blue" (click)="addAssignLecturer()">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 1.6C11.5288 1.6 14.4 4.4712 14.4 8C14.4 11.5288 11.5288 14.4 8 14.4C4.4712 14.4 1.6 11.5288 1.6 8C1.6 4.4712 4.4712 1.6 8 1.6ZM8 0C3.5816 0 0 3.5816 0 8C0 12.4184 3.5816 16 8 16C12.4184 16 16 12.4184 16 8C16 3.5816 12.4184 0 8 0ZM12 7.2H8.8V4H7.2V7.2H4V8.8H7.2V12H8.8V8.8H12V7.2Z" fill="currentColor"/>
-          </svg>
-          <span class="font-medium">Add More</span>
-        </div>
-      </div>
+          <div class="flex justify-center items-center my-5">
+            <div
+              class="flex items-center gap-2 cursor-pointer text-Dark-Blue"
+              (click)="addAssignLecturer()"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 1.6C11.5288 1.6 14.4 4.4712 14.4 8C14.4 11.5288 11.5288 14.4 8 14.4C4.4712 14.4 1.6 11.5288 1.6 8C1.6 4.4712 4.4712 1.6 8 1.6ZM8 0C3.5816 0 0 3.5816 0 8C0 12.4184 3.5816 16 8 16C12.4184 16 16 12.4184 16 8C16 3.5816 12.4184 0 8 0ZM12 7.2H8.8V4H7.2V7.2H4V8.8H7.2V12H8.8V8.8H12V7.2Z"
+                  fill="currentColor"
+                />
+              </svg>
+              <span class="font-medium">Add More</span>
+            </div>
+          </div>
 
-      <div class="flex items-center gap-3 sticky">
-        <button (click)="closeModal()" type="button" class="w-1/3 px-4 py-2 text-Dark-Blue bg-white rounded-full border-2 border-Dark-Blue hover:bg-gray-100 ">
-          Cancel
-        </button>
-        <button type="submit" class="w-2/3 px-4 py-2 text-white bg-Dark-Blue rounded-full border-2 border-Dark-Blue ">
-          Assign
-        </button>
-      </div>
-    </div>
+          <div class="flex items-center gap-3 sticky">
+            <button
+              (click)="closeModal()"
+              type="button"
+              class="w-1/3 px-4 py-2 text-Dark-Blue bg-white rounded-full border-2 border-Dark-Blue hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="w-2/3 px-4 py-2 text-white bg-Dark-Blue rounded-full border-2 border-Dark-Blue"
+            >
+              Assign
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </form>

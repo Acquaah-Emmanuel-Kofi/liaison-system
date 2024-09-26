@@ -72,7 +72,7 @@
   </div>
 
   <div class="flex gap-4">
-    <button type="button" title="Reload Data">
+    <button type="button" title="Reload Data" (click)="refetchData()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -98,6 +98,7 @@
     <button
       type="button"
       title="Clear Filters"
+      (click)="clearFilters()"
       class="flex gap-1 items-center text-[#19337E]"
     >
       <svg

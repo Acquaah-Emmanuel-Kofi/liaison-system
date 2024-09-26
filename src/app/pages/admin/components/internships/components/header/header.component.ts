@@ -64,6 +64,15 @@ export class HeaderComponent implements OnInit {
     this.filterValues.emit(selectedData);
   }
 
+  refetchData() {
+    this.refetch.emit();
+  }
+
+  clearFilters() {
+    this.selectedFaculty = null;
+    this.selectedDepartment = null;
+  }
+
   handleSearchTerm(value: string) {
     this.searchValue.emit(value);
   }

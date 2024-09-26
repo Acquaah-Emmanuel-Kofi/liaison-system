@@ -70,3 +70,30 @@ export const getYears = (
     return null;
   }
 };
+
+
+export const filterLecturers = (
+  lecturers: any[],
+  faculty: string,
+  department: string
+) => {
+  const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, '-');
+
+  let filteredLecturers = lecturers;
+
+  if (faculty) {
+    const normalizedFaculty = normalize(faculty);
+    filteredLecturers = filteredLecturers.filter(
+      (lecturer) => normalize(lecturer.faculty) === normalizedFaculty
+    );
+  }
+
+  if (department) {
+    const normalizedDepartment = normalize(department);
+    filteredLecturers = filteredLecturers.filter(
+      (lecturer) => normalize(lecturer.department) === normalizedDepartment
+    );
+  }
+
+  return filteredLecturers;
+};

@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import {
-  filterLecturers,
+  filterFacultyDepartment,
   searchArray,
 } from '../../../../shared/helpers/functions.helper';
 
@@ -83,7 +83,9 @@ export class LecturersComponent {
   }
 
   handleFilterValue(selection: { faculty: string; department: string }) {
-    const filteredLecturers = filterLecturers(
+    this.searchTerm.set(selection.faculty);
+
+    const filteredLecturers = filterFacultyDepartment(
       this.lecturersQuery.data()!,
       selection.faculty,
       selection.department
@@ -101,6 +103,6 @@ export class LecturersComponent {
   }
 
   refetchData() {
-    this.lecturersQuery.refetch()
+    this.lecturersQuery.refetch();
   }
 }

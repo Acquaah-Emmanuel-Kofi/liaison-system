@@ -1,4 +1,6 @@
 import { formatDate } from '@angular/common';
+import { IStudentData } from '../interfaces/response.interface';
+import { TableData } from '../components/table/table.interface';
 
 export const getFirstTwoInitials = (name: string) => {
   return name
@@ -71,9 +73,8 @@ export const getYears = (
   }
 };
 
-
-export const filterLecturers = (
-  lecturers: any[],
+export const filterFacultyDepartment = (
+  lecturers: TableData[],
   faculty: string,
   department: string
 ) => {
@@ -84,16 +85,32 @@ export const filterLecturers = (
   if (faculty) {
     const normalizedFaculty = normalize(faculty);
     filteredLecturers = filteredLecturers.filter(
-      (lecturer) => normalize(lecturer.faculty) === normalizedFaculty
+      (lecturer) => normalize(lecturer['faculty']) === normalizedFaculty
     );
   }
 
   if (department) {
     const normalizedDepartment = normalize(department);
     filteredLecturers = filteredLecturers.filter(
-      (lecturer) => normalize(lecturer.department) === normalizedDepartment
+      (lecturer) => normalize(lecturer['department']) === normalizedDepartment
     );
   }
 
   return filteredLecturers;
+};
+
+export const filterStudentsByDateRange = (
+  students: IStudentData[],
+  start: string,
+  end: string
+): IStudentData[] => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  return students.filter((student) => {
+    const studentStartDate = new Date(student.startDate);
+    const studentEndDate = new Date(student.endDate);
+
+    return studentStartDate >= startDate && studentEndDate <= endDate;
+  });
 };

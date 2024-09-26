@@ -4,6 +4,7 @@ import { SearchbarComponent } from '../../../../../../shared/components/searchba
 import { facultiesAndDepartments } from '../../../../../../shared/helpers/constants.helper';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'liaison-header',
@@ -13,6 +14,7 @@ import { FormsModule } from '@angular/forms';
     SelectFilterComponent,
     DropdownModule,
     FormsModule,
+    CalendarModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -32,6 +34,8 @@ export class HeaderComponent implements OnInit {
 
   facultiesAndDepartments: Record<string, { name: string; value: string }[]> =
     {};
+
+  rangeDates: Date[] | undefined;
 
   constructor() {
     this.facultiesAndDepartments = facultiesAndDepartments;

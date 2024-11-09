@@ -12,7 +12,6 @@ export class DataService {
   students: any[] = [];
   headers: string[] = [];
 
-  // Use this function to send a file to the backend and return a Promise
   sendFileToBackend(file: File): Promise<ICommonResponse> {
     const formData = new FormData();
     formData.append('file', file);
@@ -24,4 +23,6 @@ export class DataService {
       )
     );
   }
+
+
 }

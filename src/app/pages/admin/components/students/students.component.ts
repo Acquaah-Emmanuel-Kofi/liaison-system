@@ -1,19 +1,15 @@
 import {Component, computed, effect, HostListener, inject, OnInit, signal, Signal} from '@angular/core';
-import { HeaderComponent } from './components/header/header.component';
-import { TableComponent } from '../../../../shared/components/table/table.component';
-import { TableColumn, TableData } from '../../../../shared/components/table/table.interface';
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
-import { StudentTableService } from "../../service/students-table/student-table.service";
-import { ToastModule } from "primeng/toast";
-import { MessageService } from "primeng/api";
-import { injectQuery } from "@tanstack/angular-query-experimental";
-import {lecturersQueryKey, studentsQueryKey} from '../../../../shared/helpers/query-keys.helper';
-import {
-  IGetLecturersResponse,
-  IGetStudentResponse,
-  IStudentData
-} from '../../../../shared/interfaces/response.interface';
-import {lastValueFrom, Subscription} from "rxjs";
+import {HeaderComponent} from './components/header/header.component';
+import {TableComponent} from '../../../../shared/components/table/table.component';
+import {TableColumn, TableData} from '../../../../shared/components/table/table.interface';
+import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
+import {StudentTableService} from "../../service/students-table/student-table.service";
+import {ToastModule} from "primeng/toast";
+import {MessageService} from "primeng/api";
+import {injectQuery} from "@tanstack/angular-query-experimental";
+import {studentsQueryKey} from '../../../../shared/helpers/query-keys.helper';
+import {IGetStudentResponse, IStudentData} from '../../../../shared/interfaces/response.interface';
+import {Subscription} from "rxjs";
 import {searchArray} from "../../../../shared/helpers/constants.helper";
 
 @Component({
@@ -36,7 +32,7 @@ export class StudentsComponent implements OnInit{
   totalData?: number;
 
   filteredData = signal<TableData[]>([]);
-  pageNumber = 1;
+  pageNumber = 0;
   private searchSubscription: Subscription;
 
 
@@ -129,12 +125,13 @@ export class StudentsComponent implements OnInit{
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
-    const data = this.query.data()?.data?.students || [];
-    if (data.length > 0) {
-      const filteredStudents = searchArray(data, value, ['name', 'department', 'faculty']);
+    const filteredStudents = searchArray(this.query.data()?.data?.students!, value, [
+      'name',
+      'department',
+      'faculty',
+    ]);
 
-      this.filteredData.set(filteredStudents);
-    }
+    this.filteredData.set(filteredStudents ?? []);
   }
 
 

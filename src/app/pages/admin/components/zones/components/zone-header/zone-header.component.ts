@@ -3,15 +3,17 @@ import {SearchbarComponent} from "../../../../../../shared/components/searchbar/
 import {SelectFilterComponent} from "../../../../../../shared/components/select-filter/select-filter.component";
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
 import {Router} from "@angular/router";
-import {injectQuery} from "@tanstack/angular-query-experimental";
+import {injectMutation, injectQuery} from "@tanstack/angular-query-experimental";
 import {lecturerListQueryKey, studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
 import {ModalContainerComponent} from "../../../../../../shared/components/modal-container/modal-container.component";
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgForOf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {RegionService} from "../../../../../../shared/services/regions/regions.service";
 import {ZoneService} from "../../service/zone.service";
 import {lectureListResponse} from "../../zone.interface";
-import {reset} from "@angular-architects/ngrx-toolkit/lib/with-devtools";
+import {lastValueFrom} from "rxjs";
+import {MessageService} from "primeng/api";
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'liaison-zone-header',
@@ -22,15 +24,20 @@ import {reset} from "@angular-architects/ngrx-toolkit/lib/with-devtools";
     ModalContainerComponent,
     FormsModule,
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf,
+    NgClass,
+    ToastModule
   ],
   templateUrl: './zone-header.component.html',
-  styleUrl: './zone-header.component.scss'
+  styleUrl: './zone-header.component.scss',
+  providers: [MessageService]
 })
 export class ZoneHeaderComponent implements OnInit {
   zoneService = inject(ZoneService)
   studentService = inject(StudentTableService)
   regionService = inject(RegionService)
+  messageService = inject(MessageService)
   fb = inject(FormBuilder)
   toggledFilterButton: boolean = false;
   route = inject(Router);
@@ -40,13 +47,26 @@ export class ZoneHeaderComponent implements OnInit {
   selectedRegion = '';
   isAddMoreTriggered: boolean = false;
   regions: string[] = [];
+  towns: string[] = [];
   lecturers: lectureListResponse[] = [];
+  selectedTowns: string[] = [];
+  selectedLecturers: string[] = []
+  lecturerNames: string[] = []
+  defaultPlaceholder = "Select town(s)"
   addZoneForm!: FormGroup;
+  currentZoneIndex: number = 0;
+  isTownListOpened: any;
+  isLecturerListOpened!: boolean;
 
   constructor() {
     this.addZoneForm = this.fb.group({
       zones: this.fb.array([this.createZonesForm()])
     });
+  }
+
+  toggleTownList(event: Event) {
+    event.stopPropagation(); // Prevent modal close
+    this.isTownListOpened = !this.isTownListOpened;
   }
 
   ngOnInit(): void {
@@ -81,6 +101,7 @@ export class ZoneHeaderComponent implements OnInit {
     enabled: false,
   }));
 
+
   toggleFilterButton() {
     this.toggledFilterButton = !this.toggledFilterButton;
   }
@@ -94,12 +115,15 @@ export class ZoneHeaderComponent implements OnInit {
     this.clearZonesArray();
   }
 
+  closeTownList() {
+    this.isTownListOpened = false;
+  }
+
   clearZonesArray() {
     const zonesArray = this.zones;
     while (zonesArray.length !== 0) {
       zonesArray.removeAt(0);
     }
-
     this.addZone();
   }
 
@@ -107,13 +131,14 @@ export class ZoneHeaderComponent implements OnInit {
     return this.addZoneForm.get('zones') as FormArray;
   }
 
-  createZonesForm(): FormGroup {
-    return this.fb.group({
-      name: ['', Validators.required],
-      region: ['', Validators.required],
-      zoneLead: ['', Validators.required],
-      lecturerIds: ['', Validators.required],
-    });
+    createZonesForm(): FormGroup {
+      return this.fb.group({
+        name: ['', Validators.required],
+        region: ['', Validators.required],
+        towns: this.fb.array([], Validators.required),
+        zoneLead: ['', Validators.required],
+        lecturerIds: this.fb.array([], Validators.required),
+      });
   }
 
   addZone() {
@@ -125,6 +150,46 @@ export class ZoneHeaderComponent implements OnInit {
     this.zones.removeAt(i);
   }
 
+
+  toggleTownSelection(town: string, index: number): void {
+    const townFormArray = this.zones.at(index).get('towns') as FormArray;
+    const townIndex = townFormArray.controls.findIndex(control => control.value === town);
+
+    if (this.selectedTowns.includes(town)) {
+      this.selectedTowns = this.selectedTowns.filter(t => t !== town);
+      if (townIndex >= 0) {
+        townFormArray.removeAt(townIndex);
+      }
+    } else {
+      this.selectedTowns.push(town);
+      townFormArray.push(this.fb.control(town));
+    }
+  }
+
+  toggleLecturesSelection(name:string ,id: string, index: number): void {
+    const townFormArray = this.zones.at(index).get('lecturerIds') as FormArray;
+    const townIndex = townFormArray.controls.findIndex(control => control.value === id);
+
+    if (this.lecturerNames.includes(id)) {
+      this.lecturerNames = this.lecturerNames.filter(t => t !== id);
+      if (townIndex >= 0) {
+        townFormArray.removeAt(townIndex);
+      }
+    } else {
+      this.lecturerNames.push(name);
+      townFormArray.push(this.fb.control(id));
+    }
+  }
+
+
+  onRegionChange(index:number){
+    const region = this.zones.at(index).get('region')?.value
+    this.towns = this.regionService.getTownsByRegion(region)
+    const townFormArray = this.zones.at(index).get('towns') as FormArray;
+    // townFormArray.enable({onlySelf: true});
+  }
+
+
   handleSearchTerm(value: string) {
     this.searchValue = value;
     if (this.searchValue) {
@@ -135,12 +200,37 @@ export class ZoneHeaderComponent implements OnInit {
     }
   }
 
+
+  zoneMutation = injectMutation(() => ({
+    mutationFn: (data: any) =>
+      lastValueFrom(this.zoneService.submitZone(data)),
+    onSuccess: (data: any)=> {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: data.message });
+      console.log(data)
+      }
+  }))
+
+
   onSubmit() {
     if (this.addZoneForm.valid) {
-      console.log('Submitted Form Data:', this.addZoneForm.value);
+      this.zoneMutation.mutate(this.addZoneForm.get('zones')?.value);
       this.closeModal();
     } else {
-      console.log('Form is invalid');
+      console.log('invalid')
+      this.messageService.add({ severity: 'error', summary: "Couldn't Submit", detail: 'Form is invalid: make sure all form fields are filled'});
     }
+  }
+
+  openTownList( event: Event, index: number) {
+    event.stopPropagation();
+    this.currentZoneIndex = index;
+    this.isTownListOpened = !this.isTownListOpened;
+
+    const townFormArray = this.zones.at(index).get('towns') as FormArray;
+    this.selectedTowns = townFormArray.controls.map(control => control.value);
+  }
+
+  closeDropdown() {
+    this.isTownListOpened = false
   }
 }

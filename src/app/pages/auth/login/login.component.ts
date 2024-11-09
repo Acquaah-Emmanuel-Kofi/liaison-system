@@ -11,6 +11,7 @@ import { ChipsModule } from 'primeng/chips';
 import { Button } from 'primeng/button';
 import { AuthService } from '../services/auth/auth.service';
 import { ICredentials, ILoginResponse } from '../interfaces/auth.interface';
+import { Router } from '@angular/router';
 import { LoaderComponent } from '../../../shared/components/loader/loader.component';
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
@@ -41,12 +42,15 @@ import {LoaderModalComponent} from "../../../shared/components/loader-modal/load
 export class LoginComponent {
   messageService = inject(MessageService)
   fb = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
+
   public type: string = 'password';
   public isLoading: boolean = false;
   isModalOpen: boolean = false;
   public isText: boolean = false;
 
-  private _authService = inject(AuthService);
+
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -107,5 +111,6 @@ export class LoginComponent {
     this.isModalOpen = false;
 
     this.messageService.add({ severity: 'success', summary: 'Success', detail: response.message });
+    this._router.navigate(['/admin']);
   }
 }

@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../../../../environments/environment.development";
-import {lastValueFrom} from "rxjs";
+import {lastValueFrom, Observable} from "rxjs";
 import {UserStore} from "../../../../../shared/store/user.store";
 import {lectureListModule, lectureListResponse} from "../zone.interface";
 
@@ -18,10 +18,12 @@ export class ZoneService {
     return lastValueFrom(this._http.get<lectureListModule>(url));
   }
 
-  // getCountries(){
-  //   return lastValueFrom(
-  //     `https://wft-geo-db.p.rapidapi.com/v1/geo/countries/US/regions `
-  //   )
-  // }
+  submitZone(formData:any): Observable<any>{
+    const url  =`${environment.BACKEND_API_BASE_URL}/zones/${this.userStore.id()}`
+    return this._http.post(url, formData);
+  }
+
+
+
 
 }

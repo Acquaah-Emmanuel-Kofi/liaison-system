@@ -1,30 +1,22 @@
 import { Injectable } from '@angular/core';
+// @ts-ignore
+import cities  from '../../../../assets/utils/data/cities.json';
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class RegionService {
-  private regions = [
-    'Ahafo Region',
-    'Ashanti Region',
-    'Bono East Region',
-    'Bono Region',
-    'Central Region',
-    'Eastern Region',
-    'Greater Accra Region',
-    'North East Region',
-    'Northern Region',
-    'Oti Region',
-    'Savannah Region',
-    'Upper East Region',
-    'Upper West Region',
-    'Volta Region',
-    'Western North Region',
-    'Western Region',
-  ];
+  private regions = cities;
 
   getRegions() {
-    return this.regions;
+    return Object.keys(this.regions);
   }
+
+  getTownsByRegion(region: string) {
+    return this.regions[region] || [];
+  }
+
+
 }
 

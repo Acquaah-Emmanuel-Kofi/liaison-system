@@ -1,16 +1,39 @@
-<div class="border border-Lighter-Blue bg-Lighter-Gray rounded-[12px] p-4 flex flex-col justify-between items-center w-[280px] 2xl:w-[450px]">
-  <div class="flex gap-28 2xl:gap-52">
-    <div class="flex flex-col">
-      <span class="text-sm text-gray-500">{{title}}</span>
-      <span class="text-2xl font-bold">{{count}}</span>
-    </div>
-    <div class="flex flex-col items-end">
-      <div class="w-8 h-8 rounded-full bg-Bright-Blue flex flex-col items-center pt-2">
-        <img [ngSrc]="iconSrc" alt="Icon" class="w-5 h-5 mb-2" width="20" height="20">
+<div class="border border-Lighter-Blue bg-Lighter-Gray p-4 rounded-lg">
+  <div class="flex justify-between">
+    <div class="space-y-2">
+      <h1 class="text-lg text-black">{{ title }}</h1>
+      @if(isLoading()) {
+
+      <div class="flex h-9 w-12 flex-col justify-center gap-1">
+        <div
+          class="h-1 w-3/4 skeleton skeleton-text rounded-lg bg-gray-border"
+        ></div>
+        <div
+          class="h-1 w-2/4 skeleton skeleton-text rounded-lg bg-gray-border"
+        ></div>
+        <div
+          class="h-1 w-1/4 skeleton skeleton-text rounded-lg bg-gray-border"
+        ></div>
       </div>
+
+      } @else {
+      <h2 class="text-3xl font-bold text-black">{{ count }}</h2>
+
+      }
+    </div>
+
+    <div
+      class="w-8 h-8 rounded-full bg-Bright-Blue flex justify-center items-center"
+    >
+      <img [ngSrc]="iconSrc" alt="Icon" width="20" height="20" />
     </div>
   </div>
-  <div class="w-[100%] flex justify-end">
-    <button (click)="navigate()" class="text-blue-500 text-sm">VIEW</button>
+  <div class="w-full flex justify-end">
+    <button
+      (click)="navigate()"
+      class="text-[#19337E] hover:text-[#19337E]/70 text-sm"
+    >
+      VIEW
+    </button>
   </div>
 </div>

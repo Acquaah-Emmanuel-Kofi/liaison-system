@@ -1,13 +1,31 @@
 <section>
-  <liaison-header />
+  <liaison-header
+    (searchValue)="handleSearchTerm($event)"
+    (refetch)="refetchData()"
+    (dateFilterValue)="handleDateFilter($event)"
+    (statusFilterValue)="handleStatusFilter($event)"
+  />
 
+  @switch (studentsQuery.status()) { @case ('pending') { @if
+  (studentsQuery.data()) {
+  <ng-container *ngTemplateOutlet="table" />
+  } @else {
+  <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" />
+  } } @case ('error') {
+  <liaison-table [columns]="columns" [data]="[]" [errorOccurred]="true" />
+  } @case ('success') {
+  <ng-container *ngTemplateOutlet="table" />
+
+  } }
+</section>
+
+<ng-template #table>
   <liaison-table
     [columns]="columns"
-    [data]="data"
-    [first] = 'first'
-    [pageSize] = 'pageSize'
-    [totalData] ='totalData'
-    (actionClicked)="handleActionClick($event)"
+    [data]="searchTerm() ? filteredData() : studentsQuery.data()!"
+    [first]="first()"
+    [pageSize]="pageSize()"
+    [totalData]="totalData()"
     (pageChange)="handlePageChange($event)"
   />
-</section>
+</ng-template>

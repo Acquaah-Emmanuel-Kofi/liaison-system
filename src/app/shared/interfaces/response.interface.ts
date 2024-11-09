@@ -1,20 +1,23 @@
-import { IUser } from "./user.interface";
+import { IUser } from './user.interface';
 
 export interface ICommonResponse {
-    status: number;
-    message: string;
+  status: number;
+  message: string;
+}
+
+interface IPagableResponse {
+  currentPage: number;
+  pageSize: number;
+  totalData: number;
+  totalPages: number;
 }
 
 export interface IGetStudentResponse extends ICommonResponse {
   data: IStudentResponseData;
 }
 
-interface IStudentResponseData {
-  currentPage: number | undefined;
-  pageSize: number | undefined;
+interface IStudentResponseData extends IPagableResponse {
   students: IStudentData[];
-  totalData: number ;
-  totalPages: number | undefined;
 }
 
 export interface IStudentData extends IUser {
@@ -27,19 +30,15 @@ export interface IStudentData extends IUser {
   name: string;
   placeOfInternship: string;
   startDate: string;
-  status: 'IN_PROGRESS' | 'COMPLETED'
+  status: 'IN_PROGRESS' | 'COMPLETED';
 }
 
 export interface IGetLecturersResponse extends ICommonResponse {
   data: ILecturersResponseData;
 }
 
-interface ILecturersResponseData {
-  currentPage: number;
-  pageSize: number;
+interface ILecturersResponseData extends IPagableResponse {
   page: ILecturerContentData;
-  totalData: number;
-  totalPages: number;
 }
 
 interface ILecturerContentData {
@@ -52,3 +51,13 @@ export interface ILecturersData extends IUser {
   faculty: string;
   lecturerId: string;
 }
+
+export interface IStartAnalytics {
+  lectures: number;
+  students: number;
+  internships: number;
+}
+export interface IStatAnalyticsResponse extends ICommonResponse {
+  data: IStartAnalytics;
+}
+

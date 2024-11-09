@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class SearchbarComponent {
   searchTermValue = output<string>();
+  placeholder = input<string>('Search');
   searchTerm: string = '';
 
   handleSearchFilter(event: string) {

@@ -5,7 +5,7 @@ export interface ILinks {
 
 export interface IStartCard {
   title: string;
-  number: number;
+  count: number;
   iconSrc: string;
   navigateTo: string;
 }

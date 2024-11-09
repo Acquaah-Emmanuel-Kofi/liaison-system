@@ -1,0 +1,28 @@
+<div class="flex flex-col justify-center items-center min-h-[400px]">
+  <img
+    [src]="
+      isError() ? 'assets/icons/error_occurred.svg' : 'assets/empty-data.svg'
+    "
+    alt="Error Icon"
+  />
+  <p class="text-Primary-Black font-medium text-[20px]">
+    {{ isError() ? "An Error Occurred!" : "No data found" }}
+  </p>
+  <p>{{ errorMessage() }}</p>
+
+  @if (isError()) {
+  <button
+    type="button"
+    (click)="onRetry()"
+    class="relative mt-3 overflow-hidden rounded-lg bg-Primary-Blue fill-white px-3 py-1 text-white transition-all duration-100 will-change-transform hover:bg-light-blue active:scale-95 disabled:bg-[#CCCCCC] md:w-auto"
+  >
+    <div class="relative">
+      <div class="opacity-1 valid: flex items-center transition-all">
+        <span class="whitespace-nowrap font-Archivo font-medium">
+          {{ buttonMessage() }}
+        </span>
+      </div>
+    </div>
+  </button>
+  }
+</div>

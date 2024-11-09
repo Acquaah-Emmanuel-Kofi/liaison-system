@@ -1,8 +1,12 @@
+import { formatDate } from '@angular/common';
+import { IStudentData } from '../interfaces/response.interface';
+import { TableData } from '../components/table/table.interface';
+
 export const getFirstTwoInitials = (name: string) => {
   return name
-    .split(' ')
-    .map((name) => name.charAt(0).toUpperCase())
-    .join('');
+    ?.split(' ')
+    ?.map((name) => name.charAt(0)?.toUpperCase())
+    ?.join('');
 };
 
 /**
@@ -28,22 +32,92 @@ export const sortByKey = <T extends Record<string, any>>(
   });
 };
 
-const routeValueKey: { [key: string]: string } = {
-  dashboard: 'Dashboard',
-  lecturers: 'Lecturers',
-  students: 'Students',
-  internships: 'Internships',
-  'access-control': 'Access Control',
-  courses: 'Courses',
-  Location: 'Location',
-  Annoucements: 'Annoucements',
+export const formatDateToDDMMYYYY = (date: string): string => {
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) return date; // Return original if invalid date
+  return formatDate(parsedDate, 'dd/MM/yyyy', 'en-US'); // Format date
 };
 
-export function setPageHeader(currentRoute: string): string {
-  for (const key in routeValueKey) {
-    if (currentRoute.includes(key)) {
-      return routeValueKey[key];
-    }
-  }
-  return '';
+export function searchArray<T>(
+  array: T[],
+  searchTerm: string,
+  keys: (keyof T)[]
+): T[] {
+  return array?.filter((item) =>
+    keys?.some((key) =>
+      item[key]
+        ?.toString()
+        ?.toLowerCase()
+        ?.trim()
+        ?.includes(searchTerm?.toLowerCase()?.trim())
+    )
+  );
 }
+
+export const getYears = (
+  range: string
+): { startYear: number; endYear: number } | null => {
+  const years = range?.split('/');
+
+  if (
+    years.length === 2 &&
+    !isNaN(Number(years[0])) &&
+    !isNaN(Number(years[1]))
+  ) {
+    return {
+      startYear: Number(years[0]),
+      endYear: Number(years[1]),
+    };
+  } else {
+    return null;
+  }
+};
+
+export const filterFacultyDepartment = (
+  lecturers: TableData[],
+  faculty: string,
+  department: string
+) => {
+  const normalize = (str: string) => str?.toLowerCase()?.replace(/\s+/g, '-');
+
+  let filteredLecturers = lecturers;
+
+  if (faculty) {
+    const normalizedFaculty = normalize(faculty);
+    filteredLecturers = filteredLecturers?.filter(
+      (lecturer) => normalize(lecturer['faculty']) === normalizedFaculty
+    );
+  }
+
+  if (department) {
+    const normalizedDepartment = normalize(department);
+    filteredLecturers = filteredLecturers?.filter(
+      (lecturer) => normalize(lecturer['department']) === normalizedDepartment
+    );
+  }
+
+  return filteredLecturers;
+};
+
+export const filterStudentsByDateRange = (
+  students: IStudentData[],
+  start: string,
+  end: string
+): IStudentData[] => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  return students?.filter((student) => {
+    const studentStartDate = new Date(student.startDate);
+    const studentEndDate = new Date(student.endDate);
+
+    return studentStartDate >= startDate && studentEndDate <= endDate;
+  });
+};
+
+export const filterStudentsByStatus = (
+  students: IStudentData[],
+  status: 'IN_PROGRESS' | 'COMPLETED'
+): IStudentData[] => {
+  return students?.filter((student) => student.status === status);
+};

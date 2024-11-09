@@ -1,43 +1,82 @@
-import {Component, inject, output} from '@angular/core';
+import {Component, inject, OnInit, output} from '@angular/core';
 import {SelectFilterComponent} from '../../../../../../shared/components/select-filter/select-filter.component';
 import {Router, RouterLink} from "@angular/router";
 import {SearchbarComponent} from '../../../../../../shared/components/searchbar/searchbar.component';
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
-import {injectQuery} from "@tanstack/angular-query-experimental";
-import {studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
+import { facultiesAndDepartments } from '../../../../../../shared/helpers/constants.helper';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'liaison-header',
   standalone: true,
-  imports: [SearchbarComponent, SelectFilterComponent, RouterLink],
+  imports: [
+    SearchbarComponent,
+    SelectFilterComponent,
+    RouterLink,
+    DropdownModule,
+    FormsModule,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
-  studentService = inject(StudentTableService)
-  toggledFilterButton: boolean = false;
-  route = inject(Router);
+export class HeaderComponent implements OnInit {
   searchValue = output<string>();
+  filterValues = output<{ faculty: string; department: string }>();
+  refetch = output<void>();
 
+  toggledFilters: boolean = false;
 
-  filterOptions: string[] = [
-    'Computer Science',
-    'Engineering',
-    'Fashion Design',
-    'Textiles Design',
-    'Ceramic Design',
-    'Painting Design',
-    'Sculpture Design',
-    'Graphic Design',
-  ];
+  facultyFilterOptions: { name: string; value: string }[] = [];
+  departmentsFilterOptions: { name: string; value: string }[] = [];
 
+  selectedFaculty: string | null = null;
+  selectedDepartment: string | null = null;
 
-  toggleFilterButton() {
-    this.toggledFilterButton = !this.toggledFilterButton;
+  facultiesAndDepartments: Record<string, { name: string; value: string }[]> =
+    {};
+
+  studentService = inject(StudentTableService);
+  route = inject(Router);
+
+  constructor() {
+    this.facultiesAndDepartments = facultiesAndDepartments;
   }
 
-  getOptionSelected(value: string) {
-    console.log('Option selected:', value);
+  ngOnInit() {
+    this.facultyFilterOptions = Object.keys(this.facultiesAndDepartments).map(
+      (faculty) => ({
+        name: faculty,
+        value: faculty,
+      })
+    );
+  }
+
+  toggleFilter() {
+    this.toggledFilters = !this.toggledFilters;
+  }
+
+  onFacultyChange(faculty: string) {
+    this.departmentsFilterOptions = this.facultiesAndDepartments[faculty] || [];
+    this.selectedDepartment = null;
+  }
+
+  emitFilterValue() {
+    const selectedData = {
+      faculty: this.selectedFaculty ?? '',
+      department: this.selectedDepartment ?? '',
+    };
+
+    this.filterValues.emit(selectedData);
+  }
+
+  refetchData() {
+    this.refetch.emit();
+  }
+
+  clearFilters() {
+    this.selectedFaculty = null;
+    this.selectedDepartment = null;
   }
 
   navigate() {

@@ -1,18 +1,16 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgIf} from "@angular/common";
+import {Component, EventEmitter, input, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'liaison-modal-container',
   standalone: true,
-  imports: [
-    NgIf
-  ],
+  imports: [],
   templateUrl: './modal-container.component.html',
-  styleUrl: './modal-container.component.scss'
+  styleUrl: './modal-container.component.scss',
+
 })
 export class ModalContainerComponent {
   @Input() isOpen = false;
-  @Input() title = 'Modal Title';
+  title = input('Modal Title');
   @Output() closeModal = new EventEmitter<void>();
 
   close() {

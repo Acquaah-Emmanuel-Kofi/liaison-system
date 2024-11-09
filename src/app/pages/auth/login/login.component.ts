@@ -42,13 +42,15 @@ import {LoaderModalComponent} from "../../../shared/components/loader-modal/load
 export class LoginComponent {
   messageService = inject(MessageService)
   fb = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
+
   public type: string = 'password';
   public isLoading: boolean = false;
   isModalOpen: boolean = false;
   public isText: boolean = false;
 
-  private _authService = inject(AuthService);
-  private _router = inject(Router);
+
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

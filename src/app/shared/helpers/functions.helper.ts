@@ -16,7 +16,7 @@ export const sortByKey = <T extends Record<string, any>>(
   columnKey: keyof T,
   sortOrder: 'asc' | 'desc'
 ): void => {
-  data.sort((a, b) => {
+  data?.sort((a, b) => {
     const valueA = String(a[columnKey]).toLowerCase();
     const valueB = String(b[columnKey]).toLowerCase();
 

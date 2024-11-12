@@ -92,7 +92,7 @@
               <div class="relative w-full">
                 <input
                   (focus)="openTownList($event,i)"
-                  [value]="selectedTowns?.length? selectedTowns.join(', ') : defaultPlaceholder"
+                  [value]="getTownsForZone(i).length ? getTownsForZone(i).join(', ') : defaultPlaceholder"
                   id="towns"
                   formArrayName="towns"
                   name="towns"
@@ -116,7 +116,7 @@
                       <input
                         type="checkbox"
                         class="form-checkbox cursor-pointer h-4 w-4 accent-[#19337E]"
-                        [checked]="selectedTowns.includes(town)"
+                        [checked]="getTownsForZone(i).includes(town)"
                         (change)="toggleTownSelection(town, i)"
                       />
                     </div>
@@ -159,7 +159,7 @@
               <label for="zoneLead" class="font-medium text-base mb-2 text-Dark-Primary">Assign Lecturer(s)</label>
               <div class="relative w-full">
                 <input
-                  [value]="lecturerNames?.length? lecturerNames.join(', ') : 'select lecturer(s)'"
+                  [value]="getLecturersForZone(i).length ? getLecturersForZone(i).join(', '): 'select lecturer(s)'"
                   (focus)="isLecturerListOpened =!isLecturerListOpened"
                   id="lecturers"
                   formArrayName="lecturerIds"
@@ -184,8 +184,8 @@
                       <input
                         type="checkbox"
                         class="form-checkbox cursor-pointer h-4 w-4 accent-[#19337E]"
-                        [checked]="selectedLecturers.includes(lecturer.name)"
-                        (change)="toggleLecturesSelection(lecturer.name,lecturer.id, i)"
+                        [checked]="selectedLecturers[i]?.includes(lecturer.name)"
+                        (change)="toggleLecturesSelection(lecturer, i)"
                       />
                     </div>
                   </div>

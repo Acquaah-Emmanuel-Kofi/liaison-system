@@ -6,35 +6,62 @@ import {injectQuery} from "@tanstack/angular-query-experimental";
 import {zonesQueryData} from "../../../../shared/helpers/query-keys.helper";
 import {ZoneService} from "./service/zone.service";
 import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
+import {HeaderComponent} from "../students/components/header/header.component";
+import {NgTemplateOutlet} from "@angular/common";
+import {ActivatedRoute, RouterOutlet} from "@angular/router";
+import {ToastModule} from "primeng/toast";
+import {searchArray} from "../../../../shared/helpers/functions.helper";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'liaison-zones',
   standalone: true,
   imports: [
     ZoneHeaderComponent,
-    TableComponent
+    TableComponent,
+    HeaderComponent,
+    NgTemplateOutlet,
+    RouterOutlet,
+    ToastModule
   ],
   templateUrl: './zones.component.html',
-  styleUrl: './zones.component.scss'
+  styleUrl: './zones.component.scss',
+  providers: [MessageService]
 })
 export class ZonesComponent implements OnInit{
+  activatedRoute = inject(ActivatedRoute);
   zoneService = inject(ZoneService)
   protected sidebarService = inject(SidebarService);
   zones:any;
   selectedRowData: TableData | null = null;
   first: number | undefined = 0;
   pageSize: number = 10;
+  currentPage = 1
   totalData?: number;
   pageNumber = 1;
   currentYear: number = new Date().getFullYear();
   lastyear = this.currentYear - 1;
   internshipType!: boolean
+  searchTerm = signal<string>('');
+  filteredData = signal<TableData[]>([]);
   startYear = signal<number | undefined>(this.lastyear);
   endYear = signal<number | undefined>(this.currentYear);
 
 
   ngOnInit() {
     this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value });
+  }
+
+  isChildRouteActive(): boolean {
+    return this.activatedRoute.firstChild !== null;
+  }
+
+  handlePageChange(data: { first: number; rows: number; page: number }) {
+    this.first = data.first;
+
+    this.currentPage = data.page + 1;
+
+    this.pageSize = data.rows;
   }
 
   columns: TableColumn[] = [
@@ -69,8 +96,16 @@ export class ZonesComponent implements OnInit{
   data: TableData[] = [];
 
 
-  handleActionClick(row: TableData): void {
-    this.selectedRowData = row;
+  handleSearchTerm(value: string) {
+    this.searchTerm.set(value);
+
+    const filteredZones = searchArray(this.zoneQuery.data()!, value, [
+      'name',
+      'region',
+      'zoneLead'
+    ]);
+
+    this.filteredData.set(filteredZones ?? []);
   }
 
 

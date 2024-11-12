@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit, output, signal} from '@angular/core';
 import {SearchbarComponent} from "../../../../../../shared/components/searchbar/searchbar.component";
 import {SelectFilterComponent} from "../../../../../../shared/components/select-filter/select-filter.component";
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
@@ -15,6 +15,7 @@ import {lastValueFrom} from "rxjs";
 import {MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import {SidebarService} from "../../../../../../shared/services/sidebar/sidebar.service";
+import {DropdownModule} from "primeng/dropdown";
 
 @Component({
   selector: 'liaison-zone-header',
@@ -28,7 +29,8 @@ import {SidebarService} from "../../../../../../shared/services/sidebar/sidebar.
     ReactiveFormsModule,
     NgIf,
     NgClass,
-    ToastModule
+    ToastModule,
+    DropdownModule
   ],
   templateUrl: './zone-header.component.html',
   styleUrl: './zone-header.component.scss',
@@ -64,6 +66,16 @@ export class ZoneHeaderComponent implements OnInit {
   protected sidebarService = inject(SidebarService);
   startYear = signal<number >(this.lastyear);
   endYear = signal<number>(this.currentYear);
+  toggledFilters: boolean = false;
+  facultyFilterOptions: { name: string; value: string }[] = [];
+  departmentsFilterOptions: { name: string; value: string }[] = [];
+  filterValues = output<{ faculty: string; department: string }>();
+  refetch = output<void>();
+  selectedFaculty: string | null = null;
+  selectedDepartment: string | null = null;
+
+  facultiesAndDepartments: Record<string, { name: string; value: string }[]> =
+    {};
 
   constructor() {
     this.addZoneForm = this.fb.group({
@@ -320,4 +332,33 @@ export class ZoneHeaderComponent implements OnInit {
   closeDropdown() {
     this.isTownListOpened = false
   }
+
+  toggleFilter() {
+    this.toggledFilters = !this.toggledFilters;
+  }
+
+  onFacultyChange(faculty: string) {
+    this.departmentsFilterOptions = this.facultiesAndDepartments[faculty] || [];
+    this.selectedDepartment = null;
+  }
+
+  emitFilterValue() {
+    const selectedData = {
+      faculty: this.selectedFaculty ?? '',
+      department: this.selectedDepartment ?? '',
+    };
+
+    this.filterValues.emit(selectedData);
+  }
+
+  refetchData() {
+    this.refetch.emit();
+  }
+
+  clearFilters() {
+    this.selectedFaculty = null;
+    this.selectedDepartment = null;
+  }
+
+
 }

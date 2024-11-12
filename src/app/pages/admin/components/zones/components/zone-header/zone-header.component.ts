@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, output, signal} from '@angular/core';
 import {SearchbarComponent} from "../../../../../../shared/components/searchbar/searchbar.component";
 import {SelectFilterComponent} from "../../../../../../shared/components/select-filter/select-filter.component";
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
@@ -14,6 +14,8 @@ import {lectureListResponse} from "../../zone.interface";
 import {lastValueFrom} from "rxjs";
 import {MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
+import {SidebarService} from "../../../../../../shared/services/sidebar/sidebar.service";
+import {DropdownModule} from "primeng/dropdown";
 
 @Component({
   selector: 'liaison-zone-header',
@@ -27,7 +29,8 @@ import {ToastModule} from "primeng/toast";
     ReactiveFormsModule,
     NgIf,
     NgClass,
-    ToastModule
+    ToastModule,
+    DropdownModule
   ],
   templateUrl: './zone-header.component.html',
   styleUrl: './zone-header.component.scss',
@@ -49,14 +52,30 @@ export class ZoneHeaderComponent implements OnInit {
   regions: string[] = [];
   towns: string[] = [];
   lecturers: lectureListResponse[] = [];
-  selectedTowns: string[] = [];
-  selectedLecturers: string[] = []
+  selectedTowns: { [key: number]: string[] } = {};
+  selectedLecturers: { [key: number]: string[] } = {};
   lecturerNames: string[] = []
   defaultPlaceholder = "Select town(s)"
   addZoneForm!: FormGroup;
   currentZoneIndex: number = 0;
   isTownListOpened: any;
   isLecturerListOpened!: boolean;
+  currentYear: number = new Date().getFullYear();
+  lastyear = this.currentYear - 1;
+  internshipType!: boolean
+  protected sidebarService = inject(SidebarService);
+  startYear = signal<number >(this.lastyear);
+  endYear = signal<number>(this.currentYear);
+  toggledFilters: boolean = false;
+  facultyFilterOptions: { name: string; value: string }[] = [];
+  departmentsFilterOptions: { name: string; value: string }[] = [];
+  filterValues = output<{ faculty: string; department: string }>();
+  refetch = output<void>();
+  selectedFaculty: string | null = null;
+  selectedDepartment: string | null = null;
+
+  facultiesAndDepartments: Record<string, { name: string; value: string }[]> =
+    {};
 
   constructor() {
     this.addZoneForm = this.fb.group({
@@ -64,13 +83,25 @@ export class ZoneHeaderComponent implements OnInit {
     });
   }
 
-  toggleTownList(event: Event) {
-    event.stopPropagation(); // Prevent modal close
-    this.isTownListOpened = !this.isTownListOpened;
+  toggleTownList(event: Event, index: number) {
+    event.stopPropagation();
+    this.isTownListOpened = index;
+    this.towns = this.getAvailableTownsForZone(index);
   }
+  // openTownList( event: Event, index: number) {
+  //   event.stopPropagation();
+  //   this.currentZoneIndex = index;
+  //   this.isTownListOpened = !this.isTownListOpened;
+  //
+  //   const townFormArray = this.zones.at(index).get('towns') as FormArray;
+  //   this.selectedTowns = townFormArray.controls.map(control => control.value);
+  // }
+
 
   ngOnInit(): void {
     this.regions = this.regionService.getRegions();
+    this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value });
+    this.lecturesQuery.refetch();
   }
 
   filterOptions: string[] = [
@@ -151,43 +182,96 @@ export class ZoneHeaderComponent implements OnInit {
   }
 
 
+  getTownsFormArray(index: number): FormArray {
+    return this.zones.at(index).get('towns') as FormArray;
+  }
+
+
+  hasRegionSelected(zoneIndex: number): boolean {
+    const zoneGroup = this.zones.at(zoneIndex);
+    const regionValue = zoneGroup.get('region')?.value;
+    return !!regionValue && regionValue.trim() !== '';
+  }
+
+  // Get available towns based on the selected region for a specific zone
+  getAvailableTownsForZone(zoneIndex: number): string[] {
+    if (!this.hasRegionSelected(zoneIndex)) {
+      return [];
+    }
+    // Return towns based on the selected region
+    const selectedRegion = this.zones.at(zoneIndex).get('region')?.value;
+    return this.towns;
+  }
+
+  openTownList(event: any, zoneIndex: number) {
+    this.currentZoneIndex = zoneIndex;
+    this.isTownListOpened = true;
+  }
+  //
+  // getAvailableTownsForZone(zoneIndex: number): string[] {
+  //   const selectedRegion = this.zones.at(zoneIndex).get('region')?.value;
+  //   return this.regionService.getTownsByRegion(selectedRegion);
+  // }
+
   toggleTownSelection(town: string, index: number): void {
-    const townFormArray = this.zones.at(index).get('towns') as FormArray;
-    const townIndex = townFormArray.controls.findIndex(control => control.value === town);
+    const townsFormArray = this.getTownsFormArray(index);
+    const townIndex = townsFormArray.controls.findIndex(control => control.value === town);
 
-    if (this.selectedTowns.includes(town)) {
-      this.selectedTowns = this.selectedTowns.filter(t => t !== town);
+    if (this.selectedTowns[index]?.includes(town)) {
+      this.selectedTowns[index] = this.selectedTowns[index].filter(t => t !== town);
       if (townIndex >= 0) {
-        townFormArray.removeAt(townIndex);
+        townsFormArray.removeAt(townIndex);
       }
     } else {
-      this.selectedTowns.push(town);
-      townFormArray.push(this.fb.control(town));
+      if (!this.selectedTowns[index]) {
+        this.selectedTowns[index] = [];
+      }
+      this.selectedTowns[index].push(town);
+      townsFormArray.push(this.fb.control(town));
     }
   }
 
-  toggleLecturesSelection(name:string ,id: string, index: number): void {
-    const townFormArray = this.zones.at(index).get('lecturerIds') as FormArray;
-    const townIndex = townFormArray.controls.findIndex(control => control.value === id);
+  toggleLecturesSelection(lecturer: lectureListResponse, index: number): void {
+    const lecturerFormArray = this.zones.at(index).get('lecturerIds') as FormArray;
+    const lecturerIndex = lecturerFormArray.controls.findIndex(control => control.value === lecturer.id);
 
-    if (this.lecturerNames.includes(id)) {
-      this.lecturerNames = this.lecturerNames.filter(t => t !== id);
-      if (townIndex >= 0) {
-        townFormArray.removeAt(townIndex);
+    if (this.selectedLecturers[index]?.includes(lecturer.name)) {
+      this.selectedLecturers[index] = this.selectedLecturers[index].filter(l => l !== lecturer.name);
+      if (lecturerIndex >= 0) {
+        lecturerFormArray.removeAt(lecturerIndex);
       }
     } else {
-      this.lecturerNames.push(name);
-      townFormArray.push(this.fb.control(id));
+      if (!this.selectedLecturers[index]) {
+        this.selectedLecturers[index] = [];
+      }
+      this.selectedLecturers[index].push(lecturer.name);
+      lecturerFormArray.push(this.fb.control(lecturer.id));
     }
   }
 
-
-  onRegionChange(index:number){
-    const region = this.zones.at(index).get('region')?.value
-    this.towns = this.regionService.getTownsByRegion(region)
-    const townFormArray = this.zones.at(index).get('towns') as FormArray;
-    // townFormArray.enable({onlySelf: true});
+  getTownsForZone(zoneIndex: number): string[] {
+    return this.selectedTowns[zoneIndex] || [];
   }
+
+  getLecturersForZone(zoneIndex: number): string[] {
+    return this.selectedLecturers[zoneIndex] || [];
+  }
+
+  onRegionChange(index: number): void {
+    const townsFormArray = this.getTownsFormArray(index);
+    const region = this.zones.at(index).get('region') as FormArray
+    this.towns = this.regionService.getTownsByRegion(region.value)
+    townsFormArray.clear();
+    this.selectedTowns[index] = [];
+  }
+
+
+  // onRegionChange(index:number){
+  //   const region = this.zones.at(index).get('region')?.value
+  //   this.towns = this.regionService.getTownsByRegion(region)
+  //   const townFormArray = this.zones.at(index).get('towns') as FormArray;
+  //
+  // }
 
 
   handleSearchTerm(value: string) {
@@ -202,35 +286,79 @@ export class ZoneHeaderComponent implements OnInit {
 
 
   zoneMutation = injectMutation(() => ({
-    mutationFn: (data: any) =>
-      lastValueFrom(this.zoneService.submitZone(data)),
-    onSuccess: (data: any)=> {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: data.message });
-      console.log(data)
-      }
-  }))
+    mutationFn: async ({ formData, startYear, endYear, internship }: {
+      formData: any;
+      startYear: number;
+      endYear: number;
+      internship: boolean;
+    }) => {
+      const result = await lastValueFrom(
+        this.zoneService.submitZone(formData, startYear, endYear, internship)
+      );
+      return result;
+    },
+    onSuccess: (data: any) => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: data.message || 'Zone submitted successfully'
+      });
+    },
+    onError: (error: any) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.message || 'An error occurred while submitting the zone'
+      });
+    }
+  }));
+
 
 
   onSubmit() {
     if (this.addZoneForm.valid) {
-      this.zoneMutation.mutate(this.addZoneForm.get('zones')?.value);
+      const formData = this.addZoneForm.get('zones')?.value;
+      const startYear = this.startYear();
+      const endYear = this.endYear();
+      const internship = this.internshipType;
+      this.zoneMutation.mutate({ formData, startYear, endYear, internship });
       this.closeModal();
     } else {
-      console.log('invalid')
       this.messageService.add({ severity: 'error', summary: "Couldn't Submit", detail: 'Form is invalid: make sure all form fields are filled'});
     }
   }
 
-  openTownList( event: Event, index: number) {
-    event.stopPropagation();
-    this.currentZoneIndex = index;
-    this.isTownListOpened = !this.isTownListOpened;
-
-    const townFormArray = this.zones.at(index).get('towns') as FormArray;
-    this.selectedTowns = townFormArray.controls.map(control => control.value);
-  }
 
   closeDropdown() {
     this.isTownListOpened = false
   }
+
+  toggleFilter() {
+    this.toggledFilters = !this.toggledFilters;
+  }
+
+  onFacultyChange(faculty: string) {
+    this.departmentsFilterOptions = this.facultiesAndDepartments[faculty] || [];
+    this.selectedDepartment = null;
+  }
+
+  emitFilterValue() {
+    const selectedData = {
+      faculty: this.selectedFaculty ?? '',
+      department: this.selectedDepartment ?? '',
+    };
+
+    this.filterValues.emit(selectedData);
+  }
+
+  refetchData() {
+    this.refetch.emit();
+  }
+
+  clearFilters() {
+    this.selectedFaculty = null;
+    this.selectedDepartment = null;
+  }
+
+
 }

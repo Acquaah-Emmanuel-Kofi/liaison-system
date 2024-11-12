@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../../../environments/environment.development";
-import {lastValueFrom, Observable} from "rxjs";
+import {catchError, lastValueFrom, Observable, tap} from "rxjs";
 import {UserStore} from "../../../../../shared/store/user.store";
 import {lectureListModule, lectureListResponse} from "../zone.interface";
 
@@ -18,9 +18,31 @@ export class ZoneService {
     return lastValueFrom(this._http.get<lectureListModule>(url));
   }
 
-  submitZone(formData:any): Observable<any>{
-    const url  =`${environment.BACKEND_API_BASE_URL}/zones/${this.userStore.id()}`
-    return this._http.post(url, formData);
+  submitZone(formData:any,startOfAcademicYear: number  ,endOfAcademicYear:number,internship:boolean): Observable<any>{
+    const params = new HttpParams()
+      .set('startOfAcademicYear', startOfAcademicYear.toString())
+      .set('endOfAcademicYear', endOfAcademicYear.toString())
+      .set('internship', internship);
+
+    const url = `${environment.BACKEND_API_BASE_URL}/zones/${this.userStore.id()}`;
+
+    return this._http.post(url, formData, { params }).pipe(
+      tap(response => console.log('Response:', response)),
+      catchError(error => {
+        throw error;
+      })
+    );
+  }
+
+  getAllCreatedZones(startOfAcademicYear: number,endOfAcademicYear: number,internship: boolean){
+    const params = new HttpParams()
+      .set('startOfAcademicYear', startOfAcademicYear.toString())
+      .set('endOfAcademicYear', endOfAcademicYear.toString())
+      .set('internship', internship);
+
+    const url = `${environment.BACKEND_API_BASE_URL}/zones/${this.userStore.id()}`;
+    return lastValueFrom(this._http.get<any>(url, { params }));
+
   }
 
 

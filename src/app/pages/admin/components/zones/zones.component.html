@@ -1,15 +1,46 @@
-<section>
-  <liaison-zone-header>
+<!--<section>-->
+<!--  <liaison-zone-header>-->
 
-  </liaison-zone-header>
+<!--  </liaison-zone-header>-->
 
-  <liaison-table
-    [columns]="columns"
-    [data]="data"
-    [first] = 'first'
-    [pageSize] = 'pageSize'
-    [totalData] ='totalData'
-    (actionClicked)="handleActionClick($event)"
-  />
+<!--  <liaison-table-->
+<!--    [columns]="columns"-->
+<!--    [data]="data"-->
+<!--    [first] = 'first'-->
+<!--    [pageSize] = 'pageSize'-->
+<!--    [totalData] ='totalData'-->
+<!--    (actionClicked)="handleActionClick($event)"-->
+<!--  />-->
 
-</section>
+<!--</section>-->
+<p-toast></p-toast>
+@if (!isChildRouteActive()){
+  <section>
+    <liaison-header (searchValue)="handleSearchTerm($event)" />
+
+    @switch (zoneQuery.status()) { @case ('pending') { @if
+    (zoneQuery.data()) {
+      <ng-container *ngTemplateOutlet="table" />
+    } @else {
+      <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" />
+    } } @case ('error') {
+      <liaison-table [columns]="columns" [data]="[]" [errorOccurred]="true" />
+    } @case ('success') {
+      <ng-container *ngTemplateOutlet="table" />
+
+    } }
+  </section>
+
+  <ng-template #table>
+    <liaison-table
+      [columns]="columns"
+      [data]="searchTerm() ? filteredData() : zoneQuery.data()!"
+      [first]="first"
+      [pageSize]="pageSize"
+      [totalData]="totalData"
+      (pageChange)="handlePageChange($event)"
+    />
+  </ng-template>
+}
+
+<router-outlet></router-outlet>

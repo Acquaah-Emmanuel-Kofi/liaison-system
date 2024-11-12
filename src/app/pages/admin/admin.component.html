@@ -14,8 +14,8 @@
   </div>
   @if(close){
     <div (click)="close = !close" class="cursor-pointer absolute z-50 right-0 bottom-10 bg-Primary-Blue  p-2">
-      <p [class.hidden]="(sidebarService.isSwitched$ | async)" class="text-white">Attachment view</p>
-      <p [class.hidden]="!(sidebarService.isSwitched$ | async)" class="text-white">Semester Out view</p>
+      <p [class.hidden]="(sidebarService.isSwitched$ | async)" class="text-white">Semester Out view</p>
+      <p [class.hidden]="!(sidebarService.isSwitched$ | async)" class="text-white">Attachment view</p>
     </div>
   } @else {
     <div class="absolute z-50 right-0 bottom-10 bg-Primary-Blue  p-2">

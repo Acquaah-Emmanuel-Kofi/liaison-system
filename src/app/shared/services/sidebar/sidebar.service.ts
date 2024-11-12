@@ -4,7 +4,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
   providedIn: 'root'
 })
 export class SidebarService {
-  private isInternTypeSwitchedSubject = new BehaviorSubject<boolean>(false);
+  private isInternTypeSwitchedSubject = new BehaviorSubject<boolean>(true);
   private isCollapsedSubject = new BehaviorSubject<boolean>(false);
   interTypeSubject =  new BehaviorSubject<string>('')
 
@@ -17,7 +17,7 @@ export class SidebarService {
     const currentState = this.isInternTypeSwitchedSubject.value;
     this.isInternTypeSwitchedSubject.next(!currentState);
     if (this.isSwitched$){
-      this.interTypeSubject.next('Semester out view')
+      this.interTypeSubject.next('Attachment view')
     }
   }
 

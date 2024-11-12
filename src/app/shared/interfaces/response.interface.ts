@@ -5,6 +5,20 @@ export interface ICommonResponse {
   message: string;
 }
 
+export interface IZones{
+  dateCreated?: string
+  dateUpdated?: string
+  endOfAcademicYear?:string
+  id?:string
+  internshipType?:string
+  lecturers?: string[]
+  name?:string
+  region?:string
+  startOfAcademicYear?:string
+  towns?: string[]
+  zoneLead?:string
+}
+
 interface IPagableResponse {
   currentPage: number;
   pageSize: number;

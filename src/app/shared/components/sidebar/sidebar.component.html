@@ -49,11 +49,7 @@
           >
             <div
               [style]="
-                currentRoute().includes(navLink.routerLink)
-                  ? 'background-color: #fff; -webkit-mask: url(' +
-                    navLink.defaultIconSrc +
-                    ') no-repeat center;'
-                  : 'background-color: #fff; -webkit-mask: url(' +
+                'background-color: #fff; -webkit-mask: url(' +
                     navLink.defaultIconSrc +
                     ') no-repeat center;'
               "
@@ -109,13 +105,9 @@
           >
             <div
               [style]="
-                currentRoute().includes(navLink.routerLink)
-                  ? 'background-color: #fff; -webkit-mask: url(' +
-                    navLink.defaultIconSrc +
-                    ') no-repeat center;'
-                  : 'background-color: #fff; -webkit-mask: url(' +
-                    navLink.defaultIconSrc +
-                    ') no-repeat center;'
+                'background-color: #fff; -webkit-mask: url(' +
+                navLink.defaultIconSrc +
+                ') no-repeat center;'
               "
               class="w-8 h-8"
             >
@@ -192,7 +184,6 @@
       Sem. Out
     </p>
   </div>
-
 
   <!-- Toggle Button -->
 

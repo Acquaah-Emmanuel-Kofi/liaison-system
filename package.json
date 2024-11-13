@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "@auth0/angular-jwt": "^5.2.0",
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@ngrx/signals": "^17.2.0",
     "@tanstack/angular-query-devtools-experimental": "^5.55.4",
     "@tanstack/angular-query-experimental": "^5.55.4",

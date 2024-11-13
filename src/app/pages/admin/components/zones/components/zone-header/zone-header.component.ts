@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, output, signal} from '@angular/core';
+import {Component, inject, OnInit, Output, output, signal} from '@angular/core';
 import {SearchbarComponent} from "../../../../../../shared/components/searchbar/searchbar.component";
 import {SelectFilterComponent} from "../../../../../../shared/components/select-filter/select-filter.component";
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
@@ -44,7 +44,7 @@ export class ZoneHeaderComponent implements OnInit {
   fb = inject(FormBuilder)
   toggledFilterButton: boolean = false;
   route = inject(Router);
-  searchValue = '';
+  searchValue = output<string>();
   isModalOpened: boolean = false;
   zoneName = '';
   selectedRegion = '';
@@ -275,13 +275,15 @@ export class ZoneHeaderComponent implements OnInit {
 
 
   handleSearchTerm(value: string) {
-    this.searchValue = value;
-    if (this.searchValue) {
-      this.studentsQuery.refetch().then(() => {
-        const results = this.studentsQuery.data();
-        this.studentService.updateSearchResults(results);
-      });
-    }
+    this.searchValue.emit(value);
+
+    // this.searchValue.subscribe();
+    // if (this.searchValue) {
+    //   this.studentsQuery.refetch().then(() => {
+    //     const results = this.studentsQuery.data();
+    //     this.studentService.updateSearchResults(results);
+    //   });
+    // }
   }
 
 

@@ -40,6 +40,7 @@ export class ZoneService {
       .set('endOfAcademicYear', endOfAcademicYear.toString())
       .set('internship', internship);
 
+
     const url = `${environment.BACKEND_API_BASE_URL}/zones/${this.userStore.id()}`;
     return lastValueFrom(this._http.get<any>(url, { params }));
 

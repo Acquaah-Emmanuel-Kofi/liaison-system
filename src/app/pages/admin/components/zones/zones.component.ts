@@ -6,7 +6,6 @@ import {injectQuery} from "@tanstack/angular-query-experimental";
 import {zonesQueryData} from "../../../../shared/helpers/query-keys.helper";
 import {ZoneService} from "./service/zone.service";
 import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
-import {HeaderComponent} from "../students/components/header/header.component";
 import {NgTemplateOutlet} from "@angular/common";
 import {ActivatedRoute, RouterOutlet} from "@angular/router";
 import {ToastModule} from "primeng/toast";
@@ -19,7 +18,6 @@ import {MessageService} from "primeng/api";
   imports: [
     ZoneHeaderComponent,
     TableComponent,
-    HeaderComponent,
     NgTemplateOutlet,
     RouterOutlet,
     ToastModule
@@ -45,11 +43,12 @@ export class ZonesComponent implements OnInit{
   searchTerm = signal<string>('');
   filteredData = signal<TableData[]>([]);
   startYear = signal<number | undefined>(this.lastyear);
+  data: TableData[] = [];
   endYear = signal<number | undefined>(this.currentYear);
 
 
   ngOnInit() {
-    this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value });
+   this.internshipType =  this.sidebarService.getInternTypeState();
   }
 
   isChildRouteActive(): boolean {
@@ -93,18 +92,15 @@ export class ZonesComponent implements OnInit{
   }));
 
 
-  data: TableData[] = [];
 
 
   handleSearchTerm(value: string) {
-    this.searchTerm.set(value);
-
+    this.searchTerm.set(value)
     const filteredZones = searchArray(this.zoneQuery.data()!, value, [
       'name',
       'region',
       'zoneLead'
     ]);
-
     this.filteredData.set(filteredZones ?? []);
   }
 

@@ -1,22 +1,8 @@
-<!--<section>-->
-<!--  <liaison-zone-header>-->
 
-<!--  </liaison-zone-header>-->
-
-<!--  <liaison-table-->
-<!--    [columns]="columns"-->
-<!--    [data]="data"-->
-<!--    [first] = 'first'-->
-<!--    [pageSize] = 'pageSize'-->
-<!--    [totalData] ='totalData'-->
-<!--    (actionClicked)="handleActionClick($event)"-->
-<!--  />-->
-
-<!--</section>-->
 <p-toast></p-toast>
 @if (!isChildRouteActive()){
   <section>
-    <liaison-header (searchValue)="handleSearchTerm($event)" />
+    <liaison-zone-header (searchValue)="handleSearchTerm($event)" />
 
     @switch (zoneQuery.status()) { @case ('pending') { @if
     (zoneQuery.data()) {

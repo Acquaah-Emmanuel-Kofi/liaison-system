@@ -22,20 +22,20 @@ export const ADMIN_NAVLINKS: INavLinks[] = [
     routerLink: 'internships',
   },
   {
-    title: 'Access Control',
-    defaultIconSrc: '/assets/icons/access_control.svg',
-    routerLink: 'access-control',
-    children: [
-      {
-        title: 'Zones',
-        defaultIconSrc: '/assets/icons/zones.svg',
-        routerLink: 'zones',
-      },
-      {
-        title: 'Notification Settings',
-        defaultIconSrc: '/assets/icons/notifications.svg',
-        routerLink: 'notification-settings',
-      },
-    ],
-  },
+    title: 'Zones',
+    defaultIconSrc: '/assets/icons/zones.svg',
+    routerLink: 'zones',
+    // children: [
+    //   {
+    //     title: 'Zones',
+    //     defaultIconSrc: '/assets/icons/zones.svg',
+    //     routerLink: 'zones',
+    //   },
+      // {
+      //   title: 'Notification Settings',
+      //   defaultIconSrc: '/assets/icons/notifications.svg',
+      //   routerLink: 'notification-settings',
+      // },
+    // ],
+  }
 ];

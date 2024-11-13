@@ -26,7 +26,7 @@
       </svg>
     </button>
   </div>
-  <div class="flex items-center gap-2">
+
     <button
       (click)="isModalOpened = !isModalOpened"
       class="text-white border-2 rounded-full bg-[#19337E] border-[#19337E] font-medium text-sm px-6 py-1.5 text-center inline-flex items-center"
@@ -43,83 +43,9 @@
         <path d="M11 13H5V11H11V5H13V11H19V13H13V19H11V13Z" fill="white" />
       </svg>
     </button>
-  </div>
+
 </header>
-@if(toggledFilters) {
-  <div
-    class="my-6 flex justify-between items-center pr-5 animate-fade-down animate-once"
-  >
-    <div class="flex gap-4">
-      <p-dropdown
-        [options]="facultyFilterOptions"
-        [(ngModel)]="selectedFaculty"
-        (ngModelChange)="onFacultyChange($event)"
-        optionLabel="name"
-        optionValue="value"
-        [placeholder]="'Filter by Faculty'"
-      ></p-dropdown>
 
-      <p-dropdown
-        [options]="departmentsFilterOptions"
-        [(ngModel)]="selectedDepartment"
-        (ngModelChange)="emitFilterValue()"
-        optionLabel="name"
-        optionValue="value"
-        [placeholder]="'Filter by Department'"
-      ></p-dropdown>
-    </div>
-
-    <div class="flex gap-4">
-      <button type="button" title="Reload Data" (click)="refetchData()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#19337E"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-list-restart"
-        >
-          <path d="M21 6H3" />
-          <path d="M7 12H3" />
-          <path d="M7 18H3" />
-          <path
-            d="M12 18a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L11 14"
-          />
-          <path d="M11 10v4h4" />
-        </svg>
-      </button>
-
-      <button
-        type="button"
-        title="Clear Filters"
-        (click)="clearFilters()"
-        class="flex gap-1 items-center text-[#19337E]"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#19337E"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-circle-x"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="m15 9-6 6" />
-          <path d="m9 9 6 6" />
-        </svg>
-        Clear
-      </button>
-    </div>
-  </div>
-}
 
 <liaison-modal-container  [isOpen]="isModalOpened" [title]="'Add New Zone'" (closeModal)="closeModal()">
   <form [formGroup]="addZoneForm" (ngSubmit)="onSubmit()" class="space-y-6 w-full max-w-md mx-auto px-10 ">
@@ -277,7 +203,7 @@
                       <input
                         type="checkbox"
                         class="form-checkbox cursor-pointer h-4 w-4 accent-[#19337E]"
-                        [checked]="selectedLecturers[i]?.includes(lecturer.name)"
+                        [checked]="selectedLecturers[i].includes(lecturer.name)"
                         (change)="toggleLecturesSelection(lecturer, i)"
                       />
                     </div>
@@ -313,5 +239,79 @@
   </form>
 </liaison-modal-container>
 
+@if(toggledFilters) {
+  <div
+    class="my-6 flex justify-between items-center pr-5 animate-fade-down animate-once"
+  >
+    <div class="flex gap-4">
+      <p-dropdown
+        [options]="facultyFilterOptions"
+        [(ngModel)]="selectedFaculty"
+        (ngModelChange)="onFacultyChange($event)"
+        optionLabel="name"
+        optionValue="value"
+        [placeholder]="'Filter by Region'"
+      ></p-dropdown>
 
+      <!--      <p-dropdown-->
+      <!--        [options]="departmentsFilterOptions"-->
+      <!--        [(ngModel)]="selectedDepartment"-->
+      <!--        (ngModelChange)="emitFilterValue()"-->
+      <!--        optionLabel="name"-->
+      <!--        optionValue="value"-->
+      <!--        [placeholder]="'Filter by Department'"-->
+      <!--      ></p-dropdown>-->
+    </div>
+
+    <div class="flex gap-4">
+      <button type="button" title="Reload Data" (click)="refetchData()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#19337E"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-list-restart"
+        >
+          <path d="M21 6H3" />
+          <path d="M7 12H3" />
+          <path d="M7 18H3" />
+          <path
+            d="M12 18a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L11 14"
+          />
+          <path d="M11 10v4h4" />
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        title="Clear Filters"
+        (click)="clearFilters()"
+        class="flex gap-1 items-center text-[#19337E]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#19337E"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-circle-x"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="m15 9-6 6" />
+          <path d="m9 9 6 6" />
+        </svg>
+        Clear
+      </button>
+    </div>
+  </div>
+}
 

@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import {inject, Injectable, OutputEmitterRef} from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import {
@@ -28,7 +28,7 @@ export class StudentTableService {
     return lastValueFrom(this._http.get<IGetStudentResponse>(url));
   }
 
-  searchStudent(name: string) {
+    searchStudent(name: OutputEmitterRef<string>) {
     return lastValueFrom(
       this._http.get<IGetStudentResponse>(
         `${environment.BACKEND_API_BASE_URL}/admin/students?name=${name}`

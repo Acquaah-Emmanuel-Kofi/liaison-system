@@ -34,6 +34,7 @@ export const routes: Routes = [
       import('../app/pages/lecturer/lecturer.routes').then(
         (routes) => routes.lecturerRoutes
       ),
+    canActivate: [authGuard, roleGuard],
   },
   {
     path: '**',

@@ -38,7 +38,7 @@ export class LecturersComponent {
   ];
 
   currentPage = signal<number>(1);
-  first = signal<number>(1);
+  first = signal<number>(0);
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   searchTerm = signal<string>('');

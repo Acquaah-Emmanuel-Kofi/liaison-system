@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
@@ -16,6 +16,7 @@ import {
   formatDateToDDMMYYYY,
   searchArray,
 } from '../../../../shared/helpers/functions.helper';
+import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
 
 @Component({
   selector: 'liaison-internships',
@@ -24,16 +25,25 @@ import {
   templateUrl: './internships.component.html',
   styleUrl: './internships.component.scss',
 })
-export class InternshipsComponent {
+export class InternshipsComponent implements OnInit{
+  protected sidebarService = inject(SidebarService);
+
   currentPage = signal<number>(1);
-  first = signal<number>(1);
+  first = signal<number>(0);
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   searchTerm = signal<string>('');
+  internshipType!:boolean
+  currentYear: number = new Date().getFullYear();
+  lastyear = this.currentYear - 1;
 
   filteredData = signal<TableData[]>([]);
 
   studentService = inject(StudentTableService);
+
+  ngOnInit() {
+    this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value })
+  }
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -46,11 +56,14 @@ export class InternshipsComponent {
   ];
 
   studentsQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(this.currentPage(), this.totalData())],
+    queryKey: [...studentsQueryKey.data(this.currentYear,this.lastyear,this.internshipType,this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await this.studentService.getAllStudents(
+        this.currentYear,
+        this.lastyear,
+        this.internshipType,
         this.currentPage(),
-        this.pageSize()
+        this.pageSize(),
       );
 
       this.totalData.set(response.data.totalData);
@@ -108,8 +121,8 @@ export class InternshipsComponent {
 
     console.log('Status: ', status);
     console.log('filteredStudents: ', filteredStudents);
-    
-    
+
+
     this.filteredData.set(filteredStudents ?? []);
   }
 

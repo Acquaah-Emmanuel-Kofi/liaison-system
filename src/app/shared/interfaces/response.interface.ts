@@ -18,6 +18,13 @@ export interface IZones{
   towns?: string[]
   zoneLead?:string
 }
+interface IBackendRegion {
+  dateCreated: string;
+  dateUpdated: string;
+  id: string;
+  region: string;
+  town: { towns: string[] };
+}
 
 interface IPagableResponse {
   currentPage: number;

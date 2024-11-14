@@ -21,11 +21,16 @@ export class StudentTableService {
   _http = inject(HttpClient);
 
   getAllStudents(
-    pageNumber: number,
-    pageSize: number
+    startOfAcademicYear: number,
+    endOfAcademicYear: number,
+    internship: boolean,
+    page: number,
+    size: number,
+
   ): Promise<IGetStudentResponse> {
-    const url = `${environment.BACKEND_API_BASE_URL}/admin/students?internship=true&pageNumber=${pageNumber}&pageSize=${pageSize}`;
-    return lastValueFrom(this._http.get<IGetStudentResponse>(url));
+    const params = new HttpParams().set('startOfAcademicYear',startOfAcademicYear.toString()).set('endOfAcademicYear',endOfAcademicYear.toString()).set('internship',internship).set('page',page).set('size',size);
+    const url = `${environment.BACKEND_API_BASE_URL}/admin/${this.userStore.id()}/students`;
+    return lastValueFrom(this._http.get<IGetStudentResponse>(url,{params}));
   }
 
     searchStudent(name: OutputEmitterRef<string>) {

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import {
@@ -14,6 +14,7 @@ import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { IStudentData } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { searchArray } from '../../../../shared/helpers/functions.helper';
+import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
 
 @Component({
   selector: 'liaison-students',
@@ -29,19 +30,27 @@ import { searchArray } from '../../../../shared/helpers/functions.helper';
   styleUrls: ['./students.component.scss'],
   providers: [MessageService],
 })
-export class StudentsComponent {
+export class StudentsComponent implements OnInit{
   messageService = inject(MessageService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
+  protected sidebarService = inject(SidebarService);
 
+  internshipType!: boolean
+  currentYear: number = new Date().getFullYear();
+  lastyear = this.currentYear - 1;
   currentPage = signal<number>(1);
-  first = signal<number>(1);
+  first = signal<number>(0);
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   searchTerm = signal<string>('');
 
   filteredData = signal<TableData[]>([]);
+
+  ngOnInit() {
+    this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value })
+  }
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -52,11 +61,14 @@ export class StudentsComponent {
   ];
 
   studentsQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(this.currentPage(), this.totalData())],
+    queryKey: [...studentsQueryKey.data(this.currentYear,this.lastyear,this.internshipType,this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await this.studentService.getAllStudents(
+        this.currentYear,
+        this.lastyear,
+        this.internshipType,
         this.currentPage(),
-        this.pageSize()
+        this.pageSize(),
       );
 
       this.totalData.set(response.data.totalData);

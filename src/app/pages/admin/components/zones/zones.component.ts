@@ -9,7 +9,7 @@ import {SidebarService} from "../../../../shared/services/sidebar/sidebar.servic
 import {NgTemplateOutlet} from "@angular/common";
 import {ActivatedRoute, RouterOutlet} from "@angular/router";
 import {ToastModule} from "primeng/toast";
-import {searchArray} from "../../../../shared/helpers/functions.helper";
+import {formatDateToDDMMYYYY, searchArray} from "../../../../shared/helpers/functions.helper";
 import {MessageService} from "primeng/api";
 
 @Component({
@@ -86,8 +86,11 @@ export class ZonesComponent implements OnInit{
         this.internshipType
       );
 
-      this.data = response.data;
-      return response.data;
+      this.data = response.data.map((item: any) => ({
+        ...item,
+        dateCreated: formatDateToDDMMYYYY(item.dateCreated),
+      }));
+      return this.data;
     },
   }));
 

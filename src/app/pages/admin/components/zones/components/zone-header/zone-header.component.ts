@@ -1,13 +1,12 @@
-import {Component, inject, OnInit, Output, output, signal} from '@angular/core';
+import {Component, inject, OnInit, output, signal} from '@angular/core';
 import {SearchbarComponent} from "../../../../../../shared/components/searchbar/searchbar.component";
-import {SelectFilterComponent} from "../../../../../../shared/components/select-filter/select-filter.component";
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
 import {Router} from "@angular/router";
 import {injectMutation, injectQuery} from "@tanstack/angular-query-experimental";
-import {lecturerListQueryKey, studentsQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
+import {lecturerListQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
 import {ModalContainerComponent} from "../../../../../../shared/components/modal-container/modal-container.component";
-import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {FormArray, FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgForOf} from "@angular/common";
 import {RegionService} from "../../../../../../shared/services/regions/regions.service";
 import {ZoneService} from "../../service/zone.service";
 import {lectureListResponse} from "../../zone.interface";
@@ -22,13 +21,10 @@ import {DropdownModule} from "primeng/dropdown";
   standalone: true,
   imports: [
     SearchbarComponent,
-    SelectFilterComponent,
     ModalContainerComponent,
     FormsModule,
     NgForOf,
     ReactiveFormsModule,
-    NgIf,
-    NgClass,
     ToastModule,
     DropdownModule
   ],
@@ -41,11 +37,15 @@ export class ZoneHeaderComponent implements OnInit {
   studentService = inject(StudentTableService)
   regionService = inject(RegionService)
   messageService = inject(MessageService)
+  protected sidebarService = inject(SidebarService);
+
+
   fb = inject(FormBuilder)
   toggledFilterButton: boolean = false;
   route = inject(Router);
   searchValue = output<string>();
   isModalOpened: boolean = false;
+  isTownModalOpen = false;
   zoneName = '';
   selectedRegion = '';
   isAddMoreTriggered: boolean = false;
@@ -57,13 +57,14 @@ export class ZoneHeaderComponent implements OnInit {
   lecturerNames: string[] = []
   defaultPlaceholder = "Select town(s)"
   addZoneForm!: FormGroup;
+  enteredRegion = ''
+  enteredTown = ' '
   currentZoneIndex: number = 0;
   isTownListOpened: any;
   isLecturerListOpened!: boolean;
   currentYear: number = new Date().getFullYear();
   lastyear = this.currentYear - 1;
   internshipType!: boolean
-  protected sidebarService = inject(SidebarService);
   startYear = signal<number >(this.lastyear);
   endYear = signal<number>(this.currentYear);
   toggledFilters: boolean = false;
@@ -71,7 +72,7 @@ export class ZoneHeaderComponent implements OnInit {
   departmentsFilterOptions: { name: string; value: string }[] = [];
   filterValues = output<{ faculty: string; department: string }>();
   refetch = output<void>();
-  selectedFaculty: string | null = null;
+  selectedFilterRegion: string | null = null;
   selectedDepartment: string | null = null;
 
   facultiesAndDepartments: Record<string, { name: string; value: string }[]> =
@@ -97,11 +98,16 @@ export class ZoneHeaderComponent implements OnInit {
   //   this.selectedTowns = townFormArray.controls.map(control => control.value);
   // }
 
-
+  rawRegions:any
   ngOnInit(): void {
-    this.regions = this.regionService.getRegions();
+    this.rawRegions = this.regionService.getRawRegions()
+    this.fetchRegions()
     this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value });
     this.lecturesQuery.refetch();
+  }
+
+  async fetchRegions(){
+    this.regions =  await  this.regionService.getRegions();
   }
 
   filterOptions: string[] = [
@@ -127,7 +133,7 @@ export class ZoneHeaderComponent implements OnInit {
 
 
   studentsQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(), this.searchValue],
+    queryKey: [ this.searchValue],
     queryFn: () => this.studentService.searchStudent(this.searchValue),
     enabled: false,
   }));
@@ -144,6 +150,9 @@ export class ZoneHeaderComponent implements OnInit {
   closeModal() {
     this.isModalOpened = false;
     this.clearZonesArray();
+  }
+  closeTownModal() {
+    this.isTownModalOpen = false;
   }
 
   closeTownList() {
@@ -260,9 +269,14 @@ export class ZoneHeaderComponent implements OnInit {
   onRegionChange(index: number): void {
     const townsFormArray = this.getTownsFormArray(index);
     const region = this.zones.at(index).get('region') as FormArray
-    this.towns = this.regionService.getTownsByRegion(region.value)
+    this.getTowns(region)
     townsFormArray.clear();
     this.selectedTowns[index] = [];
+  }
+
+  async getTowns(region: any){
+    this.towns = await this.regionService.getTownsByRegion(region.value)
+
   }
 
 
@@ -276,14 +290,6 @@ export class ZoneHeaderComponent implements OnInit {
 
   handleSearchTerm(value: string) {
     this.searchValue.emit(value);
-
-    // this.searchValue.subscribe();
-    // if (this.searchValue) {
-    //   this.studentsQuery.refetch().then(() => {
-    //     const results = this.studentsQuery.data();
-    //     this.studentService.updateSearchResults(results);
-    //   });
-    // }
   }
 
 
@@ -294,10 +300,9 @@ export class ZoneHeaderComponent implements OnInit {
       endYear: number;
       internship: boolean;
     }) => {
-      const result = await lastValueFrom(
+      return await lastValueFrom(
         this.zoneService.submitZone(formData, startYear, endYear, internship)
       );
-      return result;
     },
     onSuccess: (data: any) => {
       this.messageService.add({
@@ -305,6 +310,8 @@ export class ZoneHeaderComponent implements OnInit {
         summary: 'Success',
         detail: data.message || 'Zone submitted successfully'
       });
+      this.closeModal();
+
     },
     onError: (error: any) => {
       this.messageService.add({
@@ -312,10 +319,57 @@ export class ZoneHeaderComponent implements OnInit {
         summary: 'Error',
         detail: error.message || 'An error occurred while submitting the zone'
       });
+      this.closeModal();
+
     }
   }));
 
 
+  TownMutation = injectMutation(()=>(
+    {
+      mutationFn: async ({townData, startYear, endYear, internship }: {townData: {},startYear: number, endYear:number,internship: boolean})=>{
+        return await lastValueFrom(
+          this.zoneService.submitTown(townData, startYear, endYear, internship)
+        );
+      },
+      onSuccess: (data: any) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: data.message || 'Town submitted successfully'
+        });
+        this.closeTownModal()
+      },
+      onError: (error: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.message || 'An error occurred while submitting the new town'
+        });
+        this.closeTownModal()
+
+      }
+
+    }
+  ))
+
+
+  onTownSubmit(newForm: NgForm) {
+    if (newForm.invalid) {
+      return;
+    }
+
+    const startYear = this.startYear();
+    const endYear = this.endYear();
+    const internship = this.internshipType;
+    const townData = [{
+      region: this.enteredRegion,
+      towns: [this.enteredTown]
+    }];
+    this.TownMutation.mutate({townData, startYear, endYear, internship})
+
+
+  }
 
   onSubmit() {
     if (this.addZoneForm.valid) {
@@ -324,7 +378,6 @@ export class ZoneHeaderComponent implements OnInit {
       const endYear = this.endYear();
       const internship = this.internshipType;
       this.zoneMutation.mutate({ formData, startYear, endYear, internship });
-      this.closeModal();
     } else {
       this.messageService.add({ severity: 'error', summary: "Couldn't Submit", detail: 'Form is invalid: make sure all form fields are filled'});
     }
@@ -346,7 +399,7 @@ export class ZoneHeaderComponent implements OnInit {
 
   emitFilterValue() {
     const selectedData = {
-      faculty: this.selectedFaculty ?? '',
+      faculty: this.selectedFilterRegion ?? '',
       department: this.selectedDepartment ?? '',
     };
 
@@ -358,9 +411,10 @@ export class ZoneHeaderComponent implements OnInit {
   }
 
   clearFilters() {
-    this.selectedFaculty = null;
+    this.selectedFilterRegion = null;
     this.selectedDepartment = null;
   }
+
 
 
 }

@@ -5,6 +5,7 @@ import { ErrorPageComponent } from './pages/404/error-page/error-page.component'
 import { authGuard } from './guards/auth/auth.guard';
 import { roleGuard } from './guards/role/role.guard';
 import { guestGuard } from './guards/guest/guest.guard';
+import { LecturerComponent } from './pages/lecturer/lecturer.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,15 @@ export const routes: Routes = [
     loadChildren: () =>
       import('../app/pages/admin/admin.routes').then(
         (routes) => routes.adminRoutes
+      ),
+    canActivate: [authGuard, roleGuard],
+  },
+  {
+    path: 'lecturer',
+    component: LecturerComponent,
+    loadChildren: () =>
+      import('../app/pages/lecturer/lecturer.routes').then(
+        (routes) => routes.lecturerRoutes
       ),
     canActivate: [authGuard, roleGuard],
   },

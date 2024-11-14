@@ -43,5 +43,11 @@ export class LocationService implements OnInit {
       });
   }
 
-  
+  private _http = inject(HttpClient);
+
+  getUserLocation(): Observable<ILecturerLocation> {
+    return this._http.get<ILecturerLocation>('https://ipapi.co/json/');
+  }
+
+ 
 }

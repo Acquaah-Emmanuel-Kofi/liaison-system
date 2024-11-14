@@ -2,8 +2,8 @@ import {Observable} from "rxjs";
 
 export const studentsQueryKey = {
   all: ['students'] as const,
-  data: (currentPage?: number, totalData?: number) =>
-    [...studentsQueryKey.all, 'all-students', currentPage, totalData] as const,
+  data: (startOfAcademicYear:number,endOfAcademicYear:number,internship:boolean,page?: number, size?: number) =>
+    [...studentsQueryKey.all, 'all-students'] as const,
 };
 
 

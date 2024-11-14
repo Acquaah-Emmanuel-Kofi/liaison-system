@@ -27,12 +27,30 @@ export class ZoneService {
     const url = `${environment.BACKEND_API_BASE_URL}/zones/${this.userStore.id()}`;
 
     return this._http.post(url, formData, { params }).pipe(
+      // tap(response => console.log('Response:', response)),
+      catchError(error => {
+        throw error;
+      })
+    );
+  }
+
+  submitTown(townData:any,startOfAcademicYear: number  ,endOfAcademicYear:number,internship:boolean): Observable<any>{
+    const params = new HttpParams()
+      // .set('startOfAcademicYear', startOfAcademicYear.toString())
+      // .set('endOfAcademicYear', endOfAcademicYear.toString())
+      // .set('internship', internship);
+
+    const url = `${environment.BACKEND_API_BASE_URL}/regions/${this.userStore.id()}`;
+
+    return this._http.post(url, townData, { params }).pipe(
       tap(response => console.log('Response:', response)),
       catchError(error => {
         throw error;
       })
     );
   }
+
+
 
   getAllCreatedZones(startOfAcademicYear: number,endOfAcademicYear: number,internship: boolean){
     const params = new HttpParams()

@@ -49,5 +49,30 @@ export class LocationService implements OnInit {
     return this._http.get<ILecturerLocation>('https://ipapi.co/json/');
   }
 
- 
+  calculateRoute(
+    origin: google.maps.LatLngLiteral,
+    destination: google.maps.LatLngLiteral,
+    map: google.maps.Map
+  ): void {
+    const request: google.maps.DirectionsRequest = {
+      origin,
+      destination,
+      travelMode: google.maps.TravelMode.DRIVING,
+    };
+
+    this.directionsService.route(
+      request,
+      (
+        result: google.maps.DirectionsResult | null,
+        status: google.maps.DirectionsStatus
+      ) => {
+        if (status === google.maps.DirectionsStatus.OK && result) {
+          this.directionsRenderer.setDirections(result);
+          this.directionsRenderer.setMap(map);
+        } else {
+          console.error(`Error fetching directions: ${status}`);
+        }
+      }
+    );
+  }
 }

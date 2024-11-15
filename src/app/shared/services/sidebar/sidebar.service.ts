@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import { GlobalVariablesStore } from '../../store/global-variables.store';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,12 +11,15 @@ export class SidebarService {
 
   isSwitched$ = this.isInternTypeSwitchedSubject.asObservable()
   isCollapsed$ = this.isCollapsedSubject.asObservable();
-  internType$ = this.interTypeSubject.asObservable()
+  internType$ = this.interTypeSubject.asObservable();
+
+  private globalStore = inject(GlobalVariablesStore);
 
 
   toggleInterType(){
     const currentState = this.isInternTypeSwitchedSubject.value;
     this.isInternTypeSwitchedSubject.next(!currentState);
+    this.globalStore.setInternshipType(!currentState);
     if (this.isSwitched$){
       this.interTypeSubject.next('Attachment view')
     }
@@ -27,27 +31,8 @@ export class SidebarService {
     this.isCollapsedSubject.next(!currentState);
   }
 
-
-  setInternTypeState(state: boolean): void {
-    this.isInternTypeSwitchedSubject.next(state);
-  }
-
-  getInternState() {
-    return this.interTypeSubject.value;
-  }
-
   getInternTypeState(): boolean {
     return this.isInternTypeSwitchedSubject.value;
   }
-
-  setCollapseState(state: boolean): void {
-    this.isCollapsedSubject.next(state);
-  }
-
-
-  getCollapseState(): boolean {
-    return this.isCollapsedSubject.value;
-  }
-
 
 }

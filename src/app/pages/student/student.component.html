@@ -1,1 +1,23 @@
-<p>student works!</p>
+<div class="flex h-screen bg-white w-full overflow-x-hidden">
+    <liaison-sidebar [toggled]="isSidebarVisible" (closeEvent)="isSidebarVisible = false"
+        [links]="links"></liaison-sidebar>
+
+    <div class="flex flex-1 flex-col">
+        <liaison-navbar (toggleSidebar)="toggleSidebar()"></liaison-navbar>
+
+        <div class="w-full h-screen overflow-y-auto p-4">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    @if(close){
+    <div (click)="close = !close" class="cursor-pointer absolute z-50 right-0 bottom-10 bg-Primary-Blue  p-2">
+        <p [class.hidden]="(sidebarService.isSwitched$ | async)" class="text-white">Semester Out view</p>
+        <p [class.hidden]="!(sidebarService.isSwitched$ | async)" class="text-white">Attachment view</p>
+    </div>
+    } @else {
+    <div class="absolute z-50 right-0 bottom-10 bg-Primary-Blue  p-2">
+        <button (click)="close = !close" class="text-white">
+            &#60; </button>
+    </div>
+    }
+</div>

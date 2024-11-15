@@ -57,18 +57,21 @@ export class AdminDashboardComponent implements OnInit {
       count: 0,
       iconSrc: 'assets/lectures.svg',
       navigateTo: '/admin/lecturers',
+      show: true
     },
     {
       title: 'Students',
       count: 0,
       iconSrc: 'assets/students.svg',
       navigateTo: '/admin/students',
+      show: true
     },
     {
       title: 'Attachment',
       count: 0,
       iconSrc: 'assets/interns.svg',
       navigateTo: '/admin/internships',
+      show: true
     },
   ];
 
@@ -92,6 +95,7 @@ export class AdminDashboardComponent implements OnInit {
       Region: 'Western',
       sub_zones: 15,
       No_of_Students: 300,
+
     },
     {
       Region: 'Greater Accra',

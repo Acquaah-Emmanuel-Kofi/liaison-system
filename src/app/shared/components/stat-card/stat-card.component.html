@@ -29,11 +29,17 @@
     </div>
   </div>
   <div class="w-full flex justify-end">
-    <button
-      (click)="navigate()"
-      class="text-[#19337E] hover:text-[#19337E]/70 text-sm"
-    >
-      VIEW
-    </button>
+    @if (showView) {
+      <button
+        (click)="navigate()"
+        class="text-[#19337E] hover:text-[#19337E]/70 text-sm"
+      >
+        VIEW
+      </button>
+    } @else {
+      <div class="text-[#19337E] text-sm">
+        <h6 class="text-[10px]">total only</h6>
+      </div>
+    }
   </div>
 </div>

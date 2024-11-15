@@ -36,7 +36,7 @@ export const lecturerListQueryKey = {
 
 export const statAnalyticsQueryKey = {
   all: ['stat analytics'] as const,
-  data: (internshipType: string, startYear: number, endYear: number) =>
+  data: (internshipType: boolean, startYear: number, endYear: number) =>
     [
       ...statAnalyticsQueryKey.all,
       'all-stats',

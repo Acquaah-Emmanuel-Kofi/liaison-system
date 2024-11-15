@@ -19,8 +19,8 @@ import { injectQuery } from '@tanstack/angular-query-experimental';
 import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { DashboardService } from '../../service/dashboard/dashboard.service';
 import { IStartAnalytics } from '../../../../shared/interfaces/response.interface';
-import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
 import { getYears } from '../../../../shared/helpers/functions.helper';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -111,27 +111,17 @@ export class AdminDashboardComponent implements OnInit {
   ];
 
   readonly userStore = inject(UserStore);
+  private globalStore = inject(GlobalVariablesStore);
 
   public username = computed(() => this.userStore.firstName());
 
   private _dashboardService = inject(DashboardService);
-  private _sidebarService = inject(SidebarService);
-
-  internshipType = signal<'SEMESTER_OUT' | 'INTERNSHIP'>('INTERNSHIP');
-  startYear = signal<number | undefined>(this.lastyear);
-  endYear = signal<number | undefined>(this.currentYear);
 
   constructor() {
     this.populateYears();
   }
 
   ngOnInit() {
-    this._sidebarService.isSwitched$.subscribe((value: boolean) => {
-      value
-        ? this.internshipType.set('SEMESTER_OUT')
-        : this.internshipType.set('INTERNSHIP');
-    });
-
     this.updateCountsFromApiResponse(this.analyticsQuery.data()!);
   }
 
@@ -146,28 +136,26 @@ export class AdminDashboardComponent implements OnInit {
   getYears() {
     if (this.selectedYear) {
       const year = getYears(this.selectedYear);
-      this.startYear.set(year?.startYear);
-      this.endYear.set(year?.endYear);
-    }
-  }
 
-  navigateToUpload() {
-    this.route.navigate(['admin/upload']);
+      if (year) {
+        this.globalStore.setStartOfAcademicYear(year?.startYear);
+        this.globalStore.setEndOfAcademicYear(year?.endYear);
+      }
+    }
   }
 
   analyticsQuery = injectQuery(() => ({
     queryKey: [
       ...statAnalyticsQueryKey.data(
-        this.internshipType(),
-        this.startYear() ?? this.lastyear,
-        this.endYear() ?? this.currentYear
+        this.globalStore.type(),
+        this.globalStore.startYear() ?? this.lastyear,
+        this.globalStore.endYear() ?? this.currentYear
       ),
     ],
     queryFn: async () => {
       const response = await this._dashboardService.getStatAnalytics(
-        this.internshipType(),
-        this.startYear() ?? 0,
-        this.endYear() ?? 0
+        this.globalStore.startYear() ?? this.lastyear,
+        this.globalStore.endYear() ?? this.currentYear
       );
 
       this.updateCountsFromApiResponse(response.data);

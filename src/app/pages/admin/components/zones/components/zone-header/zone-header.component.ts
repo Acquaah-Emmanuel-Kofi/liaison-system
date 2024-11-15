@@ -44,6 +44,7 @@ export class ZoneHeaderComponent implements OnInit {
   toggledFilterButton: boolean = false;
   route = inject(Router);
   searchValue = output<string>();
+  filterValue = output<string>();
   isModalOpened: boolean = false;
   isTownModalOpen = false;
   zoneName = '';
@@ -129,13 +130,6 @@ export class ZoneHeaderComponent implements OnInit {
       this.lecturers = response.data
       return response
     }
-  }));
-
-
-  studentsQuery = injectQuery(() => ({
-    queryKey: [ this.searchValue],
-    queryFn: () => this.studentService.searchStudent(this.searchValue),
-    enabled: false,
   }));
 
 
@@ -392,18 +386,8 @@ export class ZoneHeaderComponent implements OnInit {
     this.toggledFilters = !this.toggledFilters;
   }
 
-  onFacultyChange(faculty: string) {
-    this.departmentsFilterOptions = this.facultiesAndDepartments[faculty] || [];
-    this.selectedDepartment = null;
-  }
-
-  emitFilterValue() {
-    const selectedData = {
-      faculty: this.selectedFilterRegion ?? '',
-      department: this.selectedDepartment ?? '',
-    };
-
-    this.filterValues.emit(selectedData);
+  onFacultyChange(Region: string) {
+    this.filterValue.emit(Region)
   }
 
   refetchData() {
@@ -412,7 +396,7 @@ export class ZoneHeaderComponent implements OnInit {
 
   clearFilters() {
     this.selectedFilterRegion = null;
-    this.selectedDepartment = null;
+    this.filterValue.emit('')
   }
 
 

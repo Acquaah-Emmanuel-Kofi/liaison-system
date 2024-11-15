@@ -2,7 +2,7 @@
 <p-toast></p-toast>
 @if (!isChildRouteActive()){
   <section>
-    <liaison-zone-header (searchValue)="handleSearchTerm($event)" />
+    <liaison-zone-header (searchValue)="handleSearchTerm($event)" (filterValue) = "handleFilter($event)" />
 
     @switch (zoneQuery.status()) { @case ('pending') { @if
     (zoneQuery.data()) {
@@ -20,7 +20,7 @@
   <ng-template #table>
     <liaison-table
       [columns]="columns"
-      [data]="searchTerm() ? filteredData() : zoneQuery.data()!"
+      [data]="searchTerm() || FilterValue() ? filteredData() : zoneQuery.data()!"
       [first]="first"
       [pageSize]="pageSize"
       [totalData]="totalData"

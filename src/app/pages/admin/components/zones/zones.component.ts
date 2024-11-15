@@ -41,6 +41,7 @@ export class ZonesComponent implements OnInit{
   lastyear = this.currentYear - 1;
   internshipType!: boolean
   searchTerm = signal<string>('');
+  FilterValue= signal<string>('');
   filteredData = signal<TableData[]>([]);
   startYear = signal<number | undefined>(this.lastyear);
   data: TableData[] = [];
@@ -106,6 +107,12 @@ export class ZonesComponent implements OnInit{
     ]);
     this.filteredData.set(filteredZones ?? []);
   }
+
+  handleFilter(value: string){
+    this.FilterValue.set(value);
+    const filteredZones = searchArray(this.zoneQuery.data()!, value, ['region'])
+    this.filteredData.set(filteredZones ?? []);
+}
 
 
 }

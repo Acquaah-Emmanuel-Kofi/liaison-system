@@ -17,6 +17,7 @@ import {
   searchArray,
 } from '../../../../shared/helpers/functions.helper';
 import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
+import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
 
 @Component({
   selector: 'liaison-internships',
@@ -27,6 +28,8 @@ import {SidebarService} from "../../../../shared/services/sidebar/sidebar.servic
 })
 export class InternshipsComponent implements OnInit{
   protected sidebarService = inject(SidebarService);
+  private globalStore = inject(GlobalVariablesStore);
+
 
   currentPage = signal<number>(1);
   first = signal<number>(0);
@@ -56,12 +59,12 @@ export class InternshipsComponent implements OnInit{
   ];
 
   studentsQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(this.currentYear,this.lastyear,this.internshipType,this.currentPage(), this.totalData())],
+    queryKey: [...studentsQueryKey.data(this.globalStore.endYear(),this.globalStore.startYear(),this.globalStore.type(),this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await this.studentService.getAllStudents(
-        this.currentYear,
-        this.lastyear,
-        this.internshipType,
+        this.globalStore.startYear(),
+        this.globalStore.endYear(),
+        this.globalStore.type(),
         this.currentPage(),
         this.pageSize(),
       );
@@ -107,9 +110,6 @@ export class InternshipsComponent implements OnInit{
       dates.endDate
     );
 
-    console.log('dates: ', dates);
-    console.log('filteredStudents: ', filteredStudents);
-
     this.filteredData.set(filteredStudents ?? []);
   }
 
@@ -118,10 +118,6 @@ export class InternshipsComponent implements OnInit{
       this.studentsQuery.data() as IStudentData[],
       status
     );
-
-    console.log('Status: ', status);
-    console.log('filteredStudents: ', filteredStudents);
-
 
     this.filteredData.set(filteredStudents ?? []);
   }

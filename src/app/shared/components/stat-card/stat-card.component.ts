@@ -14,6 +14,7 @@ export class StatCardComponent {
   @Input() title: string = '';
   @Input() count: number = 0;
   @Input() navigateTo: string = '';
+  @Input() showView: boolean = false;
 
   isLoading = input<boolean>(false)
 

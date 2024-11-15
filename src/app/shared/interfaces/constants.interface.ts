@@ -8,6 +8,7 @@ export interface IStartCard {
   count: number;
   iconSrc: string;
   navigateTo: string;
+  show: boolean
 }
 
 export interface PayLoadData {

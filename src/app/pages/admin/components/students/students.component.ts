@@ -15,6 +15,7 @@ import { IStudentData } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { searchArray } from '../../../../shared/helpers/functions.helper';
 import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
+import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
 
 @Component({
   selector: 'liaison-students',
@@ -31,6 +32,7 @@ import {SidebarService} from "../../../../shared/services/sidebar/sidebar.servic
   providers: [MessageService],
 })
 export class StudentsComponent implements OnInit{
+  private globalStore = inject(GlobalVariablesStore);
   messageService = inject(MessageService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
@@ -61,12 +63,12 @@ export class StudentsComponent implements OnInit{
   ];
 
   studentsQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(this.currentYear,this.lastyear,this.internshipType,this.currentPage(), this.totalData())],
+    queryKey: [...studentsQueryKey.data(this.globalStore.startYear(),this.globalStore.endYear(),this.globalStore.type(),this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await this.studentService.getAllStudents(
-        this.currentYear,
-        this.lastyear,
-        this.internshipType,
+        this.globalStore.startYear(),
+        this.globalStore.endYear(),
+        this.globalStore.type(),
         this.currentPage(),
         this.pageSize(),
       );

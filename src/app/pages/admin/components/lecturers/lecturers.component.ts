@@ -19,6 +19,7 @@ import {
   filterFacultyDepartment,
   searchArray,
 } from '../../../../shared/helpers/functions.helper';
+import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
 
 @Component({
   selector: 'liaison-lecturers',
@@ -29,6 +30,8 @@ import {
   providers: [MessageService],
 })
 export class LecturersComponent {
+  private globalStore = inject(GlobalVariablesStore);
+
   columns: TableColumn[] = [
     { label: 'Staff ID', key: 'staff_id' },
     { label: 'Name', key: 'name' },

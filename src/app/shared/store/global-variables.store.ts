@@ -11,7 +11,7 @@ const currentYear = new Date().getFullYear();
 const lastyear = currentYear - 1;
 
 const initialInternshipTypeState: IGlobalVariables = {
-  type: false,
+  type: true,
   startYear: lastyear,
   endYear: currentYear,
 };

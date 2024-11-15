@@ -11,6 +11,7 @@ import {ActivatedRoute, RouterOutlet} from "@angular/router";
 import {ToastModule} from "primeng/toast";
 import {formatDateToDDMMYYYY, searchArray} from "../../../../shared/helpers/functions.helper";
 import {MessageService} from "primeng/api";
+import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
 
 @Component({
   selector: 'liaison-zones',
@@ -27,6 +28,7 @@ import {MessageService} from "primeng/api";
   providers: [MessageService]
 })
 export class ZonesComponent implements OnInit{
+  private globalStore = inject(GlobalVariablesStore);
   activatedRoute = inject(ActivatedRoute);
   zoneService = inject(ZoneService)
   protected sidebarService = inject(SidebarService);
@@ -75,16 +77,16 @@ export class ZonesComponent implements OnInit{
   zoneQuery = injectQuery(() => ({
     queryKey: [
       ...zonesQueryData.data(
-        this.startYear() ?? this.lastyear,
-        this.endYear() ?? this.currentYear,
-        this.internshipType,
+        this.globalStore.startYear(),
+        this.globalStore.endYear(),
+        this.globalStore.type(),
       ),
     ],
     queryFn: async () => {
       const response = await this.zoneService.getAllCreatedZones(
-        this.startYear() ?? 0,
-        this.endYear() ?? 0,
-        this.internshipType
+        this.globalStore.startYear(),
+        this.globalStore.endYear(),
+        this.globalStore.type(),
       );
 
       this.data = response.data.map((item: any) => ({

@@ -122,7 +122,9 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.updateCountsFromApiResponse(this.analyticsQuery.data()!);
+
   }
 
   populateYears() {
@@ -159,7 +161,6 @@ export class AdminDashboardComponent implements OnInit {
       );
 
       this.updateCountsFromApiResponse(response.data);
-
       return response.data;
     },
   }));

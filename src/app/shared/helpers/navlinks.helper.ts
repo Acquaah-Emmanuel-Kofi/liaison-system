@@ -46,21 +46,21 @@ export const LECTURER_NAVLINKS: INavLinks[] = [
     defaultIconSrc: '/assets/icons/dashboard.svg',
     routerLink: 'dashboard',
   },
-  {
-    title: 'Courses',
-    defaultIconSrc: '/assets/icons/courses.svg',
-    routerLink: 'courses',
-  },
+  // {
+  //   title: 'Courses',
+  //   defaultIconSrc: '/assets/icons/courses.svg',
+  //   routerLink: 'courses',
+  // },
   {
     title: 'Students',
     defaultIconSrc: '/assets/icons/students.svg',
     routerLink: 'students',
   },
-  {
-    title: 'Internships',
-    defaultIconSrc: '/assets/icons/internships.svg',
-    routerLink: 'internships',
-  },
+  // {
+  //   title: 'Internships',
+  //   defaultIconSrc: '/assets/icons/internships.svg',
+  //   routerLink: 'internships',
+  // },
   {
     title: 'Location',
     defaultIconSrc: '/assets/icons/location.svg',

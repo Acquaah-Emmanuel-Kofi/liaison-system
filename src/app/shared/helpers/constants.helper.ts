@@ -20,8 +20,8 @@ const routeValueKey: { [key: string]: string } = {
   'access-control': 'Access Control',
   courses: 'Courses',
   location: 'Location',
-  annoucements: 'Annoucements',
   zones: 'Zones',
+  'assumption-of-duty': 'Assumption of Duty',
 };
 
 export function setPageHeader(currentRoute: string): string {

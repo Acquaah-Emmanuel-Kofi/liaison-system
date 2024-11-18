@@ -276,7 +276,7 @@
                       <input
                         type="checkbox"
                         class="form-checkbox cursor-pointer h-4 w-4 accent-[#19337E]"
-                        [checked]="selectedLecturers[i].includes(lecturer.name)"
+                        [checked]="selectedLecturers[i]?.includes(lecturer.name)"
                         (change)="toggleLecturesSelection(lecturer, i)"
                       />
                     </div>

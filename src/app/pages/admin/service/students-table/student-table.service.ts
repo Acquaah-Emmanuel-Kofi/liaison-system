@@ -11,6 +11,7 @@ import { UserStore } from '../../../../shared/store/user.store';
 @Injectable({
   providedIn: 'root',
 })
+
 export class StudentTableService {
   private searchResultsSubject =
     new BehaviorSubject<IGetStudentResponse | null>(null);
@@ -28,10 +29,11 @@ export class StudentTableService {
     size: number,
 
   ): Promise<IGetStudentResponse> {
-    const params = new HttpParams().set('startOfAcademicYear',startOfAcademicYear.toString()).set('endOfAcademicYear',endOfAcademicYear.toString()).set('internship',internship).set('page',page).set('size',size);
+    const params = new HttpParams().set('startOfAcademicYear',startOfAcademicYear).set('endOfAcademicYear',endOfAcademicYear).set('internship',internship).set('page',page).set('size',size);
     const url = `${environment.BACKEND_API_BASE_URL}/admin/${this.userStore.id()}/students`;
     return lastValueFrom(this._http.get<IGetStudentResponse>(url,{params}));
   }
+
 
     searchStudent(name: OutputEmitterRef<string>) {
     return lastValueFrom(
@@ -41,10 +43,12 @@ export class StudentTableService {
     );
   }
 
+
   updateSearchResults(results: IGetStudentResponse | undefined) {
     // @ts-ignore
     this.searchResultsSubject.next(results);
   }
+
 
   getAllLecturers(
     page: number,
@@ -61,4 +65,6 @@ export class StudentTableService {
       { params }
     );
   }
+
+
 }

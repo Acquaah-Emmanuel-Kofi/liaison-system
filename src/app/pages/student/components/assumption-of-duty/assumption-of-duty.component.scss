@@ -1,0 +1,29 @@
+.p-inputtext{
+  border: 1px solid #142965;
+}
+
+.p-checkbox{
+  border: 1px solid #142965;
+}
+
+.p-dropdown{
+  border-radius: 2px;
+}
+
+.p-dropdown-panel{
+  width : 20%
+}
+
+.p-button:focus {
+  outline:none;
+}
+
+.p-inputtext:focus{
+  outline: none;
+  //border: 1px solid #142965;
+}
+
+.custom-option {
+  height: 20px; /* Set the height of each dropdown option */
+  line-height: 50px; /* Ensures text is vertically centered */
+}

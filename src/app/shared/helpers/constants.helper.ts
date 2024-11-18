@@ -17,6 +17,7 @@ const routeValueKey: { [key: string]: string } = {
   lecturers: 'Lecturers',
   students: 'Students',
   internships: 'Internships',
+  profile: 'Edit Profile',
   'access-control': 'Access Control',
   courses: 'Courses',
   location: 'Location',

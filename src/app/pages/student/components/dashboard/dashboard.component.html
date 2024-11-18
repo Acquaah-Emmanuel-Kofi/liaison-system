@@ -1,1 +1,35 @@
-<p>dashboard works!</p>
+<div class="px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+
+  <div
+    class="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full mb-6 sm:mb-8"
+  >
+    <div class="flex flex-col gap-2 mb-4 sm:mb-0">
+      <p
+        class="text-Primary-Black text-lg sm:text-xl lg:text-2xl 2xl:text-[26px] font-medium relative flex gap-2"
+      >
+        Welcome back {{ username() || "student"}}
+        <img src="/assets/icons/waving_hand.svg" alt="Waving Hand" />
+      </p>
+      <p class="text-Dark-Blue text-lg">Here's an overview of your profile</p>
+    </div>
+  </div>
+
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    @for (card of statCard; track $index) {
+      <liaison-stat-card
+        [iconSrc]="card.iconSrc"
+        [title]="card.title"
+        [count]="card.count"
+        [showView] ="card.show"
+        [navigateTo]="card.navigateTo"
+      >
+      </liaison-stat-card>
+    }
+  </div>
+
+
+
+
+
+</div>

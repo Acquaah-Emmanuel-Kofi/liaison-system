@@ -12,7 +12,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 export class MapComponent {
   clickedMarker = output<IStudentLocation>();
 
-  userLocation = signal<ILecturerLocation>({
+  private userLocation = signal<ILecturerLocation>({
     latitude: 7.9465,
     longitude: -1.0232,
   });
@@ -52,6 +52,8 @@ export class MapComponent {
         studentLocation,
         this.map
       );
+    } else {
+      alert("An error occurred! Couldn't initialize map.")
     }
   }
 

@@ -67,3 +67,17 @@ export const LECTURER_NAVLINKS: INavLinks[] = [
     routerLink: 'location',
   },
 ];
+
+
+export const STUDENT_NAVLINKS: INavLinks[] = [
+  {
+    title: 'Dashboard',
+    defaultIconSrc: '/assets/icons/dashboard.svg',
+    routerLink: 'dashboard',
+  },
+  {
+    title: 'Assumption of duty',
+    defaultIconSrc: '/assets/icons/book.svg',
+    routerLink: 'assumption-of-duty',
+  },
+];

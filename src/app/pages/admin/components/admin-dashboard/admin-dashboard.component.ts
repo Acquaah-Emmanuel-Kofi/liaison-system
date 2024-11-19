@@ -1,40 +1,33 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { NgClass, NgForOf, NgOptimizedImage } from '@angular/common';
-import { Router } from '@angular/router';
-import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
-import { AdminChartComponent } from '../admin-chart/admin-chart.component';
-import { TableComponent } from '../../../../shared/components/table/table.component';
-import {
-  TableColumn,
-  TableData,
-} from '../../../../shared/components/table/table.interface';
-import { IStartCard } from '../../../../shared/interfaces/constants.interface';
-import { ToggleButtonModule } from 'primeng/togglebutton';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { CascadeSelectModule } from 'primeng/cascadeselect';
-import { FormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
-import { UserStore } from '../../../../shared/store/user.store';
-import { injectQuery } from '@tanstack/angular-query-experimental';
-import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
-import { DashboardService } from '../../service/dashboard/dashboard.service';
-import { IStartAnalytics } from '../../../../shared/interfaces/response.interface';
-import { getYears } from '../../../../shared/helpers/functions.helper';
-import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import {Component, computed, inject, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {StatCardComponent} from '../../../../shared/components/stat-card/stat-card.component';
+import {AdminChartComponent} from '../admin-chart/admin-chart.component';
+import {TableComponent} from '../../../../shared/components/table/table.component';
+import {TableColumn, TableData,} from '../../../../shared/components/table/table.interface';
+import {IStartCard} from '../../../../shared/interfaces/constants.interface';
+import {ToggleButtonModule} from 'primeng/togglebutton';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {CascadeSelectModule} from 'primeng/cascadeselect';
+import {FormsModule} from '@angular/forms';
+import {DropdownModule} from 'primeng/dropdown';
+import {UserStore} from '../../../../shared/store/user.store';
+import {injectQuery} from '@tanstack/angular-query-experimental';
+import {statAnalyticsQueryKey} from '../../../../shared/helpers/query-keys.helper';
+import {DashboardService} from '../../service/dashboard/dashboard.service';
+import {IStartAnalytics} from '../../../../shared/interfaces/response.interface';
+import {getYears} from '../../../../shared/helpers/functions.helper';
+import {GlobalVariablesStore} from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-admin-dashboard',
   standalone: true,
   imports: [
     StatCardComponent,
-    NgOptimizedImage,
-    NgForOf,
     StatCardComponent,
     AdminChartComponent,
     TableComponent,
     ToggleButtonModule,
     InputSwitchModule,
-    NgClass,
     CascadeSelectModule,
     FormsModule,
     DropdownModule,

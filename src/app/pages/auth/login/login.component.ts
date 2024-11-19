@@ -1,18 +1,11 @@
-import { Component, inject } from '@angular/core';
-import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
-import {
-  FormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { ChipsModule } from 'primeng/chips';
-import { Button } from 'primeng/button';
-import { AuthService } from '../services/auth/auth.service';
-import { ICredentials, ILoginResponse } from '../interfaces/auth.interface';
-import { Router } from '@angular/router';
-import { LoaderComponent } from '../../../shared/components/loader/loader.component';
+import {Component, inject} from '@angular/core';
+import {NgIf, NgOptimizedImage} from '@angular/common';
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
+import {FloatLabelModule} from 'primeng/floatlabel';
+import {ChipsModule} from 'primeng/chips';
+import {AuthService} from '../services/auth/auth.service';
+import {ICredentials, ILoginResponse} from '../interfaces/auth.interface';
+import {Router} from '@angular/router';
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
 import {BrandComponent} from "../../../shared/components/brand/brand.component";
@@ -26,11 +19,8 @@ import {LoaderModalComponent} from "../../../shared/components/loader-modal/load
     FormsModule,
     FloatLabelModule,
     ChipsModule,
-    NgClass,
     ReactiveFormsModule,
     NgIf,
-    Button,
-    LoaderComponent,
     ToastModule,
     BrandComponent,
     LoaderModalComponent
@@ -53,7 +43,7 @@ export class LoginComponent {
 
 
   loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required]],
     password: ['', Validators.required],
     rememberMe: [false],
   });

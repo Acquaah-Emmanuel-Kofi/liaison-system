@@ -1,1 +1,19 @@
-<p>map works!</p>
+<div class="overflow-x-auto">
+  <google-map
+    height="500px"
+    width="100%"
+    [zoom]="10"
+    [center]="center"
+    (mapInitialized)="onMapReady($event)"
+  >
+    @for (location of studentLocations; track $index) {
+    <map-marker
+      [position]="{ lat: location.lat, lng: location.lng }"
+      [label]="location.label"
+      [icon]="{
+        url: 'assets/icons/yellow_location.svg'
+      }"
+    />
+    }
+  </google-map>
+</div>

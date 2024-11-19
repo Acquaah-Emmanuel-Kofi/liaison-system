@@ -7,11 +7,14 @@
   </header>
   <div class="flex gap-6">
     <div class="border border-[#19337E] w-full">
-      <liaison-map />
+      <liaison-map (clickedMarker)="getStudentLocationToTogglePanel($event)" />
     </div>
-    <div class="w-[25%]">
+    @if (studentLocation()) {
+    <div class="w-[35%]">
       <div class="flex justify-end mb-4">
         <button
+          type="button"
+          (click)="closePanel()"
           class="text-gray-500 hover:text-gray-700 w-5 h-5 hover:bg-gray-100 flex justify-center rounded-full items-center"
         >
           <svg
@@ -28,7 +31,8 @@
           </svg>
         </button>
       </div>
-      <div class="flex flex-col items-center">
+
+      <div class="flex flex-col items-center w-full">
         <label class="mb-5 text-[#19337E] font-bold text-sm">Index No.</label>
 
         <div
@@ -90,7 +94,7 @@
             <p
               class="text-[#19337E] max-w-[100px] overflow-hidden whitespace-nowrap truncate group-hover:overflow-hidden group-hover:white-space-normal"
             >
-            Information Technology
+              Information Technology
             </p>
 
             <div
@@ -106,14 +110,22 @@
           </div>
         </div>
 
-        <div class="flex justify-center my-7">
-            <button type="button" title="Calculate for shortest route to get to the student"
-                class="px-6 py-3 bg-[#19337E] text-white font-semibold text-sm rounded-md shadow-md hover:bg-[#142860] focus:outline-none focus:ring-2 focus:ring-[#19337E] focus:ring-offset-2 transition-all">
-                Shortest Route
-            </button>
+        <div class="flex flex-col justify-center my-7 space-y-4">
+            <div class="flex justify-between gap-6 items-center w-full">
+                <p class="flex gap-2"><span class="font-medium text-Primary-Blue">Lat: </span> {{studentLocation()?.lat}}</p>
+                <p class="flex gap-2"><span class="font-medium text-Primary-Blue">Lng: </span> {{studentLocation()?.lng}}</p>
+            </div>
+          <button
+            type="button"
+            title="Calculate for shortest route to get to the student"
+            class="px-6 py-3 bg-[#19337E] text-white font-semibold text-sm rounded-md shadow-md hover:bg-[#142860] focus:outline-none focus:ring-2 focus:ring-[#19337E] focus:ring-offset-2 transition-all"
+          >
+            Shortest Route
+          </button>
         </div>
       </div>
     </div>
+    }
   </div>
 
   <!-- @for (student of studentLocations; track $index) {

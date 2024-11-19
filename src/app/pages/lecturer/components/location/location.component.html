@@ -1,23 +1,111 @@
 <section class="space-y-8">
-    <header>
-        <div class="text-[#19337E] text-base font-normal">
-            <h1 class="text-[#333131] font-medium text-4xl">Find Your Students</h1>
-            <p>Use location pins to find students and the shortest route to visit</p>
+  <header>
+    <div class="text-[#19337E] text-base font-normal">
+      <h1 class="text-[#333131] font-medium text-4xl">Find Your Students</h1>
+      <p>Use location pins to find students and the shortest route to visit</p>
+    </div>
+  </header>
+  <div class="flex gap-6">
+    <div class="border border-[#19337E] w-full">
+      <liaison-map />
+    </div>
+    <div class="w-[25%]">
+      <div class="flex justify-end mb-4">
+        <button
+          class="text-gray-500 hover:text-gray-700 w-5 h-5 hover:bg-gray-100 flex justify-center rounded-full items-center"
+        >
+          <svg
+            width="9"
+            height="10"
+            viewBox="0 0 9 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1 9.08335L0.125 8.26669L3.625 5.00002L0.125 1.73335L1 0.916687L4.5 4.18335L8 0.916687L8.875 1.73335L5.375 5.00002L8.875 8.26669L8 9.08335L4.5 5.81669L1 9.08335Z"
+              fill="#19337E"
+            />
+          </svg>
+        </button>
+      </div>
+      <div class="flex flex-col items-center">
+        <label class="mb-5 text-[#19337E] font-bold text-sm">Index No.</label>
+
+        <div
+          class="h-28 w-28 rounded-full bg-gray-100 flex justify-center items-center text-gray-500 font-semibold text-[26px]"
+        >
+          DT
         </div>
-    </header>
-  <div>
-    <div class="overflow-x-auto">
-      <google-map height="500px" width="100%" [zoom]="10" [center]="center" (mapInitialized)="onMapReady($event)">
-        @for (location of studentLocations; track $index) {
-        <map-marker
-          [position]="{ lat: location.lat, lng: location.lng }"
-          [label]="location.label"
-          [icon]="{
-            url: 'assets/icons/yellow_location.svg'
-          }"
-        />
-        }
-      </google-map>
+
+        <h1 class="my-3 font-bold text-black text-base">Student Name</h1>
+        <p class="text-[#19337E] text-sm">BSC. Computer Science</p>
+
+        <div
+          type="button"
+          class="relative flex items-center gap-3 justify-center my-6"
+        >
+          <button
+            class="border-none outline-none bg-[#19337E] rounded-md w-7 h-7 flex justify-center items-center"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4.87496 14.25C5.58329 13.7083 6.37496 13.2812 7.24996 12.9687C8.12496 12.6562 9.04163 12.5 9.99996 12.5C10.9583 12.5 11.875 12.6562 12.75 12.9687C13.625 13.2812 14.4166 13.7083 15.125 14.25C15.6111 13.6805 15.9895 13.0347 16.2604 12.3125C16.5312 11.5902 16.6666 10.8194 16.6666 9.99996C16.6666 8.15274 16.0173 6.57982 14.7187 5.28121C13.4201 3.9826 11.8472 3.33329 9.99996 3.33329C8.15274 3.33329 6.57982 3.9826 5.28121 5.28121C3.9826 6.57982 3.33329 8.15274 3.33329 9.99996C3.33329 10.8194 3.46871 11.5902 3.73954 12.3125C4.01038 13.0347 4.38885 13.6805 4.87496 14.25ZM9.99996 10.8333C9.18052 10.8333 8.48954 10.552 7.92704 9.98954C7.36454 9.42704 7.08329 8.73607 7.08329 7.91663C7.08329 7.09718 7.36454 6.40621 7.92704 5.84371C8.48954 5.28121 9.18052 4.99996 9.99996 4.99996C10.8194 4.99996 11.5104 5.28121 12.0729 5.84371C12.6354 6.40621 12.9166 7.09718 12.9166 7.91663C12.9166 8.73607 12.6354 9.42704 12.0729 9.98954C11.5104 10.552 10.8194 10.8333 9.99996 10.8333ZM9.99996 18.3333C8.84718 18.3333 7.76385 18.1145 6.74996 17.677C5.73607 17.2395 4.85413 16.6458 4.10413 15.8958C3.35413 15.1458 2.76038 14.2638 2.32288 13.25C1.88538 12.2361 1.66663 11.1527 1.66663 9.99996C1.66663 8.84718 1.88538 7.76385 2.32288 6.74996C2.76038 5.73607 3.35413 4.85413 4.10413 4.10413C4.85413 3.35413 5.73607 2.76038 6.74996 2.32288C7.76385 1.88538 8.84718 1.66663 9.99996 1.66663C11.1527 1.66663 12.2361 1.88538 13.25 2.32288C14.2638 2.76038 15.1458 3.35413 15.8958 4.10413C16.6458 4.85413 17.2395 5.73607 17.677 6.74996C18.1145 7.76385 18.3333 8.84718 18.3333 9.99996C18.3333 11.1527 18.1145 12.2361 17.677 13.25C17.2395 14.2638 16.6458 15.1458 15.8958 15.8958C15.1458 16.6458 14.2638 17.2395 13.25 17.677C12.2361 18.1145 11.1527 18.3333 9.99996 18.3333ZM9.99996 16.6666C10.7361 16.6666 11.4305 16.559 12.0833 16.3437C12.7361 16.1284 13.3333 15.8194 13.875 15.4166C13.3333 15.0139 12.7361 14.7048 12.0833 14.4895C11.4305 14.2743 10.7361 14.1666 9.99996 14.1666C9.26385 14.1666 8.5694 14.2743 7.91663 14.4895C7.26385 14.7048 6.66663 15.0139 6.12496 15.4166C6.66663 15.8194 7.26385 16.1284 7.91663 16.3437C8.5694 16.559 9.26385 16.6666 9.99996 16.6666Z"
+                fill="white"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="relative border-none outline-none bg-[#19337E] rounded-md w-7 h-7 flex justify-center items-center"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16.95 18C14.8667 18 12.8083 17.5458 10.775 16.6375C8.74167 15.7292 6.89167 14.4417 5.225 12.775C3.55833 11.1083 2.27083 9.25833 1.3625 7.225C0.454167 5.19167 0 3.13333 0 1.05C0 0.75 0.1 0.5 0.3 0.3C0.5 0.1 0.75 0 1.05 0H5.1C5.33333 0 5.54167 0.0791667 5.725 0.2375C5.90833 0.395833 6.01667 0.583333 6.05 0.8L6.7 4.3C6.73333 4.56667 6.725 4.79167 6.675 4.975C6.625 5.15833 6.53333 5.31667 6.4 5.45L3.975 7.9C4.30833 8.51667 4.70417 9.1125 5.1625 9.6875C5.62083 10.2625 6.125 10.8167 6.675 11.35C7.19167 11.8667 7.73333 12.3458 8.3 12.7875C8.86667 13.2292 9.46667 13.6333 10.1 14L12.45 11.65C12.6 11.5 12.7958 11.3875 13.0375 11.3125C13.2792 11.2375 13.5167 11.2167 13.75 11.25L17.2 11.95C17.4333 12.0167 17.625 12.1375 17.775 12.3125C17.925 12.4875 18 12.6833 18 12.9V16.95C18 17.25 17.9 17.5 17.7 17.7C17.5 17.9 17.25 18 16.95 18ZM3.025 6L4.675 4.35L4.25 2H2.025C2.10833 2.68333 2.225 3.35833 2.375 4.025C2.525 4.69167 2.74167 5.35 3.025 6ZM11.975 14.95C12.625 15.2333 13.2875 15.4583 13.9625 15.625C14.6375 15.7917 15.3167 15.9 16 15.95V13.75L13.65 13.275L11.975 14.95Z"
+                fill="white"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex justify-between items-center gap-3">
+          <div>
+            <h3 class="font-bold">Age</h3>
+            <p class="text-[#19337E]">18</p>
+          </div>
+
+          <div class="relative group">
+            <h3 class="font-bold">Department</h3>
+            <p
+              class="text-[#19337E] max-w-[100px] overflow-hidden whitespace-nowrap truncate group-hover:overflow-hidden group-hover:white-space-normal"
+            >
+            Information Technology
+            </p>
+
+            <div
+              class="absolute left-0 top-full mt-1 hidden group-hover:flex bg-white text-black border border-gray-300 rounded-md p-2 shadow-lg max-w-xs z-10"
+            >
+              Information Technology
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-bold">Gender</h3>
+            <p class="text-[#19337E]">Male</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -7,7 +7,7 @@ import { roleGuard } from './guards/role/role.guard';
 import { guestGuard } from './guards/guest/guest.guard';
 // import { LecturerComponent } from './pages/lecturer/lecturer.component';
 import { StudentComponent } from './pages/student/student.component';
-import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { ProfilePageComponent } from './shared/components/profile-page/profile-page.component';
 
 export const routes: Routes = [
   {

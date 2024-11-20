@@ -157,4 +157,10 @@ export class AssumptionOfDutyComponent implements OnInit {
 
 
   protected readonly focus = focus;
+
+  moveBack(prevCallback: any) {
+    prevCallback.emit();
+  }
+
+
 }

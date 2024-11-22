@@ -6,6 +6,7 @@ import { UploadStudentComponent } from "./components/students/components/uploadS
 import { LecturersComponent } from "./components/lecturers/lecturers.component";
 import { InternshipsComponent } from "./components/internships/internships.component";
 import { ZonesComponent } from "./components/zones/zones.component";
+import { ProfilePageComponent } from "../../shared/components/profile-page/profile-page.component";
 
 export const adminRoutes: Routes = [
   {
@@ -42,5 +43,9 @@ export const adminRoutes: Routes = [
   {
     path: 'zones',
     component: ZonesComponent,
+  },
+  {
+    path: 'profile',
+    component: ProfilePageComponent,
   },
 ];

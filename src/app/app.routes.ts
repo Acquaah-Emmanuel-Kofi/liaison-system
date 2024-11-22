@@ -7,7 +7,6 @@ import { roleGuard } from './guards/role/role.guard';
 import { guestGuard } from './guards/guest/guest.guard';
 // import { LecturerComponent } from './pages/lecturer/lecturer.component';
 import { StudentComponent } from './pages/student/student.component';
-import { ProfilePageComponent } from './shared/components/profile-page/profile-page.component';
 
 export const routes: Routes = [
   {
@@ -48,18 +47,6 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard, roleGuard],
     
-  },
- 
-  {
-    path: 'profile',
-    component: AdminComponent,  
-    canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        component: ProfilePageComponent,  
-      },
-    ],
   },
   
   {

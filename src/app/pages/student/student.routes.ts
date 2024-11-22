@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AssumptionOfDutyComponent } from './components/assumption-of-duty/assumption-of-duty.component';
+import { ProfilePageComponent } from '../../shared/components/profile-page/profile-page.component';
 
 export const studentRoutes: Routes = [
   {
@@ -15,5 +16,9 @@ export const studentRoutes: Routes = [
   {
     path: 'assumption-of-duty',
     component: AssumptionOfDutyComponent,
+  },
+  {
+    path: 'profile',
+    component: ProfilePageComponent,
   },
 ];

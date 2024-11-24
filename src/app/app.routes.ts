@@ -5,7 +5,7 @@ import { ErrorPageComponent } from './pages/404/error-page/error-page.component'
 import { authGuard } from './guards/auth/auth.guard';
 import { roleGuard } from './guards/role/role.guard';
 import { guestGuard } from './guards/guest/guest.guard';
-import { LecturerComponent } from './pages/lecturer/lecturer.component';
+// import { LecturerComponent } from './pages/lecturer/lecturer.component';
 import { StudentComponent } from './pages/student/student.component';
 
 export const routes: Routes = [
@@ -27,16 +27,17 @@ export const routes: Routes = [
         (routes) => routes.adminRoutes
       ),
     canActivate: [authGuard, roleGuard],
+    
   },
-  {
-    path: 'lecturer',
-    component: LecturerComponent,
-    loadChildren: () =>
-      import('../app/pages/lecturer/lecturer.routes').then(
-        (routes) => routes.lecturerRoutes
-      ),
-    canActivate: [authGuard, roleGuard],
-  },
+  // {
+  //   path: 'lecturer',
+  //   component: LecturerComponent,
+  //   loadChildren: () =>
+  //     import('../app/pages/lecturer/lecturer.routes').then(
+  //       (routes) => routes.lecturerRoutes
+  //     ),
+  //   canActivate: [authGuard, roleGuard],
+  // },
   {
     path: 'student',
     component: StudentComponent,
@@ -45,7 +46,9 @@ export const routes: Routes = [
         (routes) => routes.studentRoutes
       ),
     canActivate: [authGuard, roleGuard],
+    
   },
+  
   {
     path: '**',
     component: ErrorPageComponent,

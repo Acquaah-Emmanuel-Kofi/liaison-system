@@ -1,6 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {StepperModule} from "primeng/stepper";
-import {Button} from "primeng/button";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgClass, NgForOf, NgStyle} from "@angular/common";
 import {FloatLabelModule} from "primeng/floatlabel";
@@ -10,13 +9,17 @@ import {CheckboxModule} from "primeng/checkbox";
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
 import {LoaderModalComponent} from "../../../../shared/components/loader-modal/loader-modal/loader-modal.component";
+import {injectMutation} from "@tanstack/angular-query-experimental";
+import {lastValueFrom} from "rxjs";
+import {AssumptionService} from "../../services/assumption/assumption.service";
+import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
+import {RegionService} from "../../../../shared/services/regions/regions.service";
 
 @Component({
   selector: 'liaison-assumption-of-duty',
   standalone: true,
   imports: [
     StepperModule,
-    Button,
     ReactiveFormsModule,
     FloatLabelModule,
     InputTextModule,
@@ -33,19 +36,18 @@ import {LoaderModalComponent} from "../../../../shared/components/loader-modal/l
   providers: [MessageService]
 })
 export class AssumptionOfDutyComponent implements OnInit {
+  private globalStore = inject(GlobalVariablesStore);
   messageService = inject(MessageService)
+  assumptionService = inject(AssumptionService)
+  regionService = inject(RegionService)
   isFocused: boolean = false;
   isModalOpen: boolean = false;
+
 
   companyInfoForm!: FormGroup;
   AgreementForm!: FormGroup
 
-  zones = [
-    { name: 'Western Region (Takoradi Township)', value: 'WesternRegion' },
-    { name: 'Central Region (Cape Coast)', value: 'CentralRegion' },
-    { name: 'Greater Accra Region (Accra)', value: 'GreaterAccra' },
-    { name: 'Ashanti Region (Kumasi)', value: 'AshantiRegion' },
-  ];
+  zones: any;
 
   letterToOptions = [
     { name: 'THE MANAGER', value: 'TheManager' },
@@ -87,6 +89,7 @@ export class AssumptionOfDutyComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.zones = this.regionService.getRawRegions()
     this.buildForm()
     this.buildAgreementForm()
   }
@@ -95,16 +98,19 @@ export class AssumptionOfDutyComponent implements OnInit {
   buildForm(){
     this.companyInfoForm = this.fb.group({
       companyName: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
-      location: ['', Validators.required],
-      city: ['', Validators.required],
+      companyPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+      companyExactLocation: ['', Validators.required],
+      companyTown: ['', Validators.required],
       commencementDate: ['', Validators.required],
-      address: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      supervisor: ['', Validators.required],
+      companyAddress: ['', Validators.required],
+      companyEmail: ['', [Validators.required, Validators.email]],
+      companySupervisor: ['', Validators.required],
       supervisorPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
-      companyZone: ['', Validators.required],
+      companyRegion: ['', Validators.required],
       letterTo: ['', Validators.required],
+      companyLongitude: ["",Validators.required],
+      companyLatitude: ["",Validators.required]
+
     });
   }
 
@@ -127,11 +133,14 @@ export class AssumptionOfDutyComponent implements OnInit {
     }
   }
 
+
   onPhoneInput($event: Event) {
     const input = $event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
     this.companyInfoForm.get('phone')?.setValue(input.value, { emitEvent: false })
   }
+
+
   onSuperPhoneInput($event: Event) {
     const input = $event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
@@ -140,16 +149,41 @@ export class AssumptionOfDutyComponent implements OnInit {
   }
 
 
+  AssumptionMutation = injectMutation(()=>(
+    {
+      mutationFn: async (formData )=>{
+        return await lastValueFrom(
+          this.assumptionService.submitAssumptionForm(formData, this.globalStore.startYear(), this.globalStore.endYear(), this.globalStore.type())
+        );
+      },
+      onSuccess: (data: any) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: data.message || 'Assumption of duty form submission was successfully'
+        });
+        this.isModalOpen = false;
+
+      },
+      onError: (error: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.message || 'An error occurred while submitting the details'
+        });
+        this.isModalOpen = false;
+
+
+      }
+
+    }
+  ))
+
+
   submitForm(): void {
     if (this.AgreementForm.valid && this.companyInfoForm.valid) {
       this.isModalOpen = true;
-      console.log('Form Data:', this.companyInfoForm.value);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail:  'Assumption of duty form submission was successfully'
-      });
-      this.isModalOpen = false;
+      this.AssumptionMutation.mutate(this.companyInfoForm.value)
     } else {
       this.AgreementForm.markAllAsTouched();
     }
@@ -157,4 +191,12 @@ export class AssumptionOfDutyComponent implements OnInit {
 
 
   protected readonly focus = focus;
+
+  moveBack(prevCallback: any) {
+    prevCallback.emit();
+  }
+
+
+
+
 }

@@ -12,12 +12,12 @@ import { GoogleMapsModule } from '@angular/google-maps';
 export class MapComponent {
   clickedMarker = output<IStudentLocation>();
 
-  private userLocation = signal<ILecturerLocation>({
+  lecturerLocation = signal<ILecturerLocation>({
     latitude: 7.9465,
     longitude: -1.0232,
   });
 
-  center: google.maps.LatLngLiteral = { lat: 7.9465, lng: 1.0232 };
+  center: google.maps.LatLngLiteral = { lat: 7.9465, lng: -1.0232 };
   map: google.maps.Map | undefined;
 
   studentLocations: IStudentLocation[] = [
@@ -32,7 +32,7 @@ export class MapComponent {
   ngOnInit(): void {
     this.locationService.getUserLocation().subscribe((location) => {
       this.center = { lat: location.latitude, lng: location.longitude };
-      this.userLocation.set(location);
+      this.lecturerLocation.set(location);
     });
   }
 
@@ -42,8 +42,8 @@ export class MapComponent {
 
   calculateRouteToStudent(studentLocation: google.maps.LatLngLiteral): void {
     const lecturerLocation: google.maps.LatLngLiteral = {
-      lat: this.userLocation().latitude,
-      lng: this.userLocation().longitude,
+      lat: this.lecturerLocation().latitude,
+      lng: this.lecturerLocation().longitude,
     };
 
     if (this.map) {

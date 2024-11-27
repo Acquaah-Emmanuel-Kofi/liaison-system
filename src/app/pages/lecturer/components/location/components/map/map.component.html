@@ -2,16 +2,36 @@
   <google-map
     height="500px"
     width="100%"
-    [zoom]="10"
+    [zoom]="5"
     [center]="center"
     (mapInitialized)="onMapReady($event)"
   >
+    <!-- Lecturer's Location Marker -->
+    <map-marker
+      [position]="{
+        lat: lecturerLocation().latitude,
+        lng: lecturerLocation().longitude
+      }"
+      [label]="{
+        text: 'You',
+        color: 'black',
+        fontSize: '14px',
+        fontWeight: 'bold'
+      }"
+    ></map-marker>
+
+    <!-- Students' Location Markers -->
     @for (location of studentLocations; track $index) {
     <map-marker
       [position]="{ lat: location.lat, lng: location.lng }"
-      [label]="location.label"
+      [label]="{
+        text: location.label,
+        color: 'blue',
+        fontSize: '14px',
+        fontWeight: 'bold'
+      }"
       [icon]="{
-        url: 'assets/icons/yellow_location.svg'
+        url: 'assets/icons/yellow_location.svg',
       }"
       (mapClick)="onMarkerClick(location)"
     />

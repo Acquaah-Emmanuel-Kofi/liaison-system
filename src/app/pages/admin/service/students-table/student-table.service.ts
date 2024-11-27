@@ -29,7 +29,7 @@ export class StudentTableService {
     size: number,
 
   ): Promise<IGetStudentResponse> {
-    const params = new HttpParams().set('startOfAcademicYear',startOfAcademicYear).set('endOfAcademicYear',endOfAcademicYear).set('internship',internship).set('page',page).set('size',size);
+    const params = new HttpParams().set('startOfAcademicYear',startOfAcademicYear + 1).set('endOfAcademicYear',endOfAcademicYear + 1).set('internship',internship).set('page',page).set('size',size);
     const url = `${environment.BACKEND_API_BASE_URL}/admin/${this.userStore.id()}/students`;
     return lastValueFrom(this._http.get<IGetStudentResponse>(url,{params}));
   }

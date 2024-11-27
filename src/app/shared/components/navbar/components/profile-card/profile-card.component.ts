@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ILinks } from '../../../../interfaces/constants.interface';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../../pages/auth/services/auth/auth.service';
@@ -12,8 +12,6 @@ import { UserStore } from '../../../../store/user.store';
   styleUrls: ['./profile-card.component.scss'],
 })
 export class ProfileCardComponent {
-  @Output() emitMenu = new EventEmitter<string>();
-
   userStore = inject(UserStore);
   _authService = inject(AuthService);
   _router = inject(Router);
@@ -25,7 +23,7 @@ export class ProfileCardComponent {
 
   cardItems: ILinks[] = [
     {
-      label: 'Your Profile',
+      label: 'Profile',
       link: `/${this.getUserRole()}/profile`,
     },
     {
@@ -33,12 +31,6 @@ export class ProfileCardComponent {
       link: `/${this.getUserRole()}/settings`,
     },
   ];
-  
-
-  onMenuClick(route: string): void {
-    this._router.navigate([this.userStore.role(), route]);
-    this.emitMenu.emit(route); 
-  }
 
   logout() {
     this._authService.logout();

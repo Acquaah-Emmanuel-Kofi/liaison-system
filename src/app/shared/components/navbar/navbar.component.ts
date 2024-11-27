@@ -78,5 +78,4 @@ export class NavbarComponent implements OnInit {
     this.isProfileToggled = false;
   }
 
-  getProfileMenu(menu: string): void {}
 }

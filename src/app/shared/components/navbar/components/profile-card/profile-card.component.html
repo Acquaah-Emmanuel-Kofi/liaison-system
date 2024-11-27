@@ -4,7 +4,6 @@
   @for(item of cardItems; track $index){
   <a
     [routerLink]="item.link"
-    (click)="onMenuClick(item.label)"
     class="block px-4 py-2 text-sm text-gray-700"
     >{{ item.label }}</a
   >

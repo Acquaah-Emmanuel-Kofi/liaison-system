@@ -31,7 +31,6 @@ export class MapComponent {
 
   ngOnInit(): void {
     this.locationService.getUserLocation().subscribe((location) => {
-      this.center = { lat: location.latitude, lng: location.longitude };
       this.lecturerLocation.set(location);
     });
   }

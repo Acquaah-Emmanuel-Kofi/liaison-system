@@ -108,8 +108,8 @@ export class AssumptionOfDutyComponent implements OnInit {
       supervisorPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       companyRegion: ['', Validators.required],
       letterTo: ['', Validators.required],
-      companyLongitude: ["",Validators.required],
-      companyLatitude: ["",Validators.required]
+      companyLongitude: ["",],
+      companyLatitude: ["",]
 
     });
   }
@@ -183,7 +183,12 @@ export class AssumptionOfDutyComponent implements OnInit {
   submitForm(): void {
     if (this.AgreementForm.valid && this.companyInfoForm.valid) {
       this.isModalOpen = true;
-      this.AssumptionMutation.mutate(this.companyInfoForm.value)
+      const formData = {
+        ...this.companyInfoForm.value,
+        companyLongitude: "",
+        companyLatitude: ""
+      }
+      this.AssumptionMutation.mutate(formData)
     } else {
       this.AgreementForm.markAllAsTouched();
     }

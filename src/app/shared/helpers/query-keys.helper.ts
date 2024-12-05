@@ -17,6 +17,9 @@ export const zonesQueryData = {
       internship,
   ]
 }
+export const dashboardQueryKey = {
+  all: ['dashboard'] as const,
+}
 
 export const lecturersQueryKey = {
   all: ['lecturers'] as const,

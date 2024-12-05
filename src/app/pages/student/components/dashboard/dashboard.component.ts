@@ -4,7 +4,7 @@ import {GlobalVariablesStore} from "../../../../shared/store/global-variables.st
 import {StatCardComponent} from "../../../../shared/components/stat-card/stat-card.component";
 import {IStartCard} from "../../../../shared/interfaces/constants.interface";
 import {CardModule} from "primeng/card";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {injectQuery} from "@tanstack/angular-query-experimental";
 import {dashboardQueryKey} from "../../../../shared/helpers/query-keys.helper";
 import {DashboardService} from "../../services/dashboard/dashboard.service";
@@ -18,7 +18,8 @@ import {getFirstAndLastInitial} from "../../../../../assets/utils/getInitials";
     StatCardComponent,
     CardModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NgOptimizedImage
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -72,8 +73,8 @@ export class DashboardComponent implements OnInit {
       this.student = response.data;
       this.lecturers = response.data.assignedLecturers;
 
-      this.otherLecturers = this.lecturers.filter((lecturer) => lecturer.role !== 'Zone Lead');
-      this.zoneLead = this.lecturers.find((lecturer) => lecturer.role === 'Zone Lead') || null;
+      this.otherLecturers = this.lecturers.filter((lecturer) => lecturer.isZoneLead === false);
+      this.zoneLead = this.lecturers.find((lecturer) => lecturer.isZoneLead === true) || null;
       this.zoneSupervisorsCount = this.lecturers.length
       console.log(this.zoneSupervisorsCount)
       this.cdr.detectChanges()

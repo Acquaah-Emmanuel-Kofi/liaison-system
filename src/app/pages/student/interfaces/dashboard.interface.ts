@@ -4,4 +4,5 @@ export interface assignedLecturer {
   phone: string,
   role?: string,
   image?: string,
+  isZoneLead?: boolean
 }

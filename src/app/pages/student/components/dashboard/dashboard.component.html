@@ -8,13 +8,19 @@
         class="text-Primary-Black text-lg sm:text-xl lg:text-2xl 2xl:text-[26px] font-medium relative flex gap-2"
       >
         Welcome back {{ username || "student"}}
-        <img ngSrc="/assets/icons/waving_hand.svg" alt="Waving Hand" height="21" width="21"/>
+        <img ngSrc="/assets/icons/waving_hand.svg" alt="Waving Hand" height="21" width="21" priority/>
       </p>
       <p class="text-Dark-Blue text-lg">Here's an overview of your profile</p>
     </div>
 
     <div>
-
+      @if (dashboardQUery.isPending()) {
+        <div class="flex h-14 w-auto flex-col justify-center">
+          <div
+            class="h-5 w-44 skeleton rounded-full skeleton-text bg-gray-border"
+          ></div>
+        </div>
+      } @else {
         @if (student?.isSupervised) {
           <div class=" bg-green-200 w-40 px-2 h-8 rounded-full flex items-center justify-center">
             <h3>Status: Supervised</h3>
@@ -24,6 +30,8 @@
             <h3>Status: Not Supervised</h3>
           </div>
         }
+      }
+
 
     </div>
   </div>
@@ -37,86 +45,135 @@
         [count]="card.count"
         [showView] ="card.show"
         [navigateTo]="card.navigateTo"
+        [isLoading]="dashboardQUery.isPending()"
       >
       </liaison-stat-card>
     }
   </div>
 
 
+  @if (dashboardQUery.isPending()){
+    <div class="container mx-auto py-6 w-[100%]">
+      <div class="h-6 bg-gray-300 rounded w-36 mb-3"></div>
 
-
-  <div class="container mx-auto p-6 w-[100%]">
-    <h1 class="text-2xl font-bold mb-6">Lecturers in Zone</h1>
-
-    <!-- Leader Card (Full-Width) -->
-    <div *ngIf="zoneLead" class="bg-gray-100 p-6 rounded-lg flex items-center justify-center mb-8 shadow-md gap-[10%]">
-      <div class="flex items-center ">
-        @if (zoneLead.image){
-          <img [ngSrc]="zoneLead.image" alt="Leader" class="w-24 h-24 rounded-full mr-6 border border-gray-200" fill/>
-        }@else{
+      <!-- Leader Skeleton (Full-Width) -->
+      <div class="bg-gray-100 p-6 rounded-lg flex items-center justify-center mb-8 shadow-md gap-[10%]">
+        <div class="flex items-center animate-pulse">
           <div
-            class="w-24 h-24 rounded-full mr-6 bg-gray-300 flex items-center justify-center text-white font-bold text-xl"
-          >
-            {{ getFirstAndLastInitial(zoneLead.name) }}
+            class="w-24 h-24 rounded-full bg-gray-300 mr-6"
+          ></div>
+          <div>
+            <div class="h-6 bg-gray-300 rounded w-36 mb-2"></div>
+            <div class="h-4 bg-gray-300 rounded w-28 mb-1"></div>
+            <div class="h-4 bg-gray-300 rounded w-32 mb-1"></div>
+            <div class="h-4 bg-gray-300 rounded w-24"></div>
           </div>
-        }
-        <div>
-          <h2 class="text-xl font-semibold">{{ zoneLead.name }}</h2>
-          <p class="text-sm text-gray-600">{{ zoneLead.role }} </p>
-          <p class="text-sm text-gray-500">Location: {{ zoneLead.email }}</p>
-          <p class="text-sm text-gray-500">Phone: {{ zoneLead.phone }}</p>
+        </div>
+
+        <div class="bg-white w-1 h-16"></div>
+
+        <div class="w-32 h-5 flex items-center justify-center rounded-full bg-gray-300">
+          <div class="h-4 bg-gray-300 rounded w-20"></div>
         </div>
       </div>
 
-      <div class="bg-white w-1 h-16"></div>
-
-      <div class="w-32 h-5 flex items-center justify-center rounded-full bg-Dark-Blue text-white">
-        <p class="text-sm text-white">Zone Lead </p>
-      </div>
-
-    <!-- Grid Layout -->
-    <div class="grid grid-flex-col grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 item-center">
-      <div
-        *ngFor="let lecturer of otherLecturers"
-      >
-        <div class="card flex justify-content-center ">
-          <p-card [header]="lecturer.name" [style]="{ width: '360px' }">
-            <ng-template pTemplate="header">
-              @if (lecturer.image) {
-                <div
-                  class="w-full h-48 object-cover mr-6 bg-gray-300 flex items-center justify-center text-white font-bold text-xl"
-                >
-                  <div class="w-24 h-24 rounded-full flex items-center justify-center bg-white text-black">
-                    <img [ngSrc]="lecturer.image" alt="{{ lecturer.name }}" class="w-24 h-24 rounded-full object-cover"
-                         fill/>
-                  </div>
-
-                </div>
-              } @else {
-                <div
-                  class="w-full h-48 object-cover mr-6 bg-gray-300 flex items-center justify-center text-white font-bold text-xl"
-                >
-                  <div class="w-24 h-24 rounded-full flex items-center justify-center bg-white text-black">
-                    {{ getFirstAndLastInitial(lecturer.name) }}
-                  </div>
-                </div>
-              }
-            </ng-template>
-            <div class="-mt-3">
-              <p class="text-sm text-gray-600">{{ lecturer.email }}</p>
-              <p class="text-sm text-gray-500"> {{ lecturer.phone }}</p>
-              <p class="text-sm text-gray-500"> {{ lecturer.role }}</p>
-            </div>
-          </p-card>
+      <!-- Grid Skeleton -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div
+          *ngFor="let _ of [1, 2, 3, 4, 5, 6]"
+        class="card flex justify-content-center animate-pulse"
+        >
+        <div class="w-[360px] p-4 bg-gray-100 rounded-lg shadow-md">
+          <div class="w-full h-48 bg-gray-300 rounded mb-4"></div>
+          <div class="h-6 bg-gray-300 rounded w-36 mb-2"></div>
+          <div class="h-4 bg-gray-300 rounded w-28 mb-1"></div>
+          <div class="h-4 bg-gray-300 rounded w-24"></div>
         </div>
-
       </div>
     </div>
-  </div>
+    </div>
+
+
+  } @else {
+    <div class="container mx-auto py-6 w-[100%]">
+      <h1 class="text-2xl font-bold mb-6">Lecturers in Zone</h1>
+
+      @if (!zoneLead && otherLecturers.length <=0){
+      <h3>Awaiting supervisor assignment</h3>
+      }
+      <!-- Leader Card (Full-Width) -->
+      <div *ngIf="zoneLead" class="bg-gray-100 p-6 rounded-lg flex items-center justify-center mb-8 shadow-md gap-[10%]">
+        <div class="flex items-center ">
+          @if (zoneLead.image){
+            <img [ngSrc]="zoneLead.image" alt="Leader" class="w-24 h-24 rounded-full mr-6 border border-gray-200" fill priority/>
+          }@else{
+            <div
+              class="w-24 h-24 rounded-full mr-6 bg-gray-300 flex items-center justify-center text-white font-bold text-xl"
+            >
+              {{ getFirstAndLastInitial(zoneLead.name) }}
+            </div>
+          }
+          <div>
+            <h2 class="text-xl font-semibold">{{ zoneLead.name }}</h2>
+            <p class="text-sm text-gray-600">{{ zoneLead.role }} </p>
+            <p class="text-sm text-gray-500">Location: {{ zoneLead.email }}</p>
+            <p class="text-sm text-gray-500">Phone: {{ zoneLead.phone }}</p>
+          </div>
+        </div>
+
+        <div class="bg-white w-1 h-16"></div>
+
+        <div class="w-32 h-5 flex items-center justify-center rounded-full bg-Dark-Blue text-white">
+          <p class="text-sm text-white">Zone Lead </p>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-flex-col grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 item-center">
+          <div
+            *ngFor="let lecturer of otherLecturers"
+          >
+            <div class="card flex justify-content-center ">
+              <p-card [header]="lecturer.name" [style]="{ width: '360px' }">
+                <ng-template pTemplate="header">
+                  @if (lecturer.image) {
+                    <div
+                      class="w-full h-48 object-cover mr-6 bg-gray-300 flex items-center justify-center text-white font-bold text-xl"
+                    >
+                      <div class="w-24 h-24 rounded-full flex items-center justify-center bg-white text-black">
+                        <img [ngSrc]="lecturer.image" alt="{{ lecturer.name }}" class="w-24 h-24 rounded-full object-cover priority"
+                             fill/>
+                      </div>
+
+                    </div>
+                  } @else {
+                    <div
+                      class="w-full h-48 object-cover mr-6 bg-gray-300 flex items-center justify-center text-white font-bold text-xl"
+                    >
+                      <div class="w-24 h-24 rounded-full flex items-center justify-center bg-white text-black">
+                        {{ getFirstAndLastInitial(lecturer.name) }}
+                      </div>
+                    </div>
+                  }
+                </ng-template>
+                <div class="-mt-3">
+                  <p class="text-sm text-gray-600">{{ lecturer.email }}</p>
+                  <p class="text-sm text-gray-500"> {{ lecturer.phone }}</p>
+                  <p class="text-sm text-gray-500"> {{ lecturer.role }}</p>
+                </div>
+              </p-card>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
 
 
 
 
-</div>
+    </div>
+  }
+
+
+
 </div>

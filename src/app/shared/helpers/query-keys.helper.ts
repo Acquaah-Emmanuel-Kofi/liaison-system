@@ -19,6 +19,8 @@ export const zonesQueryData = {
 }
 export const dashboardQueryKey = {
   all: ['dashboard'] as const,
+  assumption: ['assumption', 'lecturers'] as const,
+  colleagues: ['dashboard', 'colleagues'] as const,
 }
 
 export const lecturersQueryKey = {

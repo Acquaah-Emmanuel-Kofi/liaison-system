@@ -80,9 +80,9 @@ export const STUDENT_NAVLINKS: INavLinks[] = [
     defaultIconSrc: '/assets/icons/book.svg',
     routerLink: 'assumption-of-duty',
   },
-  // {
-  //   title: 'Supervision Information',
-  //   defaultIconSrc: '/assets/icons/supervise.svg',
-  //   routerLink: 'supervision',
-  // }
+  {
+    title: 'Colleague Information',
+    defaultIconSrc: '/assets/icons/supervise.svg',
+    routerLink: 'supervision',
+  }
 ];

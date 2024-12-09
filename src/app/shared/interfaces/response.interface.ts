@@ -73,11 +73,40 @@ export interface ILecturersData extends IUser {
   lecturerId: string;
 }
 
+export interface IColleagueData {
+  id: string,
+  name: string,
+  email: string,
+  department: string
+}
+
 export interface IStartAnalytics {
   lectures: number;
   students: number;
   internships: number;
 }
+
+export interface IStatAnalytics {
+  totalColleagues: number;
+  totalLecturers: number;
+  internships: number;
+}
+
+export interface companyDetails {
+  companyAddress:string,
+  companyEmail:string
+  companyExactLocation:string
+  companyLatitude:string
+  companyLongitude:string
+  companyName:string
+  companyPhone:string
+  companyRegion:string
+  companySupervisor:string
+  companyTown:string
+  letterTo:string
+  supervisorPhone:string
+}
+
 export interface IStatAnalyticsResponse extends ICommonResponse {
   data: IStartAnalytics;
 }

@@ -10,6 +10,7 @@ import {dashboardQueryKey} from "../../../../shared/helpers/query-keys.helper";
 import {DashboardService} from "../../services/dashboard/dashboard.service";
 import {assignedLecturer} from "../../interfaces/dashboard.interface";
 import {getFirstAndLastInitial} from "../../../../../assets/utils/getInitials";
+import {IStartAnalytics, IStatAnalytics} from "../../../../shared/interfaces/response.interface";
 
 @Component({
   selector: 'liaison-dashboard',
@@ -42,8 +43,8 @@ export class DashboardComponent implements OnInit {
       title: 'Colleague Students',
       count: 0,
       iconSrc: 'assets/students.svg',
-      navigateTo: '/lecturer/students',
-      show: false
+      navigateTo: '/student/supervision',
+      show: true
     },
     {
       title: 'Industries',
@@ -63,12 +64,14 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
+
   }
 
   dashboardQUery = injectQuery(()=> ({
-    queryKey: [dashboardQueryKey],
+    queryKey: [dashboardQueryKey.all],
     queryFn: async ()=>{
       const response = await this.dashboardService.getDashboardInfo()
+      this.updateCountsFromApiResponse(response.data)
       this.username = response.data.name;
       this.student = response.data;
       this.lecturers = response.data.assignedLecturers;
@@ -76,14 +79,27 @@ export class DashboardComponent implements OnInit {
       this.otherLecturers = this.lecturers.filter((lecturer) => lecturer.isZoneLead === false);
       this.zoneLead = this.lecturers.find((lecturer) => lecturer.isZoneLead === true) || null;
       this.zoneSupervisorsCount = this.lecturers.length
-      console.log(this.zoneSupervisorsCount)
       this.cdr.detectChanges()
-      console.log(response.data);
       return response.data;
     }
     })
 
   );
+
+  updateCountsFromApiResponse(data: IStatAnalytics) {
+    this.statCard = this.statCard.map((card) => {
+      switch (card.title) {
+        case 'Colleague Students':
+          return { ...card, count: data.totalColleagues };
+        case 'Industries':
+          return { ...card, count: data.totalLecturers };
+        case 'Zone Supervisors':
+          return { ...card, count: data.totalLecturers };
+        default:
+          return card;
+      }
+    });
+  }
 
 
   protected readonly getFirstAndLastInitial = getFirstAndLastInitial;

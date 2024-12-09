@@ -9,11 +9,20 @@ import {environment} from "../../../../../environments/environment.development";
 })
 export class DashboardService {
   private readonly  userStore = inject(UserStore)
+  private studentData: any;
 
   _http = inject(HttpClient);
 
   getDashboardInfo(){
     const url = `${environment.BACKEND_API_BASE_URL}/student/dashboard/${this.userStore.id()}`;
     return lastValueFrom( this._http.get<any>(url));
+  }
+
+  setDashboardData(data: any) {
+    this.studentData = data;
+  }
+
+  getDashboardData() {
+    return this.studentData;
   }
 }

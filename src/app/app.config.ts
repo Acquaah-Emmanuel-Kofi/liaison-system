@@ -21,7 +21,6 @@ const token = () => getFromLocalStorage(ACCESS_TOKEN_KEY);
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideClientHydration(),
     provideRouter(routes),
     provideAnimations(),
     importProvidersFrom(
@@ -43,6 +42,5 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
-    provideClientHydration(),
   ],
 };

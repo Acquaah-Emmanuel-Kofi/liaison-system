@@ -9,11 +9,15 @@ import {CheckboxModule} from "primeng/checkbox";
 import {ToastModule} from "primeng/toast";
 import {MessageService} from "primeng/api";
 import {LoaderModalComponent} from "../../../../shared/components/loader-modal/loader-modal/loader-modal.component";
-import {injectMutation} from "@tanstack/angular-query-experimental";
+import {injectMutation, injectQuery} from "@tanstack/angular-query-experimental";
 import {lastValueFrom} from "rxjs";
 import {AssumptionService} from "../../services/assumption/assumption.service";
 import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
 import {RegionService} from "../../../../shared/services/regions/regions.service";
+import {DashboardService} from "../../services/dashboard/dashboard.service";
+import {dashboardQueryKey} from "../../../../shared/helpers/query-keys.helper";
+import {companyDetails} from "../../../../shared/interfaces/response.interface";
+import {SkeletalComponent} from "./skeletal/skeletal.component";
 
 @Component({
   selector: 'liaison-assumption-of-duty',
@@ -29,7 +33,8 @@ import {RegionService} from "../../../../shared/services/regions/regions.service
     NgClass,
     NgStyle,
     ToastModule,
-    LoaderModalComponent
+    LoaderModalComponent,
+    SkeletalComponent
   ],
   templateUrl: './assumption-of-duty.component.html',
   styleUrl: './assumption-of-duty.component.scss',
@@ -37,17 +42,21 @@ import {RegionService} from "../../../../shared/services/regions/regions.service
 })
 export class AssumptionOfDutyComponent implements OnInit {
   private globalStore = inject(GlobalVariablesStore);
+  dashboardService = inject(DashboardService);
   messageService = inject(MessageService)
   assumptionService = inject(AssumptionService)
   regionService = inject(RegionService)
   isFocused: boolean = false;
   isModalOpen: boolean = false;
+  isAsummed: boolean = false;
 
 
   companyInfoForm!: FormGroup;
   AgreementForm!: FormGroup
 
   zones: any;
+  AssumptionOfDutyInfo:any;
+  companyDetails!:companyDetails
 
   letterToOptions = [
     { name: 'THE MANAGER', value: 'TheManager' },
@@ -94,6 +103,20 @@ export class AssumptionOfDutyComponent implements OnInit {
     this.buildAgreementForm()
   }
 
+
+  dashQUery = injectQuery(()=> ({
+      queryKey: [dashboardQueryKey.assumption],
+      queryFn: async ()=>{
+        const response = await this.dashboardService.getDashboardInfo()
+        this.AssumptionOfDutyInfo = response.data.assumptionOfDuties
+        this.companyDetails =this.AssumptionOfDutyInfo[0].companyDetails
+        console.log(this.AssumptionOfDutyInfo)
+        this.isAsummed = response.data.isAssumeDuty;
+        return response.data;
+      }
+    })
+
+  );
 
   buildForm(){
     this.companyInfoForm = this.fb.group({
@@ -189,6 +212,7 @@ export class AssumptionOfDutyComponent implements OnInit {
         companyLatitude: ""
       }
       this.AssumptionMutation.mutate(formData)
+
     } else {
       this.AgreementForm.markAllAsTouched();
     }

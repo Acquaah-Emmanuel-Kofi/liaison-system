@@ -1,7 +1,7 @@
 import { Component, inject, model, output, signal } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { IUserLocation } from '../../../pages/lecturer/interfaces/location.interface';
-import { LocationService } from '../../../pages/lecturer/services/location/location.service';
+import { LocationService } from '../../services/location/location.service';
 
 @Component({
   selector: 'liaison-map',

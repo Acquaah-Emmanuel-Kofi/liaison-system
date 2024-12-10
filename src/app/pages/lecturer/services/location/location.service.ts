@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ILecturerLocation } from '../../interfaces/location.interface';
+import { catchError, Observable, of } from 'rxjs';
+import { IUserLocation } from '../../interfaces/location.interface';
 import { environment } from '../../../../../environments/environment.development';
 
 declare var google: any;
@@ -42,8 +42,37 @@ export class LocationService {
     });
   }
 
-  getUserLocation(): Observable<ILecturerLocation> {
-    return this._http.get<ILecturerLocation>('https://ipapi.co/json/');
+  getUserLocation(): Observable<IUserLocation> {
+    return this._http
+      .get<IUserLocation>('https://ipapi.co/json/')
+      .pipe(catchError(() => this.getLocationFromBrowser()));
+  }
+
+  private getLocationFromBrowser(): Observable<IUserLocation> {
+    if (!navigator.geolocation) {
+      return of({
+        latitude: 0,
+        longitude: 0,
+        message: 'Geolocation is not supported by your browser.',
+      });
+    }
+
+    return new Observable<IUserLocation>((observer) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          observer.next({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          observer.complete();
+        },
+        (error) => {
+          observer.error(
+            error.message || 'Failed to retrieve location from browser.'
+          );
+        }
+      );
+    });
   }
 
   calculateRoute(

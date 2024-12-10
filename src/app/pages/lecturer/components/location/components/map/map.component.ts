@@ -1,5 +1,8 @@
 import { Component, inject, output, signal } from '@angular/core';
-import { ILecturerLocation, IStudentLocation } from '../../../../interfaces/location.interface';
+import {
+  IUserLocation,
+  IStudentLocation,
+} from '../../../../interfaces/location.interface';
 import { LocationService } from '../../../../services/location/location.service';
 import { GoogleMapsModule } from '@angular/google-maps';
 @Component({
@@ -12,7 +15,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 export class MapComponent {
   clickedMarker = output<IStudentLocation>();
 
-  lecturerLocation = signal<ILecturerLocation>({
+  lecturerLocation = signal<IUserLocation>({
     latitude: 7.9465,
     longitude: -1.0232,
   });
@@ -52,7 +55,7 @@ export class MapComponent {
         this.map
       );
     } else {
-      alert("An error occurred! Couldn't initialize map.")
+      alert("An error occurred! Couldn't initialize map.");
     }
   }
 

@@ -1,6 +1,5 @@
 import { Component, signal, viewChild } from '@angular/core';
-import { MapComponent } from './components/map/map.component';
-import { IStudentLocation } from '../../interfaces/location.interface';
+import { MapComponent } from '../../../../shared/components/map/map.component';
 @Component({
   selector: 'liaison-location',
   standalone: true,
@@ -9,10 +8,10 @@ import { IStudentLocation } from '../../interfaces/location.interface';
   styleUrl: './location.component.scss',
 })
 export class LocationComponent {
-  studentLocation = signal<IStudentLocation | null>(null);
+  studentLocation = signal<any | null>(null);
   mapComponent = viewChild(MapComponent);
 
-  getStudentLocationToTogglePanel(location: IStudentLocation) {
+  getStudentLocationToTogglePanel(location: any) {
     this.studentLocation.set(location);
   }
 

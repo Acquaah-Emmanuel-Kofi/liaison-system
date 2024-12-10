@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { lastValueFrom } from 'rxjs';
 import { UserStore } from '../../../../shared/store/user.store';
-import { IStatAnalyticsResponse } from '../../../../shared/interfaces/response.interface';
+import { IStatAnalyticsResponse, IStudentCompanyMappingResponse } from '../../../../shared/interfaces/response.interface';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Injectable({
@@ -17,14 +17,11 @@ export class DashboardService {
 
   constructor() {}
 
-  getStatAnalytics(
-    startYear: number,
-    endYear: number
-  ): Promise<IStatAnalyticsResponse> {
+  getStatAnalytics(): Promise<IStatAnalyticsResponse> {
     const params = new HttpParams()
-    .set('startOfAcademicYear', startYear.toString())
-    .set('endOfAcademicYear', endYear.toString())
-    .set('internship', this.globalStore.type().toString())
+      .set('startOfAcademicYear', this.globalStore.startYear())
+      .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('internship', this.globalStore.type().toString());
 
     const endpoint = `${
       environment.BACKEND_API_BASE_URL
@@ -32,6 +29,21 @@ export class DashboardService {
 
     return lastValueFrom(
       this._http.get<IStatAnalyticsResponse>(endpoint, { params })
+    );
+  }
+
+  getStudentsLocation(): Promise<IStudentCompanyMappingResponse> {
+    const params = new HttpParams()
+      .set('startOfAcademicYear', this.globalStore.startYear())
+      .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('internship', this.globalStore.type().toString());
+
+    const endpoint = `${
+      environment.BACKEND_API_BASE_URL
+    }/admin/${this.userStore.id()}/students/location`;
+
+    return lastValueFrom(
+      this._http.get<IStudentCompanyMappingResponse>(endpoint, { params })
     );
   }
 }

@@ -1,10 +1,7 @@
 import { Component, inject, output, signal } from '@angular/core';
-import {
-  IUserLocation,
-  IStudentLocation,
-} from '../../../../interfaces/location.interface';
-import { LocationService } from '../../../../services/location/location.service';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { IUserLocation } from '../../../pages/lecturer/interfaces/location.interface';
+import { LocationService } from '../../../pages/lecturer/services/location/location.service';
 @Component({
   selector: 'liaison-map',
   standalone: true,
@@ -13,17 +10,18 @@ import { GoogleMapsModule } from '@angular/google-maps';
   styleUrl: './map.component.scss',
 })
 export class MapComponent {
-  clickedMarker = output<IStudentLocation>();
+  clickedMarker = output();
 
-  lecturerLocation = signal<IUserLocation>({
-    latitude: 7.9465,
-    longitude: -1.0232,
+  userLocation = signal<IUserLocation>({
+    latitude: 0,
+    longitude: 0,
   });
 
   center: google.maps.LatLngLiteral = { lat: 7.9465, lng: -1.0232 };
   map: google.maps.Map | undefined;
+  zoom: number = 7;
 
-  studentLocations: IStudentLocation[] = [
+  studentLocations = [
     { lat: 7.9465, lng: -1.0232, label: 'Student 1' },
     { lat: 8.9465, lng: -1.0232, label: 'Student 2' },
     { lat: 6.9465, lng: -2.0232, label: 'Student 3' },
@@ -34,7 +32,7 @@ export class MapComponent {
 
   ngOnInit(): void {
     this.locationService.getUserLocation().subscribe((location) => {
-      this.lecturerLocation.set(location);
+      this.userLocation.set(location);
     });
   }
 
@@ -43,14 +41,14 @@ export class MapComponent {
   }
 
   calculateRouteToStudent(studentLocation: google.maps.LatLngLiteral): void {
-    const lecturerLocation: google.maps.LatLngLiteral = {
-      lat: this.lecturerLocation().latitude,
-      lng: this.lecturerLocation().longitude,
+    const userLocation: google.maps.LatLngLiteral = {
+      lat: this.userLocation().latitude,
+      lng: this.userLocation().longitude,
     };
 
     if (this.map) {
       this.locationService.calculateRoute(
-        lecturerLocation,
+        userLocation,
         studentLocation,
         this.map
       );
@@ -59,7 +57,7 @@ export class MapComponent {
     }
   }
 
-  onMarkerClick(location: IStudentLocation) {
+  onMarkerClick(location: any) {
     this.clickedMarker.emit(location);
   }
 }

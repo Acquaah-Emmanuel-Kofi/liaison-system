@@ -52,7 +52,7 @@ export class MapComponent {
     }
   }
 
-  onMarkerClick(location: any) {
-    this.clickedMarker.emit(location);
+  onMarkerClick(data: any) {
+    this.clickedMarker.emit(data);
   }
 }

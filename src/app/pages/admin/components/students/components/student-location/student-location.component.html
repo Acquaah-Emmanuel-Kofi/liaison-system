@@ -7,7 +7,17 @@
     </header>
     <div class="flex gap-6">
         <div class="border border-[#19337E] w-full">
-            <liaison-map (clickedMarker)="getStudentLocationToTogglePanel($event)" />
+            @switch (studentsLocationQuery.status()) {
+                @case ('pending') {
+                    <h1>Loaing...</h1>
+                }
+                @case ('success') {
+                    <liaison-map (clickedMarker)="getStudentLocationToTogglePanel($event)" [mapData]="studentData()" />
+                }
+                @case ('error') {
+                    <h1>Error {{studentsLocationQuery.error()?.message}}</h1>
+                }
+            }
         </div>
         @if (studentLocation()) {
         <div class="w-[35%]">

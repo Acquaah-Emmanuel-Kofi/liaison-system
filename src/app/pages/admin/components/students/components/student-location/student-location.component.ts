@@ -4,7 +4,7 @@ import { injectQuery } from '@tanstack/angular-query-experimental';
 import { studentsLocationQueryKey } from '../../../../../../shared/helpers/query-keys.helper';
 import { DashboardService } from '../../../../service/dashboard/dashboard.service';
 import { GlobalVariablesStore } from '../../../../../../shared/store/global-variables.store';
-import { IStudentCompanyMapping } from '../../../../../lecturer/interfaces/location.interface';
+import { IStudentCompanyMapping } from '../../../../../../shared/interfaces/location.interface';
 import { MapDetailsPanelComponent } from '../../../../../../shared/components/map-details-panel/map-details-panel.component';
 
 @Component({

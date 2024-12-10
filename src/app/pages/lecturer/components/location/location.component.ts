@@ -1,6 +1,6 @@
 import { Component, signal, viewChild } from '@angular/core';
 import { MapComponent } from '../../../../shared/components/map/map.component';
-import { IStudentCompanyMapping } from '../../interfaces/location.interface';
+import { IStudentCompanyMapping } from '../../../../shared/interfaces/location.interface';
 @Component({
   selector: 'liaison-location',
   standalone: true,

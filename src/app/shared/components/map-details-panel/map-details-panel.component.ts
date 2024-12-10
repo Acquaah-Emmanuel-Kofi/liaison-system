@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { IStudentCompanyMapping } from '../../../pages/lecturer/interfaces/location.interface';
+import { IStudentCompanyMapping } from '../../interfaces/location.interface';
 
 @Component({
   selector: 'liaison-map-details-panel',

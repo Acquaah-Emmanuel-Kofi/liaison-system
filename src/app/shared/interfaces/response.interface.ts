@@ -1,4 +1,4 @@
-import { IStudentCompanyMapping } from '../../pages/lecturer/interfaces/location.interface';
+import { IStudentCompanyMapping } from './location.interface';
 import { IUser } from './user.interface';
 
 export interface ICommonResponse {
@@ -6,18 +6,18 @@ export interface ICommonResponse {
   message: string;
 }
 
-export interface IZones{
-  dateCreated?: string
-  dateUpdated?: string
-  endOfAcademicYear?:string
-  id?:string
-  internshipType?:string
-  lecturers?: string[]
-  name?:string
-  region?:string
-  startOfAcademicYear?:string
-  towns?: string[]
-  zoneLead?:string
+export interface IZones {
+  dateCreated?: string;
+  dateUpdated?: string;
+  endOfAcademicYear?: string;
+  id?: string;
+  internshipType?: string;
+  lecturers?: string[];
+  name?: string;
+  region?: string;
+  startOfAcademicYear?: string;
+  towns?: string[];
+  zoneLead?: string;
 }
 interface IBackendRegion {
   dateCreated: string;
@@ -75,10 +75,10 @@ export interface ILecturersData extends IUser {
 }
 
 export interface IColleagueData {
-  id: string,
-  name: string,
-  email: string,
-  department: string
+  id: string;
+  name: string;
+  email: string;
+  department: string;
 }
 
 export interface IStartAnalytics {
@@ -94,18 +94,18 @@ export interface IStatAnalytics {
 }
 
 export interface companyDetails {
-  companyAddress:string,
-  companyEmail:string
-  companyExactLocation:string
-  companyLatitude:string
-  companyLongitude:string
-  companyName:string
-  companyPhone:string
-  companyRegion:string
-  companySupervisor:string
-  companyTown:string
-  letterTo:string
-  supervisorPhone:string
+  companyAddress: string;
+  companyEmail: string;
+  companyExactLocation: string;
+  companyLatitude: string;
+  companyLongitude: string;
+  companyName: string;
+  companyPhone: string;
+  companyRegion: string;
+  companySupervisor: string;
+  companyTown: string;
+  letterTo: string;
+  supervisorPhone: string;
 }
 
 export interface IStatAnalyticsResponse extends ICommonResponse {
@@ -113,6 +113,5 @@ export interface IStatAnalyticsResponse extends ICommonResponse {
 }
 
 export interface IStudentCompanyMappingResponse extends ICommonResponse {
-  data: IStudentCompanyMapping[]
+  data: IStudentCompanyMapping[];
 }
-

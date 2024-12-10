@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
-import { IUserLocation } from '../../../pages/lecturer/interfaces/location.interface';
+import { IUserLocation } from '../../interfaces/location.interface';
 
 declare var google: any;
 @Injectable({

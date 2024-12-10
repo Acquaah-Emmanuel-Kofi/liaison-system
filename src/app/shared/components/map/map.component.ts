@@ -1,6 +1,6 @@
 import { Component, inject, model, output, signal } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { IUserLocation } from '../../../pages/lecturer/interfaces/location.interface';
+import { IUserLocation } from '../../interfaces/location.interface';
 import { LocationService } from '../../services/location/location.service';
 
 @Component({

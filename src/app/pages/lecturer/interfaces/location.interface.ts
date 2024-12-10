@@ -3,9 +3,3 @@ export interface IUserLocation {
   latitude: number;
   message?: string;
 }
-
-export interface IStudentLocation {
-  lat: number;
-  lng: number;
-  label: string;
-}

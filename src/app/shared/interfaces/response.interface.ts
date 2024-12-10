@@ -1,3 +1,4 @@
+import { IStudentCompanyMapping } from '../../pages/lecturer/interfaces/location.interface';
 import { IUser } from './user.interface';
 
 export interface ICommonResponse {
@@ -109,5 +110,9 @@ export interface companyDetails {
 
 export interface IStatAnalyticsResponse extends ICommonResponse {
   data: IStartAnalytics;
+}
+
+export interface IStudentCompanyMappingResponse extends ICommonResponse {
+  data: IStudentCompanyMapping[]
 }
 

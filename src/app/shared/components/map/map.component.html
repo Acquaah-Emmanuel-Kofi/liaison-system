@@ -21,11 +21,11 @@
     ></map-marker>
 
     <!-- Students' Location Markers -->
-    @for (location of studentLocations; track $index) {
+    @for (data of mapData(); track $index) {
     <map-marker
-      [position]="{ lat: location.lat, lng: location.lng }"
+      [position]="{ lat: data.lat, lng: data.lng }"
       [label]="{
-        text: location.label,
+        text: data.studentDetails.name,
         color: 'blue',
         fontSize: '14px',
         fontWeight: 'bold'
@@ -33,7 +33,7 @@
       [icon]="{
         url: 'assets/icons/yellow_location.svg',
       }"
-      (mapClick)="onMarkerClick(location)"
+      (mapClick)="onMarkerClick(data)"
     />
     }
   </google-map>

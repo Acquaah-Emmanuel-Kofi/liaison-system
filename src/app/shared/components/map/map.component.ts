@@ -2,10 +2,6 @@ import { Component, inject, output, signal } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { IUserLocation } from '../../../pages/lecturer/interfaces/location.interface';
 import { LocationService } from '../../../pages/lecturer/services/location/location.service';
-import { DashboardService } from '../../../pages/admin/service/dashboard/dashboard.service';
-import { injectQuery } from '@tanstack/angular-query-experimental';
-import { studentsLocationQueryKey } from '../../helpers/query-keys.helper';
-import { GlobalVariablesStore } from '../../store/global-variables.store';
 @Component({
   selector: 'liaison-map',
   standalone: true,
@@ -25,8 +21,6 @@ export class MapComponent {
   map: google.maps.Map | undefined;
   zoom: number = 7;
 
-  private globalStore = inject(GlobalVariablesStore);
-
   studentLocations = [
     { lat: 7.9465, lng: -1.0232, label: 'Student 1' },
     { lat: 8.9465, lng: -1.0232, label: 'Student 2' },
@@ -35,32 +29,12 @@ export class MapComponent {
   ];
 
   private locationService = inject(LocationService);
-  _dashboardService = inject(DashboardService);
 
   ngOnInit(): void {
     this.locationService.getUserLocation().subscribe((location) => {
       this.userLocation.set(location);
     });
-
-    this._dashboardService.getStudentsLocation();
   }
-
-  analyticsQuery = injectQuery(() => ({
-    queryKey: [
-      ...studentsLocationQueryKey.data(
-        this.globalStore.type(),
-        this.globalStore.startYear(),
-        this.globalStore.endYear()
-      ),
-    ],
-    queryFn: async () => {
-      const response = await this._dashboardService.getStudentsLocation();
-
-      console.log('Data: ', response);
-
-      return response.data;
-    },
-  }));
 
   onMapReady(mapInstance: google.maps.Map): void {
     this.map = mapInstance;

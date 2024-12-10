@@ -7,6 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserStore } from './shared/store/user.store';
 import { PayLoadData } from './shared/interfaces/constants.interface';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../environments/environment.development';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +25,29 @@ export class AppComponent {
 
   userStore = inject(UserStore);
 
+  private isLoaded = false;
+
   constructor() {
     this.initializeUser();
+    this.loadMap();
+  }
+
+  private loadMap(): Promise<void> {
+    if (this.isLoaded) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.GOOGLE_MAP_API_KEY}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        this.isLoaded = true;
+        resolve();
+      };
+      script.onerror = (error) => reject(error);
+
+      document.head.appendChild(script);
+    });
   }
 
   private initializeUser() {

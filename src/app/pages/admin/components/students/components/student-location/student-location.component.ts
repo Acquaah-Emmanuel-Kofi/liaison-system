@@ -1,5 +1,5 @@
 import { Component, signal, viewChild } from '@angular/core';
-import { MapComponent } from '../../../../shared/components/map/map.component';
+import { MapComponent } from '../../../../../../shared/components/map/map.component';
 
 @Component({
   selector: 'liaison-student-location',

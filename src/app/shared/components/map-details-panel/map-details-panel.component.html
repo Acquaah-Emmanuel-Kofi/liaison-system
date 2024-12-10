@@ -1,9 +1,9 @@
-<div class="w-full max-h-[500px] overflow-y-scroll no-scrollbar p-3 bg-gradient-to-r from-blue-50 to-white shadow-lg rounded-lg relative">
+<div class="w-full p-3 bg-gradient-to-r from-blue-50 to-white relative">
     <!-- Close Button -->
     <div class="absolute top-4 right-4">
         <button type="button" (click)="closePanel.emit()"
-            class="text-gray-500 hover:text-gray-700 w-4 h-4 hover:bg-gray-100 flex justify-center rounded-full items-center shadow-md transition-transform transform hover:scale-110">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            class="text-gray-500 hover:text-gray-700 w-6 h-6 hover:bg-gray-100 flex justify-center rounded-full items-center shadow-md transition-transform transform hover:scale-110">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M3.828 3.828a1 1 0 011.414 0L8 6.586l2.758-2.758a1 1 0 111.414 1.414L9.414 8l2.758 2.758a1 1 0 01-1.414 1.414L8 9.414l-2.758 2.758a1 1 0 01-1.414-1.414L6.586 8 3.828 5.242a1 1 0 010-1.414z"
                     fill="#19337E" />
@@ -67,7 +67,7 @@
     </div>
 
     <!-- Location Details -->
-    <div>
+    <div  class="mb-6">
         <div class="flex items-center mb-4">
             <div class="w-6 h-6 bg-[#19337E] text-white flex justify-center items-center rounded-full shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -82,5 +82,12 @@
             <p><strong>Latitude:</strong> {{ studentData()?.lat }}</p>
             <p><strong>Longitude:</strong> {{ studentData()?.lng }}</p>
         </div>
+    </div>
+
+    <div class="flex items-center justify-center mb-4">
+        <button type="button" (click)="triggerRoute.emit()" title="Calculate for shortest route to get to the student"
+            class="px-6 py-3 bg-[#19337E] text-white font-semibold text-sm rounded-md shadow-md hover:bg-[#142860] focus:outline-none focus:ring-2 focus:ring-[#19337E] focus:ring-offset-2 transition-all">
+            Use Shortest Route
+        </button>
     </div>
 </div>

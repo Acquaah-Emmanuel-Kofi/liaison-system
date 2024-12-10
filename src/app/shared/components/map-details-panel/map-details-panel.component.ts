@@ -11,4 +11,5 @@ import { IStudentCompanyMapping } from '../../../pages/lecturer/interfaces/locat
 export class MapDetailsPanelComponent {
   studentData = input.required<IStudentCompanyMapping | null>();
   closePanel = output<void>();
+  triggerRoute = output<void>();
 }

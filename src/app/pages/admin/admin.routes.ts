@@ -7,6 +7,7 @@ import { LecturersComponent } from "./components/lecturers/lecturers.component";
 import { InternshipsComponent } from "./components/internships/internships.component";
 import { ZonesComponent } from "./components/zones/zones.component";
 import { ProfilePageComponent } from "../../shared/components/profile-page/profile-page.component";
+import { StudentLocationComponent } from "./components/students/components/student-location/student-location.component";
 
 export const adminRoutes: Routes = [
   {
@@ -29,6 +30,10 @@ export const adminRoutes: Routes = [
       {
         path: 'upload',
         component: UploadStudentComponent,
+      },
+      {
+        path: 'location',
+        component: StudentLocationComponent,
       },
     ],
   },

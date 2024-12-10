@@ -171,6 +171,11 @@
 
   } @else {
     <div >
+      <div class="alert alert-warning">
+        <strong>Important:</strong> Your current location will be recorded for verification purposes. Please ensure you are at your company's premises
+        before filling out this form.
+      </div>
+
       <p-stepper orientation="vertical">
         <p-stepperPanel header="Company Information">
           <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">

@@ -72,7 +72,9 @@ export class LocationService {
           this.directionsRenderer.setDirections(result);
           this.directionsRenderer.setMap(map);
         } else {
-          console.error(`Error fetching directions: ${status}`);
+          const errorMessage = `Error fetching directions: ${status}`;
+          console.error(errorMessage);
+          throw new Error(errorMessage);
         }
       }
     );

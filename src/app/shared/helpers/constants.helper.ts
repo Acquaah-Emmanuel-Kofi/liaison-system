@@ -16,6 +16,7 @@ const routeValueKey: { [key: string]: string } = {
   dashboard: 'Dashboard',
   lecturers: 'Lecturers',
   students: 'Students',
+  'students/location': 'Students Location',
   internships: 'Internships',
   profile: 'Edit Profile',
   'access-control': 'Access Control',
@@ -26,11 +27,17 @@ const routeValueKey: { [key: string]: string } = {
 };
 
 export function setPageHeader(currentRoute: string): string {
-  for (const key in routeValueKey) {
+  // Sort the keys by length in descending order to match more specific routes first
+  const sortedKeys = Object.keys(routeValueKey).sort(
+    (a, b) => b.length - a.length
+  );
+
+  for (const key of sortedKeys) {
     if (currentRoute.includes(key)) {
       return routeValueKey[key];
     }
   }
+
   return '';
 }
 

@@ -5,16 +5,17 @@ import { studentsLocationQueryKey } from '../../../../../../shared/helpers/query
 import { DashboardService } from '../../../../service/dashboard/dashboard.service';
 import { GlobalVariablesStore } from '../../../../../../shared/store/global-variables.store';
 import { IStudentCompanyMapping } from '../../../../../lecturer/interfaces/location.interface';
+import { MapDetailsPanelComponent } from '../../../../../../shared/components/map-details-panel/map-details-panel.component';
 
 @Component({
   selector: 'liaison-student-location',
   standalone: true,
-  imports: [MapComponent],
+  imports: [MapComponent, MapDetailsPanelComponent],
   templateUrl: './student-location.component.html',
   styleUrl: './student-location.component.scss',
 })
 export class StudentLocationComponent {
-  studentLocation = signal<any | null>(null);
+  studentLocationData = signal<IStudentCompanyMapping | null>(null);
   mapComponent = viewChild(MapComponent);
 
   studentData = signal<IStudentCompanyMapping[]>([]);
@@ -23,15 +24,15 @@ export class StudentLocationComponent {
   private globalStore = inject(GlobalVariablesStore);
 
   getStudentLocationToTogglePanel(location: any) {
-    this.studentLocation.set(location);
+    this.studentLocationData.set(location);
   }
 
   closePanel() {
-    this.studentLocation.set(null);
+    this.studentLocationData.set(null);
   }
 
   triggerRoute() {
-    const studentLocation = this.studentLocation();
+    const studentLocation = this.studentLocationData();
     if (studentLocation && this.mapComponent) {
       const { lat, lng } = studentLocation;
       this.mapComponent()?.calculateRouteToStudent({ lat, lng });

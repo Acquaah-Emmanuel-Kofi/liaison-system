@@ -7,7 +7,7 @@
   </header>
   <div class="flex gap-6">
     <div class="border border-[#19337E] w-full">
-      <liaison-map (clickedMarker)="getStudentLocationToTogglePanel($event)"  />
+      <liaison-map (clickedMarker)="getStudentLocationToTogglePanel($event)" [mapData]="studentData()" />
     </div>
     @if (studentLocation()) {
     <div class="w-[35%]">

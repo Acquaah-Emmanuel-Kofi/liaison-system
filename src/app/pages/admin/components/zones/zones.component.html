@@ -8,9 +8,9 @@
     (zoneQuery.data()) {
       <ng-container *ngTemplateOutlet="table" />
     } @else {
-      <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" />
+      <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" [HideCheckbox] = "HideCheckbox" />
     } } @case ('error') {
-      <liaison-table [columns]="columns" [data]="[]" [errorOccurred]="true" />
+      <liaison-table [columns]="columns" [data]="[]" [errorOccurred]="true" [HideCheckbox] = "HideCheckbox"/>
     } @case ('success') {
       <ng-container *ngTemplateOutlet="table" />
 
@@ -24,6 +24,7 @@
       [first]="first"
       [pageSize]="pageSize"
       [totalData]="totalData"
+      [HideCheckbox] = "HideCheckbox"
       (pageChange)="handlePageChange($event)"
     />
   </ng-template>

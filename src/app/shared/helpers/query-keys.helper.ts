@@ -6,6 +6,10 @@ export const studentsQueryKey = {
     [...studentsQueryKey.all, 'all-students'] as const,
 };
 
+export const studentForLectureQuery = {
+  all: ['students'] as const,
+
+}
 
 export const zonesQueryData = {
   all: ['zones'] as const,

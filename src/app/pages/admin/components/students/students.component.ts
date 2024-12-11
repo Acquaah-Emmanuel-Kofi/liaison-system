@@ -38,7 +38,7 @@ export class StudentsComponent implements OnInit{
   activatedRoute = inject(ActivatedRoute);
   studentService = inject(StudentTableService);
   protected sidebarService = inject(SidebarService);
-
+  HideCheckbox = true;
   internshipType!: boolean
   currentYear: number = new Date().getFullYear();
   lastyear = this.currentYear - 1;

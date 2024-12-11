@@ -45,6 +45,7 @@ export class LecturersComponent {
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   searchTerm = signal<string>('');
+  HideCheckbox = true;
 
   filteredData = signal<TableData[]>([]);
 

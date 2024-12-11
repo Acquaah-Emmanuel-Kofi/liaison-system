@@ -2,7 +2,7 @@ import {inject, Injectable, OutputEmitterRef} from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import {
-  IGetLecturersResponse,
+  IGetLecturersResponse, IGetStudentForLecturer,
   IGetStudentResponse,
 } from '../../../../shared/interfaces/response.interface';
 import { environment } from '../../../../../environments/environment.development';
@@ -43,6 +43,18 @@ export class StudentTableService {
     );
   }
 
+  getStudentsInlectureZone(){
+    const url = `${environment.BACKEND_API_BASE_URL}/lecturers/dashboard/${this.userStore.id()}`;
+    return lastValueFrom(
+      this._http.get<IGetStudentForLecturer>(url)
+    )
+  }
+
+  // lecturers/{{lecturer-id}}/supervise/{{student-id}}
+  changeStudentSupervision(studentID:string){
+    const url = `${environment.BACKEND_API_BASE_URL}/lecturers/${this.userStore.id()}/supervise/${studentID}`;
+    return this._http.patch(url, {})
+  }
 
   updateSearchResults(results: IGetStudentResponse | undefined) {
     // @ts-ignore

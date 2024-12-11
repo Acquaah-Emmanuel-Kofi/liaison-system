@@ -41,6 +41,7 @@ export class ZonesComponent implements OnInit{
   pageNumber = 1;
   currentYear: number = new Date().getFullYear();
   lastyear = this.currentYear - 1;
+  HideCheckbox = true;
   internshipType!: boolean
   searchTerm = signal<string>('');
   FilterValue= signal<string>('');

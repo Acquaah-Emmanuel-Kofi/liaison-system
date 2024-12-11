@@ -3,8 +3,12 @@
   [ngClass]="{
     'bg-[#ECFDF3] text-[#027A48]': status() === 'COMPLETED',
     'bg-blue-100 text-[#0052B4]': status() === 'IN_PROGRESS',
+    'bg-red-200 text-red-900': status() === 'NOT SUPERVISED',
+    'bg-green-200 text-green-900': status() === 'SUPERVISED'
   }"
 >
-  @if (status() === 'COMPLETED') { Completed } @if (status() === 'IN_PROGRESS')
-  { In progress }
+  @if (status() === 'COMPLETED') { Completed }
+  @if (status() === 'IN_PROGRESS') { In progress }
+  @if (status() === 'SUPERVISED') {Supervised}
+  @if (status() === 'NOT SUPERVISED') {Not Supervised}
 </span>

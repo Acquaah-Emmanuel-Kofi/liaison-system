@@ -50,3 +50,15 @@ export const statAnalyticsQueryKey = {
       endYear,
     ] as const,
 };
+
+export const studentsLocationQueryKey = {
+  all: ['students location'] as const,
+  data: (internshipType: boolean, startYear: number, endYear: number) =>
+    [
+      ...statAnalyticsQueryKey.all,
+      'all-students',
+      internshipType,
+      startYear,
+      endYear,
+    ] as const,
+};

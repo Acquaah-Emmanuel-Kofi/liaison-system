@@ -28,3 +28,16 @@
   height: 20px; /* Set the height of each dropdown option */
   line-height: 50px; /* Ensures text is vertically centered */
 }
+
+
+.alert {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.alert-warning {
+  color: #856404;
+}

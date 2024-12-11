@@ -5,18 +5,18 @@ export interface ICommonResponse {
   message: string;
 }
 
-export interface IZones{
-  dateCreated?: string
-  dateUpdated?: string
-  endOfAcademicYear?:string
-  id?:string
-  internshipType?:string
-  lecturers?: string[]
-  name?:string
-  region?:string
-  startOfAcademicYear?:string
-  towns?: string[]
-  zoneLead?:string
+export interface IZones {
+  dateCreated?: string;
+  dateUpdated?: string;
+  endOfAcademicYear?: string;
+  id?: string;
+  internshipType?: string;
+  lecturers?: string[];
+  name?: string;
+  region?: string;
+  startOfAcademicYear?: string;
+  towns?: string[];
+  zoneLead?: string;
 }
 interface IBackendRegion {
   dateCreated: string;
@@ -74,10 +74,10 @@ export interface ILecturersData extends IUser {
 }
 
 export interface IColleagueData {
-  id: string,
-  name: string,
-  email: string,
-  department: string
+  id: string;
+  name: string;
+  email: string;
+  department: string;
 }
 
 export interface IStartAnalytics {
@@ -112,3 +112,6 @@ export interface IStatAnalyticsResponse extends ICommonResponse {
   data: IStartAnalytics;
 }
 
+// export interface IStudentCompanyMappingResponse extends ICommonResponse {
+//   data: IStudentCompanyMapping[];
+// }

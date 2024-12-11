@@ -1,22 +1,25 @@
-import {Component, computed, inject, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {StatCardComponent} from '../../../../shared/components/stat-card/stat-card.component';
-import {AdminChartComponent} from '../admin-chart/admin-chart.component';
-import {TableComponent} from '../../../../shared/components/table/table.component';
-import {TableColumn, TableData,} from '../../../../shared/components/table/table.interface';
-import {IStartCard} from '../../../../shared/interfaces/constants.interface';
-import {ToggleButtonModule} from 'primeng/togglebutton';
-import {InputSwitchModule} from 'primeng/inputswitch';
-import {CascadeSelectModule} from 'primeng/cascadeselect';
-import {FormsModule} from '@angular/forms';
-import {DropdownModule} from 'primeng/dropdown';
-import {UserStore} from '../../../../shared/store/user.store';
-import {injectQuery} from '@tanstack/angular-query-experimental';
-import {statAnalyticsQueryKey} from '../../../../shared/helpers/query-keys.helper';
-import {DashboardService} from '../../service/dashboard/dashboard.service';
-import {IStartAnalytics} from '../../../../shared/interfaces/response.interface';
-import {getYears} from '../../../../shared/helpers/functions.helper';
-import {GlobalVariablesStore} from '../../../../shared/store/global-variables.store';
+import { Component, computed, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
+import { AdminChartComponent } from '../admin-chart/admin-chart.component';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import {
+  TableColumn,
+  TableData,
+} from '../../../../shared/components/table/table.interface';
+import { IStartCard } from '../../../../shared/interfaces/constants.interface';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
+import { UserStore } from '../../../../shared/store/user.store';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { DashboardService } from '../../service/dashboard/dashboard.service';
+import { IStartAnalytics } from '../../../../shared/interfaces/response.interface';
+import { getYears } from '../../../../shared/helpers/functions.helper';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -50,21 +53,21 @@ export class AdminDashboardComponent implements OnInit {
       count: 0,
       iconSrc: 'assets/lectures.svg',
       navigateTo: '/admin/lecturers',
-      show: true
+      show: true,
     },
     {
       title: 'Students',
       count: 0,
       iconSrc: 'assets/students.svg',
       navigateTo: '/admin/students',
-      show: true
+      show: true,
     },
     {
       title: 'Attachment',
       count: 0,
       iconSrc: 'assets/interns.svg',
       navigateTo: '/admin/internships',
-      show: true
+      show: true,
     },
   ];
 
@@ -88,7 +91,6 @@ export class AdminDashboardComponent implements OnInit {
       Region: 'Western',
       sub_zones: 15,
       No_of_Students: 300,
-
     },
     {
       Region: 'Greater Accra',
@@ -119,9 +121,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.updateCountsFromApiResponse(this.analyticsQuery.data()!);
-
   }
 
   populateYears() {
@@ -152,10 +152,7 @@ export class AdminDashboardComponent implements OnInit {
       ),
     ],
     queryFn: async () => {
-      const response = await this._dashboardService.getStatAnalytics(
-        this.globalStore.startYear() ?? this.lastyear,
-        this.globalStore.endYear() ?? this.currentYear
-      );
+      const response = await this._dashboardService.getStatAnalytics();
 
       this.updateCountsFromApiResponse(response.data);
       return response.data;

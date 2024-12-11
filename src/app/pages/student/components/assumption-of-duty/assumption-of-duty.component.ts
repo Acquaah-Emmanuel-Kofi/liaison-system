@@ -1,23 +1,32 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {StepperModule} from "primeng/stepper";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgClass, NgForOf, NgStyle} from "@angular/common";
-import {FloatLabelModule} from "primeng/floatlabel";
-import {InputTextModule} from "primeng/inputtext";
-import {DropdownModule} from "primeng/dropdown";
-import {CheckboxModule} from "primeng/checkbox";
-import {ToastModule} from "primeng/toast";
-import {MessageService} from "primeng/api";
-import {LoaderModalComponent} from "../../../../shared/components/loader-modal/loader-modal/loader-modal.component";
-import {injectMutation, injectQuery} from "@tanstack/angular-query-experimental";
-import {lastValueFrom} from "rxjs";
-import {AssumptionService} from "../../services/assumption/assumption.service";
-import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
-import {RegionService} from "../../../../shared/services/regions/regions.service";
-import {DashboardService} from "../../services/dashboard/dashboard.service";
-import {dashboardQueryKey} from "../../../../shared/helpers/query-keys.helper";
-import {companyDetails} from "../../../../shared/interfaces/response.interface";
-import {SkeletalComponent} from "./skeletal/skeletal.component";
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { StepperModule } from 'primeng/stepper';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NgClass, NgForOf, NgStyle } from '@angular/common';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { LoaderModalComponent } from '../../../../shared/components/loader-modal/loader-modal/loader-modal.component';
+import {
+  injectMutation,
+  injectQuery,
+} from '@tanstack/angular-query-experimental';
+import { lastValueFrom } from 'rxjs';
+import { AssumptionService } from '../../services/assumption/assumption.service';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { RegionService } from '../../../../shared/services/regions/regions.service';
+import { DashboardService } from '../../services/dashboard/dashboard.service';
+import { dashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { companyDetails } from '../../../../shared/interfaces/response.interface';
+import { SkeletalComponent } from './skeletal/skeletal.component';
+import { LocationService } from '../../../../shared/services/location/location.service';
 
 @Component({
   selector: 'liaison-assumption-of-duty',
@@ -34,29 +43,29 @@ import {SkeletalComponent} from "./skeletal/skeletal.component";
     NgStyle,
     ToastModule,
     LoaderModalComponent,
-    SkeletalComponent
+    SkeletalComponent,
   ],
   templateUrl: './assumption-of-duty.component.html',
   styleUrl: './assumption-of-duty.component.scss',
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class AssumptionOfDutyComponent implements OnInit {
   private globalStore = inject(GlobalVariablesStore);
+  private locationService = inject(LocationService);
   dashboardService = inject(DashboardService);
-  messageService = inject(MessageService)
-  assumptionService = inject(AssumptionService)
-  regionService = inject(RegionService)
+  messageService = inject(MessageService);
+  assumptionService = inject(AssumptionService);
+  regionService = inject(RegionService);
   isFocused: boolean = false;
   isModalOpen: boolean = false;
   isAsummed: boolean = false;
 
-
   companyInfoForm!: FormGroup;
-  AgreementForm!: FormGroup
+  AgreementForm!: FormGroup;
 
   zones: any;
-  AssumptionOfDutyInfo:any;
-  companyDetails!:companyDetails
+  AssumptionOfDutyInfo: any;
+  companyDetails!: companyDetails;
 
   letterToOptions = [
     { name: 'THE MANAGER', value: 'TheManager' },
@@ -69,7 +78,10 @@ export class AssumptionOfDutyComponent implements OnInit {
     { name: 'THE CHIEF SUPERVISOR', value: 'TheChiefSupervisor' },
     { name: 'THE HEAD OF UNIT', value: 'TheHeadOfUnit' },
     { name: 'THE REGISTRAR', value: 'TheRegistrar' },
-    { name: 'THE DIRECTOR (HUMAN RESOURCE DEPARTMENT)', value: 'TheDirectorHRDept' },
+    {
+      name: 'THE DIRECTOR (HUMAN RESOURCE DEPARTMENT)',
+      value: 'TheDirectorHRDept',
+    },
     { name: 'THE PROJECT ENGINEER', value: 'TheProjectEngineer' },
     { name: 'THE ADMINISTRATOR', value: 'TheAdministrator' },
     { name: 'THE SITE ENGINEER', value: 'TheSiteEngineer' },
@@ -84,41 +96,63 @@ export class AssumptionOfDutyComponent implements OnInit {
     { name: 'THE ADMINISTRATIVE OFFICER', value: 'TheAdministrativeOfficer' },
     { name: 'THE FLAG OFFICER COMMANDING', value: 'TheFlagOfficerCommanding' },
     { name: 'REGIONAL COORDINATOR', value: 'RegionalCoordinator' },
-    { name: 'THE DIRECTOR (TECHNICAL SERVICES)', value: 'TheDirectorTechnicalServices' },
-    { name: 'THE DIRECTOR (HYDRO GENERATION)', value: 'TheDirectorHydroGeneration' },
+    {
+      name: 'THE DIRECTOR (TECHNICAL SERVICES)',
+      value: 'TheDirectorTechnicalServices',
+    },
+    {
+      name: 'THE DIRECTOR (HYDRO GENERATION)',
+      value: 'TheDirectorHydroGeneration',
+    },
     { name: 'THE PLANT MANAGER', value: 'ThePlantManager' },
     { name: 'THE BASE COMMANDER', value: 'TheBaseCommander' },
     { name: 'THE REGIONAL COORDINATOR', value: 'TheRegionalCoordinator' },
     { name: 'THE DIRECTOR OF PORTS', value: 'TheDirectorOfPorts' },
     { name: 'THE OFFICER-IN-CHARGE', value: 'TheOfficerInCharge' },
-    { name: 'THE COMMANDING OFFICER', value: 'TheCommandingOfficer' }
+    { name: 'THE COMMANDING OFFICER', value: 'TheCommandingOfficer' },
   ];
-
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.zones = this.regionService.getRawRegions()
-    this.buildForm()
-    this.buildAgreementForm()
+    this.setCompanyLocation();
+    this.zones = this.regionService.getRawRegions();
+    this.buildForm();
+    this.buildAgreementForm();
   }
 
+  setCompanyLocation() {
+    this.locationService.getUserLocation().subscribe({
+      next: (data) => {
+        this.companyInfoForm.patchValue({
+          companyLongitude: data.longitude,
+          companyLatitude: data.latitude,
+        });
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            error ||
+            "An error occurred while getting company's location details",
+        });
+      },
+    });
+  }
 
-  dashQUery = injectQuery(()=> ({
-      queryKey: [dashboardQueryKey.assumption],
-      queryFn: async ()=>{
-        const response = await this.dashboardService.getDashboardInfo()
-        this.AssumptionOfDutyInfo = response.data.assumptionOfDuties
-        this.companyDetails =this.AssumptionOfDutyInfo[0].companyDetails
-        console.log(this.AssumptionOfDutyInfo)
-        this.isAsummed = response.data.isAssumeDuty;
-        return response.data;
-      }
-    })
+  dashQUery = injectQuery(() => ({
+    queryKey: [dashboardQueryKey.assumption],
+    queryFn: async () => {
+      const response = await this.dashboardService.getDashboardInfo();
+      this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
+      this.companyDetails = this.AssumptionOfDutyInfo[0].companyDetails;
+      this.isAsummed = response.data.isAssumeDuty;
+      return response.data;
+    },
+  }));
 
-  );
-
-  buildForm(){
+  buildForm() {
     this.companyInfoForm = this.fb.group({
       companyName: ['', Validators.required],
       companyPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
@@ -131,13 +165,12 @@ export class AssumptionOfDutyComponent implements OnInit {
       supervisorPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       companyRegion: ['', Validators.required],
       letterTo: ['', Validators.required],
-      companyLongitude: ["",],
-      companyLatitude: ["",]
-
+      companyLongitude: [0],
+      companyLatitude: [0],
     });
   }
 
-  buildAgreementForm(){
+  buildAgreementForm() {
     this.AgreementForm = this.fb.group({
       termsAccepted: [false, Validators.requiredTrue], // Checkbox is required
     });
@@ -151,81 +184,94 @@ export class AssumptionOfDutyComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Info',
-        detail:  'cannot proceed until all fields are filled'
+        detail: 'Cannot proceed until all fields are filled.',
       });
     }
   }
 
-
   onPhoneInput($event: Event) {
     const input = $event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
-    this.companyInfoForm.get('phone')?.setValue(input.value, { emitEvent: false })
+    this.companyInfoForm
+      .get('phone')
+      ?.setValue(input.value, { emitEvent: false });
   }
-
 
   onSuperPhoneInput($event: Event) {
     const input = $event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
-    this.companyInfoForm.get('supervisorPhone')?.setValue(input.value, { emitEvent: false })
-
+    this.companyInfoForm
+      .get('supervisorPhone')
+      ?.setValue(input.value, { emitEvent: false });
   }
 
-
-  AssumptionMutation = injectMutation(()=>(
-    {
-      mutationFn: async (formData )=>{
-        return await lastValueFrom(
-          this.assumptionService.submitAssumptionForm(formData, this.globalStore.startYear(), this.globalStore.endYear(), this.globalStore.type())
-        );
-      },
-      onSuccess: (data: any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: data.message || 'Assumption of duty form submission was successfully'
-        });
-        this.isModalOpen = false;
-
-      },
-      onError: (error: any) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message || 'An error occurred while submitting the details'
-        });
-        this.isModalOpen = false;
-
-
-      }
-
-    }
-  ))
-
+  AssumptionMutation = injectMutation(() => ({
+    mutationFn: async (formData) => {
+      return await lastValueFrom(
+        this.assumptionService.submitAssumptionForm(
+          formData,
+          this.globalStore.startYear(),
+          this.globalStore.endYear(),
+          this.globalStore.type()
+        )
+      );
+    },
+    onSuccess: (data: any) => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail:
+          data.message || 'Assumption of duty form submission was successfully',
+      });
+      this.isModalOpen = false;
+    },
+    onError: (error: any) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail:
+          error.message || 'An error occurred while submitting the details',
+      });
+      this.isModalOpen = false;
+    },
+  }));
 
   submitForm(): void {
-    if (this.AgreementForm.valid && this.companyInfoForm.valid) {
-      this.isModalOpen = true;
-      const formData = {
-        ...this.companyInfoForm.value,
-        companyLongitude: "",
-        companyLatitude: ""
-      }
-      this.AssumptionMutation.mutate(formData)
+    if (this.formIsValid()) {
+      if (this.isLoactionDetailsAvailable()) {
+        this.isModalOpen = true;
 
+        this.AssumptionMutation.mutate(this.companyInfoForm.value);
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed to retrieve location from browser.',
+          detail:
+            'We were unable to retrieve your location. Please ensure your browser supports geolocation and try again. If the issue persists, consider switching to a different browser.',
+        });
+      }
     } else {
       this.AgreementForm.markAllAsTouched();
     }
   }
 
+  formIsValid() {
+    return this.AgreementForm.valid && this.companyInfoForm.valid;
+  }
+
+  isLoactionDetailsAvailable(): boolean {
+    const { companyLatitude, companyLongitude } = this.companyInfoForm.value;
+    return Boolean(
+      companyLatitude &&
+        companyLongitude &&
+        companyLatitude !== '' &&
+        companyLongitude !== ''
+    );
+  }
 
   protected readonly focus = focus;
 
   moveBack(prevCallback: any) {
     prevCallback.emit();
   }
-
-
-
-
 }

@@ -141,16 +141,28 @@ export class AssumptionOfDutyComponent implements OnInit {
     });
   }
 
-  dashQUery = injectQuery(() => ({
-    queryKey: [dashboardQueryKey.assumption],
-    queryFn: async () => {
-      const response = await this.dashboardService.getDashboardInfo();
-      this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
-      this.companyDetails = this.AssumptionOfDutyInfo[0].companyDetails;
-      this.isAsummed = response.data.isAssumeDuty;
-      return response.data;
-    },
-  }));
+  dashQUery = injectQuery(()=> ({
+      queryKey: [dashboardQueryKey.assumption],
+      queryFn: async ()=>{
+        const response = await this.dashboardService.getDashboardInfo()
+        this.AssumptionOfDutyInfo = response.data.assumptionOfDuties
+        this.companyDetails =this.AssumptionOfDutyInfo[0].companyDetails
+        this.isAsummed = response.data.isAssumeDuty;
+        return response.data;
+      }
+    })
+
+  );
+  // dashQUery = injectQuery(() => ({
+  //   queryKey: [dashboardQueryKey.assumption],
+  //   queryFn: async () => {
+  //     const response = await this.dashboardService.getDashboardInfo();
+  //     this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
+  //     this.companyDetails = this.AssumptionOfDutyInfo[0].companyDetails;
+  //     this.isAsummed = response.data.isAssumeDuty;
+  //     return response.data;
+  //   },
+  // }));
 
   buildForm() {
     this.companyInfoForm = this.fb.group({

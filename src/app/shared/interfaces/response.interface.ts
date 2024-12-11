@@ -1,5 +1,5 @@
-import { IStudentCompanyMapping } from './location.interface';
 import { IUser } from './user.interface';
+import {IStudentCompanyMapping} from "./location.interface";
 
 export interface ICommonResponse {
   status: number;
@@ -32,6 +32,43 @@ interface IPagableResponse {
   pageSize: number;
   totalData: number;
   totalPages: number;
+}
+
+export interface IGetStudentForLecturerData{
+  "id": string,
+  "name": string,
+  "department": string,
+  "faculty": string,
+  "age": string,
+  "email": string,
+  "gender": string,
+  "phone": string,
+  "course": string,
+  "placeOfInternship": string,
+  "isSupervised": boolean,
+  "isAssumeDuty": boolean,
+  "startDate": string,
+  "endDate": string,
+  "status": string
+  town: string,
+  student_id: string
+
+}
+export interface IGetStudentForLecturer extends ICommonResponse {
+  data:{
+    student:{
+      students: IGetStudentForLecturerData[]
+      totalStudents: number
+    },
+    "company": {
+      "companies": {},
+      "totalCompanies": number
+    },
+    "lecturer": {
+      "lecturers": string[],
+      "totalLecturers": number
+    }
+  }
 }
 
 export interface IGetStudentResponse extends ICommonResponse {
@@ -94,18 +131,19 @@ export interface IStatAnalytics {
 }
 
 export interface companyDetails {
-  companyAddress: string;
-  companyEmail: string;
-  companyExactLocation: string;
-  companyLatitude: string;
-  companyLongitude: string;
-  companyName: string;
-  companyPhone: string;
-  companyRegion: string;
-  companySupervisor: string;
-  companyTown: string;
-  letterTo: string;
-  supervisorPhone: string;
+  companyAddress:string,
+  companyEmail:string
+  companyExactLocation:string
+  companyLatitude:string
+  companyLongitude:string
+  companyName:string
+  companyPhone:string
+  companyRegion:string
+  companySupervisor:string
+  companyTown:string
+  letterTo:string
+  supervisorPhone:string
+  dateCommenced:string
 }
 
 export interface IStatAnalyticsResponse extends ICommonResponse {

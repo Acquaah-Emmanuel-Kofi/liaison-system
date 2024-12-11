@@ -39,6 +39,7 @@ export class InternshipsComponent implements OnInit{
   internshipType!:boolean
   currentYear: number = new Date().getFullYear();
   lastyear = this.currentYear - 1;
+  HideCheckbox = true
 
   filteredData = signal<TableData[]>([]);
 

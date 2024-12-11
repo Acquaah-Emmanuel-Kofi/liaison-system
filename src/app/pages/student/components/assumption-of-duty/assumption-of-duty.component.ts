@@ -26,7 +26,7 @@ import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { dashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { companyDetails } from '../../../../shared/interfaces/response.interface';
 import { SkeletalComponent } from './skeletal/skeletal.component';
-import { LocationService } from '../../../lecturer/services/location/location.service';
+import { LocationService } from '../../../../shared/services/location/location.service';
 
 @Component({
   selector: 'liaison-assumption-of-duty',

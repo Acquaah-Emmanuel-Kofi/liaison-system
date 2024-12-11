@@ -21,6 +21,6 @@ export interface IStudentCompanyMapping {
     region: string;
     exactLocation: string;
   };
-  lat: string;
-  lng: string;
+  lat: number;
+  lng: number;
 }

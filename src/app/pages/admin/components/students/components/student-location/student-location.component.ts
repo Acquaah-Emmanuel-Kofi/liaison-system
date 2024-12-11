@@ -1,25 +1,26 @@
 import { Component, inject, signal, viewChild } from '@angular/core';
-import { MapComponent } from '../../../../shared/components/map/map.component';
-import { IStudentCompanyMapping } from '../../../../shared/interfaces/location.interface';
-import { LocationService } from '../../services/location/location.service';
-import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { MapComponent } from '../../../../../../shared/components/map/map.component';
 import { injectQuery } from '@tanstack/angular-query-experimental';
-import { studentsLocationQueryKey } from '../../../../shared/helpers/query-keys.helper';
-import { MapDetailsPanelComponent } from '../../../../shared/components/map-details-panel/map-details-panel.component';
+import { studentsLocationQueryKey } from '../../../../../../shared/helpers/query-keys.helper';
+import { DashboardService } from '../../../../service/dashboard/dashboard.service';
+import { GlobalVariablesStore } from '../../../../../../shared/store/global-variables.store';
+import { IStudentCompanyMapping } from '../../../../../../shared/interfaces/location.interface';
+import { MapDetailsPanelComponent } from '../../../../../../shared/components/map-details-panel/map-details-panel.component';
+
 @Component({
-  selector: 'liaison-location',
+  selector: 'liaison-student-location',
   standalone: true,
   imports: [MapComponent, MapDetailsPanelComponent],
-  templateUrl: './location.component.html',
-  styleUrl: './location.component.scss',
+  templateUrl: './student-location.component.html',
+  styleUrl: './student-location.component.scss',
 })
-export class LocationComponent {
+export class StudentLocationComponent {
   studentLocationData = signal<IStudentCompanyMapping | null>(null);
   mapComponent = viewChild(MapComponent);
 
   studentData = signal<IStudentCompanyMapping[]>([]);
 
-  private _locationService = inject(LocationService);
+  private dashboardService = inject(DashboardService);
   private globalStore = inject(GlobalVariablesStore);
 
   getStudentLocationToTogglePanel(location: any) {
@@ -51,7 +52,7 @@ export class LocationComponent {
       ),
     ],
     queryFn: async () => {
-      const response = await this._locationService.getStudentsLocation();
+      const response = await this.dashboardService.getStudentsLocation();
 
       this.studentData.set(response.data);
 

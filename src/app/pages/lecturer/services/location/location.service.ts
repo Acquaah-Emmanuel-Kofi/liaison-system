@@ -1,81 +1,34 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, OnInit } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
-import { IUserLocation } from '../../interfaces/location.interface';
+import { inject, Injectable } from '@angular/core';
+import { UserStore } from '../../../../shared/store/user.store';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { IStudentCompanyMappingResponse } from '../../../../shared/interfaces/response.interface';
 import { environment } from '../../../../../environments/environment.development';
+import { lastValueFrom } from 'rxjs';
 
-declare var google: any;
 @Injectable({
   providedIn: 'root',
 })
 export class LocationService {
-  private directionsService: google.maps.DirectionsService;
-  private directionsRenderer: google.maps.DirectionsRenderer;
+  private readonly userStore = inject(UserStore);
+  private readonly globalStore = inject(GlobalVariablesStore);
 
   private _http = inject(HttpClient);
 
-  constructor() {
-    this.directionsService = new google.maps.DirectionsService();
-    this.directionsRenderer = new google.maps.DirectionsRenderer();
-  }
+  constructor() {}
 
-  getUserLocation(): Observable<IUserLocation> {
-    return this._http
-      .get<IUserLocation>('https://ipapi.co/json/')
-      .pipe(catchError(() => this.getLocationFromBrowser()));
-  }
+  getStudentsLocation(): Promise<IStudentCompanyMappingResponse> {
+    const params = new HttpParams()
+      .set('startOfAcademicYear', this.globalStore.startYear())
+      .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('internship', this.globalStore.type().toString());
 
-  private getLocationFromBrowser(): Observable<IUserLocation> {
-    if (!navigator.geolocation) {
-      return of({
-        latitude: 0,
-        longitude: 0,
-        message: 'Geolocation is not supported by your browser.',
-      });
-    }
+    const endpoint = `${
+      environment.BACKEND_API_BASE_URL
+    }/lecturers/${this.userStore.id()}/students/location`;
 
-    return new Observable<IUserLocation>((observer) => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          observer.next({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-          observer.complete();
-        },
-        (error) => {
-          observer.error(
-            error.message || 'Failed to retrieve location from browser.'
-          );
-        }
-      );
-    });
-  }
-
-  calculateRoute(
-    origin: google.maps.LatLngLiteral,
-    destination: google.maps.LatLngLiteral,
-    map: google.maps.Map
-  ): void {
-    const request: google.maps.DirectionsRequest = {
-      origin,
-      destination,
-      travelMode: google.maps.TravelMode.DRIVING,
-    };
-
-    this.directionsService.route(
-      request,
-      (
-        result: google.maps.DirectionsResult | null,
-        status: google.maps.DirectionsStatus
-      ) => {
-        if (status === google.maps.DirectionsStatus.OK && result) {
-          this.directionsRenderer.setDirections(result);
-          this.directionsRenderer.setMap(map);
-        } else {
-          console.error(`Error fetching directions: ${status}`);
-        }
-      }
+    return lastValueFrom(
+      this._http.get<IStudentCompanyMappingResponse>(endpoint, { params })
     );
   }
 }

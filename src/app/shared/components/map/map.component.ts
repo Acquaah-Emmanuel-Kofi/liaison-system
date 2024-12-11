@@ -1,7 +1,8 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, model, output, signal } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { IUserLocation } from '../../../pages/lecturer/interfaces/location.interface';
-import { LocationService } from '../../../pages/lecturer/services/location/location.service';
+import { IUserLocation } from '../../interfaces/location.interface';
+import { LocationService } from '../../services/location/location.service';
+
 @Component({
   selector: 'liaison-map',
   standalone: true,
@@ -11,6 +12,7 @@ import { LocationService } from '../../../pages/lecturer/services/location/locat
 })
 export class MapComponent {
   clickedMarker = output();
+  mapData = model.required<any[]>();
 
   userLocation = signal<IUserLocation>({
     latitude: 0,
@@ -20,13 +22,6 @@ export class MapComponent {
   center: google.maps.LatLngLiteral = { lat: 7.9465, lng: -1.0232 };
   map: google.maps.Map | undefined;
   zoom: number = 7;
-
-  studentLocations = [
-    { lat: 7.9465, lng: -1.0232, label: 'Student 1' },
-    { lat: 8.9465, lng: -1.0232, label: 'Student 2' },
-    { lat: 6.9465, lng: -2.0232, label: 'Student 3' },
-    { lat: 7.1465, lng: -3.0232, label: 'Student 4' },
-  ];
 
   private locationService = inject(LocationService);
 
@@ -57,7 +52,7 @@ export class MapComponent {
     }
   }
 
-  onMarkerClick(location: any) {
-    this.clickedMarker.emit(location);
+  onMarkerClick(data: any) {
+    this.clickedMarker.emit(data);
   }
 }

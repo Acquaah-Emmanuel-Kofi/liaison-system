@@ -1,0 +1,58 @@
+<section class="space-y-8">
+    <header>
+        <div class="text-[#19337E] text-base font-normal">
+            <h1 class="text-[#333131] font-medium text-4xl">Find Your Students</h1>
+            <p>Use location pins to find students and the shortest route to visit</p>
+        </div>
+    </header>
+    <div class="flex gap-6">
+        <div class="border border-[#19337E] w-full min-h-[500px] rounded-lg overflow-hidden">
+            @switch (studentsLocationQuery.status()) {
+                @case ('pending') {
+                <div class="w-full h-full relative">
+                    <!-- Skeleton Placeholder -->
+                    <div class="absolute inset-0 bg-gray-200 animate-pulse rounded-lg overflow-hidden">
+                        <!-- Shimmer Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-gray-300 to-transparent animate-shimmer">
+                        </div>
+                    </div>
+                </div>
+                }
+                @case ('success') {
+                    <liaison-map (clickedMarker)="getStudentLocationToTogglePanel($event)" [mapData]="studentData()" />
+                }
+                @case ('error') {
+                    <div class="w-full h-full flex flex-col items-center justify-center bg-red-50 text-red-600 rounded-lg p-6">
+                        <!-- Error Icon -->
+                        <div class="w-16 h-16 flex items-center justify-center bg-red-100 rounded-full shadow-md mb-4">
+                            <svg class="w-10 h-10 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M18.364 5.636l-12.728 12.728M5.636 5.636l12.728 12.728" />
+                            </svg>
+                        </div>
+                    
+                        <!-- Error Title -->
+                        <h2 class="text-xl font-bold mb-2">Something Went Wrong</h2>
+                    
+                        <!-- Error Message -->
+                        <p class="text-sm text-center mb-4">
+                            We encountered an error while loading the page. Please try refreshing the page or contact support if the issue
+                            persists.{{studentsLocationQuery.error()?.message}}
+                        </p>
+            
+                    </div>
+                }
+            }
+        </div>
+        @if (studentLocationData()) {
+        <div class="w-[35%]">
+            <liaison-map-details-panel
+             [studentData]="studentLocationData()"
+            (closePanel)="closePanel()"
+            (triggerRoute)="triggerRoute()"
+            ></liaison-map-details-panel>
+        </div>
+        }
+    </div>
+</section>

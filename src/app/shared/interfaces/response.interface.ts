@@ -105,6 +105,7 @@ export interface companyDetails {
   companyTown:string
   letterTo:string
   supervisorPhone:string
+  dateCommenced:string
 }
 
 export interface IStatAnalyticsResponse extends ICommonResponse {

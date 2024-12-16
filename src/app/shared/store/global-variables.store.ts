@@ -8,12 +8,12 @@ import {
 import { IGlobalVariables } from '../interfaces/global-variables.interface';
 
 const currentYear = new Date().getFullYear();
-const lastyear = currentYear - 1;
+const nextYear = currentYear + 1;
 
 const initialInternshipTypeState: IGlobalVariables = {
   type: true,
-  startYear: lastyear,
-  endYear: currentYear,
+  startYear: currentYear,
+  endYear: nextYear,
 };
 
 export const GlobalVariablesStore = signalStore(

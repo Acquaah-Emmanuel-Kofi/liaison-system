@@ -24,7 +24,7 @@ import { RegionService } from '../../../../shared/services/regions/regions.servi
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { dashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { SkeletalComponent } from './skeletal/skeletal.component';
-import { CompanyDetails } from '../../../../shared/interfaces/response.interface';
+import { CompanyDetails, DutyData } from '../../../../shared/interfaces/response.interface';
 
 @Component({
   selector: 'liaison-assumption-of-duty',
@@ -61,7 +61,7 @@ export class AssumptionOfDutyComponent implements OnInit {
   AgreementForm!: FormGroup;
 
   zones: any;
-  AssumptionOfDutyInfo: any;
+  AssumptionOfDutyInfo: DutyData[] = [];
   companyDetails!: CompanyDetails;
 
   letterToOptions = [
@@ -118,7 +118,6 @@ export class AssumptionOfDutyComponent implements OnInit {
     this.toggleEditMode();
   }
 
-
   dashQUery = injectQuery(() => ({
     queryKey: [dashboardQueryKey.assumption],
     queryFn: async () => {
@@ -132,8 +131,7 @@ export class AssumptionOfDutyComponent implements OnInit {
   }));
 
   toggleEditMode(): void {
-
-    if (this.isEditMode) {
+    if (this.isAsummed && this.isEditMode) {
       this.companyInfoForm.reset(this.companyDetails);
 
       Object.keys(this.companyInfoForm.controls).forEach((key) => {
@@ -245,7 +243,7 @@ export class AssumptionOfDutyComponent implements OnInit {
   }
 
   updateAssumptionMutation = injectMutation(() => ({
-    mutationFn: async (formData) => {
+    mutationFn: async (formData: CompanyDetails) => {
       return await lastValueFrom(
         this.assumptionService.updateAssuptionOfDuty(
           formData,

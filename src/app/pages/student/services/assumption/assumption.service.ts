@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {catchError, Observable, tap} from "rxjs";
 import {environment} from "../../../../../environments/environment.development";
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { CompanyDetails } from '../../../../shared/interfaces/response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -31,13 +32,15 @@ export class AssumptionService {
     );
   }
 
-
-  updateAssuptionOfDuty(formData: any, dutyId: string): Observable<any> {
+  updateAssuptionOfDuty(
+    formData: CompanyDetails,
+    dutyId: string
+  ): Observable<any> {
     const url = `${
       environment.BACKEND_API_BASE_URL
     }/assumption-of-duty/${this.userStore.id()}/update/${dutyId}`;
 
-    return this._http.patch(url, formData).pipe(
+    return this._http.put(url, formData).pipe(
       catchError((error) => {
         throw error;
       })

@@ -193,9 +193,30 @@
               type="button"
               (click)="updateForm()"
               [disabled]="updateAssumptionMutation.isPending()"
-              class="bg-Primary-Blue hover:bg-Primary-Blue/50 text-white px-5 py-2 rounded-md"
+              class="bg-Primary-Blue hover:bg-Primary-Blue/50 text-white px-5 py-2 rounded-md flex gap-1"
             >
-              Update
+              @if (updateAssumptionMutation.isPending()) {
+              <svg
+                class="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                ></path>
+              </svg>
+              Updating... } @else { Update }
             </button>
             <button
               type="button"
@@ -210,6 +231,11 @@
       </form>
     </div>
   </div>
+</div>
+
+<div>
+  <h1>History</h1>
+  <p>Listing...</p>
 </div>
 
 } @else {

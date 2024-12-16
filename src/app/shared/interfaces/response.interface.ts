@@ -133,8 +133,6 @@ export interface CompanyDetails {
   companyAddress: string;
   companyEmail: string;
   companyExactLocation: string;
-  companyLatitude: string;
-  companyLongitude: string;
   companyName: string;
   companyPhone: string;
   companyRegion: string;

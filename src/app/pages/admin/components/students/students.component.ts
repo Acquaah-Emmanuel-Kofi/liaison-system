@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from './components/header/header.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import {
@@ -14,8 +14,8 @@ import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { IStudentData } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { searchArray } from '../../../../shared/helpers/functions.helper';
-import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
-import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
+import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-students',
@@ -31,7 +31,7 @@ import {GlobalVariablesStore} from "../../../../shared/store/global-variables.st
   styleUrls: ['./students.component.scss'],
   providers: [MessageService],
 })
-export class StudentsComponent implements OnInit{
+export class StudentsComponent implements OnInit {
   private globalStore = inject(GlobalVariablesStore);
   messageService = inject(MessageService);
   router = inject(Router);
@@ -39,9 +39,7 @@ export class StudentsComponent implements OnInit{
   studentService = inject(StudentTableService);
   protected sidebarService = inject(SidebarService);
   HideCheckbox = true;
-  internshipType!: boolean
-  currentYear: number = new Date().getFullYear();
-  lastyear = this.currentYear - 1;
+  internshipType!: boolean;
   currentPage = signal<number>(1);
   first = signal<number>(0);
   totalData = signal<number>(10);
@@ -51,7 +49,9 @@ export class StudentsComponent implements OnInit{
   filteredData = signal<TableData[]>([]);
 
   ngOnInit() {
-    this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value })
+    this.sidebarService.isSwitched$.subscribe((value: boolean) => {
+      this.internshipType = value;
+    });
   }
 
   columns: TableColumn[] = [
@@ -63,15 +63,17 @@ export class StudentsComponent implements OnInit{
   ];
 
   studentsQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(this.globalStore.startYear(),this.globalStore.endYear(),this.globalStore.type(),this.currentPage(), this.totalData())],
-    queryFn: async () => {
-      const response = await this.studentService.getAllStudents(
+    queryKey: [
+      ...studentsQueryKey.data(
         this.globalStore.startYear(),
         this.globalStore.endYear(),
         this.globalStore.type(),
         this.currentPage(),
-        this.pageSize(),
-      );
+        this.totalData()
+      ),
+    ],
+    queryFn: async () => {
+      const response = await this.studentService.getAllStudents();
 
       this.totalData.set(response.data.totalData);
 

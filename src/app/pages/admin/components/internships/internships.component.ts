@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
@@ -16,8 +16,8 @@ import {
   formatDateToDDMMYYYY,
   searchArray,
 } from '../../../../shared/helpers/functions.helper';
-import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
-import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
+import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-internships',
@@ -26,27 +26,28 @@ import {GlobalVariablesStore} from "../../../../shared/store/global-variables.st
   templateUrl: './internships.component.html',
   styleUrl: './internships.component.scss',
 })
-export class InternshipsComponent implements OnInit{
+export class InternshipsComponent implements OnInit {
   protected sidebarService = inject(SidebarService);
   private globalStore = inject(GlobalVariablesStore);
-
 
   currentPage = signal<number>(1);
   first = signal<number>(0);
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   searchTerm = signal<string>('');
-  internshipType!:boolean
+  internshipType!: boolean;
   currentYear: number = new Date().getFullYear();
   lastyear = this.currentYear - 1;
-  HideCheckbox = true
+  HideCheckbox = true;
 
   filteredData = signal<TableData[]>([]);
 
   studentService = inject(StudentTableService);
 
   ngOnInit() {
-    this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value })
+    this.sidebarService.isSwitched$.subscribe((value: boolean) => {
+      this.internshipType = value;
+    });
   }
 
   columns: TableColumn[] = [
@@ -60,15 +61,17 @@ export class InternshipsComponent implements OnInit{
   ];
 
   studentsQuery = injectQuery(() => ({
-    queryKey: [...studentsQueryKey.data(this.globalStore.endYear(),this.globalStore.startYear(),this.globalStore.type(),this.currentPage(), this.totalData())],
-    queryFn: async () => {
-      const response = await this.studentService.getAllStudents(
-        this.globalStore.startYear(),
+    queryKey: [
+      ...studentsQueryKey.data(
         this.globalStore.endYear(),
+        this.globalStore.startYear(),
         this.globalStore.type(),
         this.currentPage(),
-        this.pageSize(),
-      );
+        this.totalData()
+      ),
+    ],
+    queryFn: async () => {
+      const response = await this.studentService.getAllStudents();
 
       this.totalData.set(response.data.totalData);
 

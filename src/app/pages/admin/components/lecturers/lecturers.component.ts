@@ -37,7 +37,7 @@ export class LecturersComponent {
     { label: 'Name', key: 'name' },
     { label: 'Faculty', key: 'faculty' },
     { label: 'Department', key: 'department' },
-    { label: '', key: 'action', isAction: true },
+    { label: 'Actions', key: 'action', isAction: true },
   ];
 
   currentPage = signal<number>(1);

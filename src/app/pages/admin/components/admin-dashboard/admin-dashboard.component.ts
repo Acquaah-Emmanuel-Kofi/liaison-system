@@ -5,7 +5,6 @@ import { AdminChartComponent } from '../admin-chart/admin-chart.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import {
   TableColumn,
-  TableData,
 } from '../../../../shared/components/table/table.interface';
 import { IStartCard } from '../../../../shared/interfaces/constants.interface';
 import { ToggleButtonModule } from 'primeng/togglebutton';
@@ -15,11 +14,12 @@ import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { UserStore } from '../../../../shared/store/user.store';
 import { injectQuery } from '@tanstack/angular-query-experimental';
-import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { statAnalyticsQueryKey, studentAssumptionOfDutyLogsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { DashboardService } from '../../service/dashboard/dashboard.service';
 import { IStartAnalytics } from '../../../../shared/interfaces/response.interface';
 import { getYears } from '../../../../shared/helpers/functions.helper';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -34,6 +34,7 @@ import { GlobalVariablesStore } from '../../../../shared/store/global-variables.
     CascadeSelectModule,
     FormsModule,
     DropdownModule,
+    CommonModule,
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss',
@@ -43,7 +44,7 @@ export class AdminDashboardComponent implements OnInit {
   years: { name: string; value: string }[] = [];
   selectedYear: string | null = null;
   currentYear: number = new Date().getFullYear();
-  lastyear = this.currentYear - 1;
+  nextYear = this.currentYear + 1;
   HideCheckbox = true;
   HidePagination = true;
 
@@ -73,39 +74,28 @@ export class AdminDashboardComponent implements OnInit {
 
   columns: TableColumn[] = [
     {
-      label: 'Regions',
-      key: 'Region',
+      label: 'Company Name',
+      key: 'companyName',
     },
     {
-      label: 'Sub-Zones',
-      key: 'sub_zones',
+      label: 'Supervisor Name',
+      key: 'companySupervisor',
     },
     {
-      label: 'No of Students',
-      key: 'No_of_Students',
-    },
-  ];
-
-  data: TableData[] = [
-    {
-      Region: 'Western',
-      sub_zones: 15,
-      No_of_Students: 300,
+      label: 'Supervisor Phone',
+      key: 'supervisorPhone',
     },
     {
-      Region: 'Greater Accra',
-      sub_zones: 20,
-      No_of_Students: 800,
+      label: 'Exact Location',
+      key: 'companyExactLocation',
     },
     {
-      Region: 'Central',
-      sub_zones: 12,
-      No_of_Students: 230,
+      label: 'Date Commenced',
+      key: 'dateCommenced',
     },
     {
-      Region: 'Eastern',
-      sub_zones: 10,
-      No_of_Students: 400,
+      label: 'Last Updated',
+      key: 'dateUpdated',
     },
   ];
 
@@ -127,7 +117,7 @@ export class AdminDashboardComponent implements OnInit {
   populateYears() {
     const startYear = 2020;
     for (let year = this.currentYear; year >= startYear; year--) {
-      const academicYear = year - 1 + '/' + year;
+      const academicYear = year + '/' + (year + 1);
       this.years.push({ name: academicYear, value: academicYear });
     }
   }
@@ -147,8 +137,8 @@ export class AdminDashboardComponent implements OnInit {
     queryKey: [
       ...statAnalyticsQueryKey.data(
         this.globalStore.type(),
-        this.globalStore.startYear() ?? this.lastyear,
-        this.globalStore.endYear() ?? this.currentYear
+        this.globalStore.startYear() ?? this.currentYear,
+        this.globalStore.endYear() ?? this.nextYear
       ),
     ],
     queryFn: async () => {
@@ -173,4 +163,31 @@ export class AdminDashboardComponent implements OnInit {
       }
     });
   }
+
+  studentAssumptionOfDutyLogsQuery = injectQuery(() => ({
+    queryKey: [
+      ...studentAssumptionOfDutyLogsQueryKey.data(
+        this.globalStore.type(),
+        this.globalStore.startYear() ?? this.currentYear,
+        this.globalStore.endYear() ?? this.nextYear
+      ),
+    ],
+    queryFn: async () => {
+      const response = await this._dashboardService.getAssumptionOfDutyLogs();
+
+      // Map the response data to match the columns
+      return response.data.map((log) => ({
+        companyName: log.companyDetails?.companyName ?? 'N/A',
+        companySupervisor: log.companyDetails?.companySupervisor ?? 'N/A',
+        supervisorPhone: log.companyDetails?.supervisorPhone ?? 'N/A',
+        companyExactLocation: log.companyDetails?.companyExactLocation ?? 'N/A',
+        dateCommenced: log.dateCommenced
+          ? new Date(log.dateCommenced).toLocaleDateString()
+          : 'N/A',
+        dateUpdated: log.dateUpdated
+          ? new Date(log.dateUpdated).toLocaleDateString()
+          : 'N/A',
+      }));
+    },
+  }));
 }

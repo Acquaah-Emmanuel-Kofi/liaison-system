@@ -23,8 +23,8 @@ import { AssumptionService } from '../../services/assumption/assumption.service'
 import { RegionService } from '../../../../shared/services/regions/regions.service';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { dashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
-import { companyDetails } from '../../../../shared/interfaces/response.interface';
 import { SkeletalComponent } from './skeletal/skeletal.component';
+import { CompanyDetails } from '../../../../shared/interfaces/response.interface';
 
 @Component({
   selector: 'liaison-assumption-of-duty',
@@ -62,7 +62,7 @@ export class AssumptionOfDutyComponent implements OnInit {
 
   zones: any;
   AssumptionOfDutyInfo: any;
-  companyDetails!: companyDetails;
+  companyDetails!: CompanyDetails;
 
   letterToOptions = [
     { name: 'THE MANAGER', value: 'TheManager' },

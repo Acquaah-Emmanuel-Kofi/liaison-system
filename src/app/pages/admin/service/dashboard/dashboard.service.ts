@@ -6,6 +6,7 @@ import { UserStore } from '../../../../shared/store/user.store';
 import {
   IStatAnalyticsResponse,
   IStudentCompanyMappingResponse,
+  UpdatedDutiesResponse,
 } from '../../../../shared/interfaces/response.interface';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
@@ -53,13 +54,13 @@ export class DashboardService {
     );
   }
 
-  getAssumptionOfDutyLogs(): Promise<any> {
+  getAssumptionOfDutyLogs(): Promise<UpdatedDutiesResponse> {
     const endpoint = `${
       environment.BACKEND_API_BASE_URL
     }/admin/${this.userStore.id()}/assumption-of-duties/updated`;
 
     return lastValueFrom(
-      this._http.get<any>(endpoint, {
+      this._http.get<UpdatedDutiesResponse>(endpoint, {
         params: this.httpParams(),
       })
     );

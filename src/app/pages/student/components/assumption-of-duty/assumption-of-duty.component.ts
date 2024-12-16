@@ -254,6 +254,7 @@ export class AssumptionOfDutyComponent implements OnInit {
       );
     },
     onSuccess: (data: any) => {
+      this.toggleEditMode();
       this.messageService.add({
         severity: 'success',
         summary: 'Success',

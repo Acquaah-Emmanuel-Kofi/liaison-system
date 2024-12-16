@@ -11,15 +11,16 @@
     <div >
       <div class="flex flex-column h-12rem">
         <div class="surface-border border-round surface-ground flex-auto flex-row justify-content-center align-items-center font-medium">
-          <form >
+          <form [formGroup]="companyInfoForm" >
             <div class=" w-full gap-10 ">
               <div class="w-[100%]  grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-10 px-10 items-start mt-10">
                 <div>
                   <label for="companyName">Company Name</label>
                   <input
-                    disabled
+                   
                     type="text"
-                    [value]="companyDetails.companyName"
+                    id="companyName"
+                    formControlName="companyName"
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
                   />
@@ -30,10 +31,13 @@
                   <label for="companyPhone">Company Phone No </label>
 
                   <input
-                    disabled
-                    [value]="companyDetails.companyPhone"
-                    type="text"
-                    pInputText
+                   
+                      id="companyPhone"
+                          formControlName="companyPhone"
+                          pInputText
+                          (input)="onPhoneInput($event)"
+                          pattern="[0-9]*"
+                          maxlength="10"
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
                   />
 
@@ -43,8 +47,9 @@
 
                   <label for="location">Company Exact Location</label>
                   <input
-                    disabled
-                    [value]="companyDetails.companyExactLocation"
+                   
+                     id="location"
+                          formControlName="companyExactLocation"
                     type="text"
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
@@ -56,8 +61,9 @@
                   <label for="city">Company Town/City</label>
 
                   <input
-                    [value]="companyDetails.companyTown"
-                    disabled
+                     id="city"
+                          formControlName="companyTown"
+                   
                     type="text"
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
@@ -72,8 +78,9 @@
                   </label>
 
                   <input
-                    [value]="companyDetails.dateCommenced"
-                    disabled
+                     id="commencementDate"
+                          formControlName="commencementDate"
+                   
                     type="date"
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
@@ -86,8 +93,9 @@
                   <label for="address">Company Address</label>
 
                   <input
-                    [value]="companyDetails.companyAddress"
-                    disabled
+                         id="address"
+                          formControlName="companyAddress"
+                   
                     type="text"
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
@@ -99,8 +107,9 @@
                   <label for="email">Company Email Address</label>
 
                   <input
-                    [value]="companyDetails.companyEmail"
-                    disabled
+                     id="email"
+                          formControlName="companyEmail"
+                   
                     type="email"
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
@@ -112,8 +121,9 @@
                   <label for="supervisor">Company Supervisor</label>
 
                   <input
-                    [value]="companyDetails.companySupervisor"
-                    disabled
+                    id="supervisor"
+                        formControlName="companySupervisor"
+                   
                     type="text"
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
@@ -125,9 +135,13 @@
                   <label for="supervisorPhone">Supervisor Phone No</label>
 
                   <input
-                    [value]="companyDetails.supervisorPhone"
+                      id="supervisorPhone"
+                          pattern="[0-9]*"
+                          maxlength="10"
+                          formControlName="supervisorPhone"
+                          (input)="onSuperPhoneInput($event)"
                     type="text"
-                    disabled
+                   
                     pInputText
                     class="border-red-700 h-10 w-full pl-3 focus:outline-none"
                   />
@@ -138,32 +152,53 @@
 
                 <div class="w-full">
                   <label class="font-medium text-base mb-2 text-Dark-Primary">Company Region:</label>
-                  <input
-                    [value]="companyDetails.companyRegion"
-                    type="text"
-                    disabled
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
+
+                  <select formControlName="companyRegion"  [value]="companyDetails.companyRegion"
+                    class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field ">
+                    <option value="" disabled selected>Select region</option>
+                    <option class="text-black" [value]="zone.value" *ngFor="let zone of zones">
+                      {{ zone.name }}
+                    </option>
+                  </select>
                 </div>
 
                 <div class="w-full">
                   <label class="font-medium text-base mb-2 text-Dark-Primary">Letter Addressed To: </label>
-                  <input
-                    [value]="companyDetails.letterTo"
-                    type="text"
-                    disabled
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
+
+                  <select formControlName="letterTo"  [value]="companyDetails.letterTo"
+                    class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field ">
+                    <option value="" disabled selected>Select addressed</option>
+                    <option class="text-black custom-option" [value]="option.value" *ngFor="let option of letterToOptions">
+                      {{ option.name }}
+                    </option>
+                  </select>
                 </div>
 
               </div>
             </div>
 
-            <div class="flex py-4 mx-10 mt-10">
+              <!-- Action Buttons -->
+              <div class="flex py-4 mx-10 mt-10">
+                @if (!isEditMode) {
+                  <button type="button" (click)="toggleEditMode()"
+                    class="bg-Primary-Blue hover:bg-Primary-Blue/50 text-white px-5 py-2 rounded-md">
+                    Edit
+                  </button>
+                }
 
-            </div>
+                @if (isEditMode) {
+                  <div class="flex gap-2">
+                    <button type="button" (click)="updateForm()" [disabled]="updateAssumptionMutation.isPending()"
+                      class="bg-Primary-Blue hover:bg-Primary-Blue/50 text-white px-5 py-2 rounded-md">
+                      Update
+                    </button>
+                    <button type="button" (click)="toggleEditMode()"
+                      class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-md">
+                      Cancel
+                    </button>
+                  </div>
+                }
+                </div>
           </form>
         </div>
       </div>
@@ -313,7 +348,7 @@
                           formControlName="companyRegion"
                           class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field "
                         >
-                          <option value="" disabled selected>Select region</option>
+                          <option value="" selected>Select region</option>
                           <option class="text-black" *ngFor="let zone of zones">
                             {{ zone.name }}
                           </option>
@@ -327,7 +362,7 @@
                           formControlName="letterTo"
                           class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field "
                         >
-                          <option  value="" disabled selected>Select addressed</option>
+                          <option  value="" selected>Select addressed</option>
                           <option class="text-black custom-option" *ngFor="let option of letterToOptions">
                             {{ option.name }}
                           </option>
@@ -369,8 +404,8 @@
 
 
               <div class="flex py-4 gap-8">
-                <button class= "text-black border-[1px] border-gray-200 px-5 py-2 rounded-md"  (click)="moveBack(prevCallback)">Back</button>
-                <button  (click)="submitForm()"  [ngClass]="{'bg-Primary-Blue':companyInfoForm.valid, 'bg-Lighter-Blue': !companyInfoForm.valid}"  class=" hover:bg-Bright-Blue cursor-pointer text-white px-5 py-2 rounded-md "  >Submit</button>
+                <button type="button" class= "text-black border-[1px] border-gray-200 px-5 py-2 rounded-md"  (click)="moveBack(prevCallback)">Back</button>
+                <button type="submit"  (click)="submitForm()"  [ngClass]="{'bg-Primary-Blue':companyInfoForm.valid, 'bg-Lighter-Blue': !companyInfoForm.valid}"  class=" hover:bg-Bright-Blue cursor-pointer text-white px-5 py-2 rounded-md "  >Submit</button>
                 <liaison-loader-modal [isOpen]="isModalOpen"></liaison-loader-modal>
               </div>
             </div>

@@ -1,31 +1,45 @@
-import {Component, inject, signal} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { LecturerStudentsHeaderComponent } from './components/lecturer-students-header/lecturer-students-header.component';
-import {TableComponent} from "../../../../shared/components/table/table.component";
-import {NgTemplateOutlet, TitleCasePipe} from "@angular/common";
-import {TableColumn, TableData} from "../../../../shared/components/table/table.interface";
-import {injectMutation, injectQuery} from "@tanstack/angular-query-experimental";
-import {studentForLectureQuery, studentsQueryKey} from "../../../../shared/helpers/query-keys.helper";
-import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
-import {StudentTableService} from "../../../admin/service/students-table/student-table.service";
-import {IGetStudentForLecturerData} from "../../../../shared/interfaces/response.interface";
-import {formatDateToDDMMYYYY} from "../../../../shared/helpers/functions.helper";
-import {ModalContainerComponent} from "../../../../shared/components/modal-container/modal-container.component";
-import {lastValueFrom} from "rxjs";
-import {MessageService} from "primeng/api";
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import { NgTemplateOutlet, TitleCasePipe } from '@angular/common';
+import {
+  TableColumn,
+  TableData,
+} from '../../../../shared/components/table/table.interface';
+import {
+  injectMutation,
+  injectQuery,
+} from '@tanstack/angular-query-experimental';
+import {
+  studentForLectureQuery,
+  studentsQueryKey,
+} from '../../../../shared/helpers/query-keys.helper';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { StudentTableService } from '../../../admin/service/students-table/student-table.service';
+import { IGetStudentForLecturerData } from '../../../../shared/interfaces/response.interface';
+import { formatDateToDDMMYYYY } from '../../../../shared/helpers/functions.helper';
+import { ModalContainerComponent } from '../../../../shared/components/modal-container/modal-container.component';
+import { lastValueFrom } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'liaison-students',
   standalone: true,
-  imports: [LecturerStudentsHeaderComponent, TableComponent, NgTemplateOutlet, ModalContainerComponent, TitleCasePipe],
+  imports: [
+    LecturerStudentsHeaderComponent,
+    TableComponent,
+    NgTemplateOutlet,
+    ModalContainerComponent,
+    TitleCasePipe,
+  ],
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss',
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class StudentsComponent {
-  private globalStore = inject(GlobalVariablesStore);
   studentService = inject(StudentTableService);
-  checkStatus!: boolean
-  messageService = inject(MessageService)
+  checkStatus!: boolean;
+  messageService = inject(MessageService);
 
   filteredData = signal<TableData[]>([]);
   searchTerm = signal<string>('');
@@ -34,7 +48,6 @@ export class StudentsComponent {
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   showModal = false;
-
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -46,13 +59,12 @@ export class StudentsComponent {
     { label: 'Status', key: 'status' },
   ];
 
-  student!: IGetStudentForLecturerData
+  student!: IGetStudentForLecturerData;
 
   studentsInternQuery = injectQuery(() => ({
     queryKey: [studentForLectureQuery],
     queryFn: async () => {
       const response = await this.studentService.getStudentsInlectureZone();
-      console.log(response.data.student.students)
       this.totalData.set(response.data.student.totalStudents);
 
       return this.destructureStudents(response.data.student.students);
@@ -60,17 +72,17 @@ export class StudentsComponent {
   }));
 
   destructureStudents(data: IGetStudentForLecturerData[]): TableData[] {
-    if (!data) return []
+    if (!data) return [];
 
-    data.filter((student)=> {
-      if (student.isSupervised){
-         student.status = "SUPERVISED"
+    data.filter((student) => {
+      if (student.isSupervised) {
+        student.status = 'SUPERVISED';
         this.checkStatus = true;
-      }else {
-        student.status = "NOT SUPERVISED"
+      } else {
+        student.status = 'NOT SUPERVISED';
         this.checkStatus = false;
       }
-    })
+    });
 
     return data.map((student: IGetStudentForLecturerData) => ({
       student_id: student.id,
@@ -83,49 +95,47 @@ export class StudentsComponent {
     }));
   }
 
-
   handlePageChange(data: { first: number; rows: number; page: number }) {
     this.first.set(data.first);
     this.currentPage.set(data.page + 1);
     this.pageSize.set(data.rows);
   }
 
-
-  openModal(data:any): void {
+  openModal(data: any): void {
     this.showModal = true;
-    this.student = data
-    console.log(this.student)
+    this.student = data;
     this.checkStatus = this.student.isSupervised;
   }
 
   closeModal(): void {
     this.showModal = false;
-    this.studentsInternQuery.refetch()
+    this.studentsInternQuery.refetch();
   }
 
-  changeStatusMutation = injectMutation(()=> (
-    {
-      mutationFn: async (studentId: string) => {
-        return await lastValueFrom(this.studentService.changeStudentSupervision(studentId))
-      },
-      onSuccess: (data:any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: data?.message || 'status was changed successfully'
-        });
-        this.closeModal()
-      },
-      onError: (error:any) => {
-        console.error('Failed to change status:', error.error);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'change was not successful'
-        });
-      }
-    }
-  ));
+  changeStatusMutation = injectMutation((client) => ({
+    mutationFn: async (studentId: string) => {
+      return await lastValueFrom(
+        this.studentService.changeStudentSupervision(studentId)
+      );
+    },
+    onSuccess: (data: any) => {
+      client.invalidateQueries({ queryKey: studentsQueryKey.all }).then();
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: data?.message || 'status was changed successfully',
+      });
+      this.closeModal();
+    },
+    onError: (error: any) => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'change was not successful',
+      });
+    },
+  }));
 
   changeStatus() {
     this.changeStatusMutation.mutate(this.student.student_id);

@@ -50,10 +50,11 @@ export class StudentTableService {
     )
   }
 
-  // lecturers/{{lecturer-id}}/supervise/{{student-id}}
-  changeStudentSupervision(studentID:string){
-    const url = `${environment.BACKEND_API_BASE_URL}/lecturers/${this.userStore.id()}/supervise/${studentID}`;
-    return this._http.patch(url, {})
+  changeStudentSupervision(studentID:string): Observable<any>{
+    const url = `${
+      environment.BACKEND_API_BASE_URL
+    }/lecturers/${this.userStore.id()}/supervise/${studentID}`;
+    return this._http.put<any>(url, {})
   }
 
   updateSearchResults(results: IGetStudentResponse | undefined) {

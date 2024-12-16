@@ -154,7 +154,7 @@ export class AssumptionOfDutyComponent implements OnInit {
       companyPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       companyExactLocation: ['', Validators.required],
       companyTown: ['', Validators.required],
-      commencementDate: ['', Validators.required],
+      dateCommenced: ['', Validators.required],
       companyAddress: ['', Validators.required],
       companyEmail: ['', [Validators.required, Validators.email]],
       companySupervisor: ['', Validators.required],
@@ -210,7 +210,7 @@ export class AssumptionOfDutyComponent implements OnInit {
         severity: 'success',
         summary: 'Success',
         detail:
-          data.message || 'Assumption of duty form submission was successfully',
+          data.message ?? 'Assumption of duty form submission was successfully',
       });
       this.isModalOpen = false;
     },
@@ -219,7 +219,7 @@ export class AssumptionOfDutyComponent implements OnInit {
         severity: 'error',
         summary: 'Error',
         detail:
-          error.message || 'An error occurred while submitting the details',
+          error.message ?? 'An error occurred while submitting the details',
       });
       this.isModalOpen = false;
     },
@@ -257,7 +257,7 @@ export class AssumptionOfDutyComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: data.message || 'Assumption of duty form update was successful',
+        detail: data.message ?? 'Assumption of duty form update was successful',
       });
       this.isModalOpen = false;
     },
@@ -266,7 +266,7 @@ export class AssumptionOfDutyComponent implements OnInit {
         severity: 'error',
         summary: 'Error',
         detail:
-          error.message || 'An error occurred while submitting the details',
+          error.message ?? 'An error occurred while submitting the details',
       });
       this.isModalOpen = false;
     },

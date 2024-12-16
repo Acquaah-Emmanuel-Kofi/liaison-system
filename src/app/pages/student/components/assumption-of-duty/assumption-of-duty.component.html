@@ -233,10 +233,43 @@
   </div>
 </div>
 
-<div>
-  <h1>History</h1>
-  <p>Listing...</p>
+<div class="px-8 mt-8">
+  <h1 class="text-xl font-bold mb-4">History</h1>
+
+  @if (AssumptionOfDutyInfo && AssumptionOfDutyInfo.length > 0) {
+    <div>
+      @for (duty of AssumptionOfDutyInfo.reverse(); track $index) {
+        <div
+          class="border border-gray-300 rounded-lg p-4 mb-4 shadow-md bg-white">
+          <h2 class="text-lg font-semibold text-primary mb-2">
+            {{ duty.companyDetails.companyName }}
+          </h2>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Supervisor:</span> {{ duty.companyDetails.companySupervisor }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Supervisor Phone:</span> {{ duty.companyDetails.supervisorPhone }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Location:</span> {{ duty.companyDetails.companyExactLocation }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Date Commenced:</span> {{ duty.dateCommenced }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Last Updated:</span> {{ duty.dateUpdated }}
+          </p>
+        </div>
+      }
+    </div>
+  } @else {
+  <!-- Fallback for No Data -->
+  <div>
+    <p class="text-gray-500 text-center">No assumption of duty records available.</p>
+  </div>
+  }
 </div>
+
 
 } @else {
 <div>

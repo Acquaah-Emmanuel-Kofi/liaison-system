@@ -19,7 +19,6 @@ import {
   filterFacultyDepartment,
   searchArray,
 } from '../../../../shared/helpers/functions.helper';
-import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
 
 @Component({
   selector: 'liaison-lecturers',
@@ -30,14 +29,12 @@ import {GlobalVariablesStore} from "../../../../shared/store/global-variables.st
   providers: [MessageService],
 })
 export class LecturersComponent {
-  private globalStore = inject(GlobalVariablesStore);
-
   columns: TableColumn[] = [
     { label: 'Staff ID', key: 'staff_id' },
     { label: 'Name', key: 'name' },
     { label: 'Faculty', key: 'faculty' },
     { label: 'Department', key: 'department' },
-    { label: '', key: 'action', isAction: true },
+    { label: 'Actions', key: 'action', isAction: true },
   ];
 
   currentPage = signal<number>(1);
@@ -55,7 +52,7 @@ export class LecturersComponent {
     queryKey: [...lecturersQueryKey.data(this.currentPage(), this.totalData())],
     queryFn: async () => {
       const response = await lastValueFrom<IGetLecturersResponse>(
-        this._dataServices.getAllLecturers(this.currentPage(), this.pageSize())
+        this._dataServices.getAllLecturers()
       );
 
       this.totalData.set(response.data.totalData);

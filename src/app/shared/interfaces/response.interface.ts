@@ -1,5 +1,5 @@
 import { IUser } from './user.interface';
-import {IStudentCompanyMapping} from "./location.interface";
+import { IStudentCompanyMapping } from './location.interface';
 
 export interface ICommonResponse {
   status: number;
@@ -34,41 +34,40 @@ interface IPagableResponse {
   totalPages: number;
 }
 
-export interface IGetStudentForLecturerData{
-  "id": string,
-  "name": string,
-  "department": string,
-  "faculty": string,
-  "age": string,
-  "email": string,
-  "gender": string,
-  "phone": string,
-  "course": string,
-  "placeOfInternship": string,
-  "isSupervised": boolean,
-  "isAssumeDuty": boolean,
-  "startDate": string,
-  "endDate": string,
-  "status": string
-  town: string,
-  student_id: string
-
+export interface IGetStudentForLecturerData {
+  id: string;
+  name: string;
+  department: string;
+  faculty: string;
+  age: string;
+  email: string;
+  gender: string;
+  phone: string;
+  course: string;
+  placeOfInternship: string;
+  isSupervised: boolean;
+  isAssumeDuty: boolean;
+  startDate: string;
+  endDate: string;
+  status: string;
+  town: string;
+  student_id: string;
 }
 export interface IGetStudentForLecturer extends ICommonResponse {
-  data:{
-    student:{
-      students: IGetStudentForLecturerData[]
-      totalStudents: number
-    },
-    "company": {
-      "companies": {},
-      "totalCompanies": number
-    },
-    "lecturer": {
-      "lecturers": string[],
-      "totalLecturers": number
-    }
-  }
+  data: {
+    student: {
+      students: IGetStudentForLecturerData[];
+      totalStudents: number;
+    };
+    company: {
+      companies: {};
+      totalCompanies: number;
+    };
+    lecturer: {
+      lecturers: string[];
+      totalLecturers: number;
+    };
+  };
 }
 
 export interface IGetStudentResponse extends ICommonResponse {
@@ -130,20 +129,35 @@ export interface IStatAnalytics {
   internships: number;
 }
 
-export interface companyDetails {
-  companyAddress:string,
-  companyEmail:string
-  companyExactLocation:string
-  companyLatitude:string
-  companyLongitude:string
-  companyName:string
-  companyPhone:string
-  companyRegion:string
-  companySupervisor:string
-  companyTown:string
-  letterTo:string
-  supervisorPhone:string
-  dateCommenced:string
+export interface CompanyDetails {
+  companyAddress: string;
+  companyEmail: string;
+  companyExactLocation: string;
+  companyName: string;
+  companyPhone: string;
+  companyRegion: string;
+  companySupervisor: string;
+  companyTown: string;
+  letterTo: string;
+  supervisorPhone: string;
+  dateCommenced: string;
+}
+
+export interface DutyData {
+  id: string;
+  studentId: string;
+  dateCreated: string;
+  dateUpdated: string;
+  dateCommenced: string;
+  startOfAcademicYear: string;
+  endOfAcademicYear: string;
+  companyDetails: CompanyDetails;
+  internship: boolean;
+  updated: boolean;
+}
+
+export interface UpdatedDutiesResponse extends ICommonResponse {
+  data: DutyData[];
 }
 
 export interface IStatAnalyticsResponse extends ICommonResponse {

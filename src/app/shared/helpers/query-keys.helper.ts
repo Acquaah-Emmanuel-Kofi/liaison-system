@@ -1,9 +1,22 @@
-import {Observable} from "rxjs";
 
 export const studentsQueryKey = {
   all: ['students'] as const,
-  data: (startOfAcademicYear:number,endOfAcademicYear:number,internship:boolean,page?: number, size?: number) =>
-    [...studentsQueryKey.all, 'all-students'] as const,
+  data: (
+    startOfAcademicYear: number,
+    endOfAcademicYear: number,
+    internship: boolean,
+    page?: number,
+    size?: number
+  ) =>
+    [
+      ...studentsQueryKey.all,
+      'all-students',
+      startOfAcademicYear,
+      endOfAcademicYear,
+      internship,
+      page,
+      size
+    ] as const,
 };
 
 export const studentForLectureQuery = {
@@ -49,6 +62,18 @@ export const statAnalyticsQueryKey = {
     [
       ...statAnalyticsQueryKey.all,
       'all-stats',
+      internshipType,
+      startYear,
+      endYear,
+    ] as const,
+};
+
+export const studentAssumptionOfDutyLogsQueryKey = {
+  all: ['duty logs'] as const,
+  data: (internshipType: boolean, startYear: number, endYear: number) =>
+    [
+      ...statAnalyticsQueryKey.all,
+      'all-logs',
       internshipType,
       startYear,
       endYear,

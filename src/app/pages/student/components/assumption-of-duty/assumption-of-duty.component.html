@@ -1,380 +1,537 @@
 <p-toast></p-toast>
 @if (dashQUery.isPending()) {
-  <liaison-skeletal/>
+<liaison-skeletal />
+
+} @else { @if (isAsummed) {
+<div class="assumption-filled-ui">
+  <h2 class="text-center text-lg font-bold text-success">
+    Assumption of Duty Already Submitted
+  </h2>
+  <p class="text-center">Below is your response. Thank you!</p>
+</div>
+<div>
+  <div class="flex flex-column h-12rem">
+    <div
+      class="surface-border border-round surface-ground flex-auto flex-row justify-content-center align-items-center font-medium"
+    >
+      <form [formGroup]="companyInfoForm">
+        <div class="w-full gap-10">
+          <div
+            class="w-[100%] grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-10 px-10 items-start mt-10"
+          >
+            <div>
+              <label for="companyName">Company Name</label>
+              <input
+                type="text"
+                id="companyName"
+                formControlName="companyName"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="companyPhone">Company Phone No </label>
+
+              <input
+                id="companyPhone"
+                formControlName="companyPhone"
+                pInputText
+                (input)="onPhoneInput($event)"
+                pattern="[0-9]*"
+                maxlength="10"
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="location">Company Exact Location</label>
+              <input
+                id="location"
+                formControlName="companyExactLocation"
+                type="text"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="city">Company Town/City</label>
+
+              <input
+                id="city"
+                formControlName="companyTown"
+                type="text"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label> Date of Commencement </label>
+
+              <input
+                id="dateCommenced"
+                formControlName="dateCommenced"
+                type="date"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="address">Company Address</label>
+
+              <input
+                id="address"
+                formControlName="companyAddress"
+                type="text"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="email">Company Email Address</label>
+
+              <input
+                id="email"
+                formControlName="companyEmail"
+                type="email"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="supervisor">Company Supervisor</label>
+
+              <input
+                id="supervisor"
+                formControlName="companySupervisor"
+                type="text"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="supervisorPhone">Supervisor Phone No</label>
+
+              <input
+                id="supervisorPhone"
+                pattern="[0-9]*"
+                maxlength="10"
+                formControlName="supervisorPhone"
+                (input)="onSuperPhoneInput($event)"
+                type="text"
+                pInputText
+                class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+              />
+            </div>
+          </div>
+          <div
+            class="w-[100%] 2xl:w-[35%] grid-flow-col gap-5 grid grid-col-1 md:grid-col-2 px-10 mt-10"
+          >
+            <div class="w-full">
+              <label class="font-medium text-base mb-2 text-Dark-Primary"
+                >Company Region:</label
+              >
+
+              <select
+                formControlName="companyRegion"
+                [value]="companyDetails.companyRegion"
+                class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field"
+              >
+                <option value="" disabled selected>Select region</option>
+                <option
+                  class="text-black"
+                  [value]="zone.value"
+                  *ngFor="let zone of zones"
+                >
+                  {{ zone.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="w-full">
+              <label class="font-medium text-base mb-2 text-Dark-Primary"
+                >Letter Addressed To:
+              </label>
+
+              <select
+                formControlName="letterTo"
+                [value]="companyDetails.letterTo"
+                class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field"
+              >
+                <option value="" disabled selected>Select addressed</option>
+                <option
+                  class="text-black custom-option"
+                  [value]="option.value"
+                  *ngFor="let option of letterToOptions"
+                >
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex py-4 mx-10 mt-10">
+          @if (!isEditMode) {
+          <button
+            type="button"
+            (click)="toggleEditMode()"
+            class="bg-Primary-Blue hover:bg-Primary-Blue/50 text-white px-5 py-2 rounded-md"
+          >
+            Edit
+          </button>
+          } @if (isEditMode) {
+          <div class="flex gap-2">
+            <button
+              type="button"
+              (click)="updateForm()"
+              [disabled]="updateAssumptionMutation.isPending()"
+              class="bg-Primary-Blue hover:bg-Primary-Blue/50 text-white px-5 py-2 rounded-md flex gap-1"
+            >
+              @if (updateAssumptionMutation.isPending()) {
+              <svg
+                class="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                ></path>
+              </svg>
+              Updating... } @else { Update }
+            </button>
+            <button
+              type="button"
+              (click)="toggleEditMode()"
+              class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-md"
+            >
+              Cancel
+            </button>
+          </div>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="px-8 mt-8">
+  <h1 class="text-xl font-bold mb-4">History</h1>
+
+  @if (AssumptionOfDutyInfo && AssumptionOfDutyInfo.length > 0) {
+    <div>
+      @for (duty of AssumptionOfDutyInfo.reverse(); track $index) {
+        <div
+          class="border border-gray-300 rounded-lg p-4 mb-4 shadow-md bg-white">
+          <h2 class="text-lg font-semibold text-primary mb-2">
+            {{ duty.companyDetails.companyName }}
+          </h2>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Supervisor:</span> {{ duty.companyDetails.companySupervisor }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Supervisor Phone:</span> {{ duty.companyDetails.supervisorPhone }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Location:</span> {{ duty.companyDetails.companyExactLocation }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Date Commenced:</span> {{ duty.dateCommenced }}
+          </p>
+          <p class="text-sm text-gray-700">
+            <span class="font-semibold">Last Updated:</span> {{ duty.dateUpdated }}
+          </p>
+        </div>
+      }
+    </div>
+  } @else {
+  <!-- Fallback for No Data -->
+  <div>
+    <p class="text-gray-500 text-center">No assumption of duty records available.</p>
+  </div>
+  }
+</div>
+
 
 } @else {
-  @if (isAsummed) {
-    <div class="assumption-filled-ui">
-      <h2 class="text-center text-lg font-bold text-success">Assumption of Duty Already Submitted</h2>
-      <p class="text-center">Below is your response. Thank you!</p>
-    </div>
-    <div >
-      <div class="flex flex-column h-12rem">
-        <div class="surface-border border-round surface-ground flex-auto flex-row justify-content-center align-items-center font-medium">
-          <form >
-            <div class=" w-full gap-10 ">
-              <div class="w-[100%]  grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-10 px-10 items-start mt-10">
-                <div>
-                  <label for="companyName">Company Name</label>
-                  <input
-                    disabled
-                    type="text"
-                    [value]="companyDetails.companyName"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
+<div>
+  <div class="alert alert-warning">
+    <strong>Important:</strong>
 
+    Before proceeding to fill out the form, please ensure that the exact
+    location of your company is available on Google Maps. This will help us
+    validate and process your information efficiently.
+
+    <br />
+
+    If your company's location is not yet on Google Maps, kindly update it
+    before continuing.
+    <a
+      href="https://maps.google.com/"
+      target="_blank"
+      class="text-blue-600 underline"
+      >Cick here</a
+    >
+    to confirm.
+  </div>
+
+  <p-stepper orientation="vertical">
+    <p-stepperPanel header="Company Information">
+      <ng-template
+        pTemplate="content"
+        let-nextCallback="nextCallback"
+        let-index="index"
+      >
+        <div class="flex flex-column h-12rem">
+          <div
+            class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex-row justify-content-center align-items-center font-medium"
+          >
+            <form [formGroup]="companyInfoForm">
+              <div class="w-full gap-10">
+                <div
+                  class="w-[100%] grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-10 px-10 items-start mt-10"
+                >
+                  <p-floatLabel>
+                    <input
+                      type="text"
+                      id="companyName"
+                      formControlName="companyName"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="companyName">Company Name</label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      type="text"
+                      id="companyPhone"
+                      formControlName="companyPhone"
+                      pInputText
+                      (input)="onPhoneInput($event)"
+                      pattern="[0-9]*"
+                      maxlength="10"
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="companyPhone">Company Phone No </label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      type="text"
+                      id="location"
+                      formControlName="companyExactLocation"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="location">Company Exact Location</label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      type="text"
+                      id="city"
+                      formControlName="companyTown"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="city">Company Town/City</label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      type="date"
+                      id="dateCommenced"
+                      formControlName="dateCommenced"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                      (focus)="isFocused = true"
+                      (blur)="isFocused = false"
+                    />
+                    <label
+                      [ngStyle]="{
+                        opacity: isFocused ? '1' : '0',
+                        transition: 'opacity 0.3s ease'
+                      }"
+                      for="dateCommenced"
+                    >
+                      Date of Commencement
+                    </label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      type="text"
+                      id="address"
+                      formControlName="companyAddress"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="address">Company Address</label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      type="email"
+                      id="email"
+                      formControlName="companyEmail"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="email">Company Email Address</label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      type="text"
+                      id="supervisor"
+                      formControlName="companySupervisor"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="supervisor">Company Supervisor</label>
+                  </p-floatLabel>
+
+                  <p-floatLabel>
+                    <input
+                      (input)="onSuperPhoneInput($event)"
+                      type="text"
+                      id="supervisorPhone"
+                      pattern="[0-9]*"
+                      maxlength="10"
+                      formControlName="supervisorPhone"
+                      pInputText
+                      class="border-red-700 h-10 w-full pl-3 focus:outline-none"
+                    />
+                    <label for="supervisorPhone">Supervisor Phone No</label>
+                  </p-floatLabel>
                 </div>
+                <div
+                  class="w-[100%] 2xl:w-[35%] grid-flow-col gap-5 grid grid-col-1 md:grid-col-2 px-10 mt-10"
+                >
+                  <div class="w-full">
+                    <label class="font-medium text-base mb-2 text-Dark-Primary"
+                      >Company Region:</label
+                    >
+                    <select
+                      required
+                      formControlName="companyRegion"
+                      class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field"
+                    >
+                      <option value="" selected>Select region</option>
+                      <option class="text-black" *ngFor="let zone of zones">
+                        {{ zone.name }}
+                      </option>
+                    </select>
+                  </div>
 
-                <div>
-                  <label for="companyPhone">Company Phone No </label>
-
-                  <input
-                    disabled
-                    [value]="companyDetails.companyPhone"
-                    type="text"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
-                </div>
-
-                <div>
-
-                  <label for="location">Company Exact Location</label>
-                  <input
-                    disabled
-                    [value]="companyDetails.companyExactLocation"
-                    type="text"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
-                </div>
-
-                <div>
-                  <label for="city">Company Town/City</label>
-
-                  <input
-                    [value]="companyDetails.companyTown"
-                    disabled
-                    type="text"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
-                </div>
-
-                <div>
-                  <label
-                  >
-                    Date of Commencement
-                  </label>
-
-                  <input
-                    [value]="companyDetails.dateCommenced"
-                    disabled
-                    type="date"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
-                </div>
-
-
-                <div>
-                  <label for="address">Company Address</label>
-
-                  <input
-                    [value]="companyDetails.companyAddress"
-                    disabled
-                    type="text"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
-                </div>
-
-                <div>
-                  <label for="email">Company Email Address</label>
-
-                  <input
-                    [value]="companyDetails.companyEmail"
-                    disabled
-                    type="email"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
-                </div>
-
-                <div>
-                  <label for="supervisor">Company Supervisor</label>
-
-                  <input
-                    [value]="companyDetails.companySupervisor"
-                    disabled
-                    type="text"
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
-                </div>
-
-                <div>
-                  <label for="supervisorPhone">Supervisor Phone No</label>
-
-                  <input
-                    [value]="companyDetails.supervisorPhone"
-                    type="text"
-                    disabled
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-
+                  <div class="w-full">
+                    <label class="font-medium text-base mb-2 text-Dark-Primary"
+                      >Letter Addressed To:
+                    </label>
+                    <select
+                      required
+                      formControlName="letterTo"
+                      class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field"
+                    >
+                      <option value="" selected>Select addressed</option>
+                      <option
+                        class="text-black custom-option"
+                        *ngFor="let option of letterToOptions"
+                      >
+                        {{ option.name }}
+                      </option>
+                    </select>
+                  </div>
                 </div>
               </div>
-              <div  class="w-[100%] 2xl:w-[35%] grid-flow-col gap-5 grid grid-col-1 md:grid-col-2 px-10  mt-10 ">
 
-                <div class="w-full">
-                  <label class="font-medium text-base mb-2 text-Dark-Primary">Company Region:</label>
-                  <input
-                    [value]="companyDetails.companyRegion"
-                    type="text"
-                    disabled
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-                </div>
-
-                <div class="w-full">
-                  <label class="font-medium text-base mb-2 text-Dark-Primary">Letter Addressed To: </label>
-                  <input
-                    [value]="companyDetails.letterTo"
-                    type="text"
-                    disabled
-                    pInputText
-                    class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                  />
-                </div>
-
+              <div class="flex py-4 mx-10 mt-10">
+                <button
+                  (click)="moveNext(nextCallback)"
+                  [ngClass]="{
+                    'bg-Primary-Blue': companyInfoForm.valid,
+                    'bg-Lighter-Blue': !companyInfoForm.valid
+                  }"
+                  class="hover:bg-Bright-Blue cursor-pointer text-white px-5 py-2 rounded-md"
+                >
+                  Next
+                </button>
+                <!--                <p-button label="Next" />-->
               </div>
-            </div>
-
-            <div class="flex py-4 mx-10 mt-10">
-
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
-    </div>
+      </ng-template>
+    </p-stepperPanel>
 
-  } @else {
-    <div >
-      <div class="alert alert-warning">
-        <strong>Important:</strong> Your current location will be recorded for verification purposes. Please ensure you are at your company's premises
-        before filling out this form.
-      </div>
-
-      <p-stepper orientation="vertical">
-        <p-stepperPanel header="Company Information">
-          <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
-            <div class="flex flex-column h-12rem">
-              <div class="border-2  border-dashed surface-border border-round surface-ground flex-auto flex-row justify-content-center align-items-center font-medium">
-                <form [formGroup]="companyInfoForm" >
-                  <div class=" w-full gap-10 ">
-                    <div class="w-[100%]  grid grid-col-1 md:grid-cols-2 xl:grid-cols-3 gap-10 px-10 items-start mt-10">
-                      <p-floatLabel>
-                        <input
-                          type="text"
-                          id="companyName"
-                          formControlName="companyName"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="companyName">Company Name</label>
-                      </p-floatLabel>
-
-                      <p-floatLabel>
-                        <input
-                          type="text"
-                          id="companyPhone"
-                          formControlName="companyPhone"
-                          pInputText
-                          (input)="onPhoneInput($event)"
-                          pattern="[0-9]*"
-                          maxlength="10"
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="companyPhone">Company Phone No </label>
-                      </p-floatLabel>
-
-                      <p-floatLabel>
-                        <input
-                          type="text"
-                          id="location"
-                          formControlName="companyExactLocation"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="location">Company Exact Location</label>
-                      </p-floatLabel>
-
-                      <p-floatLabel>
-                        <input
-                          type="text"
-                          id="city"
-                          formControlName="companyTown"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="city">Company Town/City</label>
-                      </p-floatLabel>
-
-                      <p-floatLabel>
-                        <input
-                          type="date"
-                          id="commencementDate"
-                          formControlName="commencementDate"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                          (focus)="isFocused = true"
-                          (blur)="isFocused = false"
-                        />
-                        <label
-                          [ngStyle]="{'opacity': isFocused ? '1' : '0', 'transition': 'opacity 0.3s ease'}"
-                          for="commencementDate"
-                        >
-                          Date of Commencement
-                        </label>
-                      </p-floatLabel>
-
-
-                      <p-floatLabel>
-                        <input
-                          type="text"
-                          id="address"
-                          formControlName="companyAddress"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="address">Company Address</label>
-                      </p-floatLabel>
-
-                      <p-floatLabel>
-                        <input
-                          type="email"
-                          id="email"
-                          formControlName="companyEmail"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="email">Company Email Address</label>
-                      </p-floatLabel>
-
-                      <p-floatLabel>
-                        <input
-                          type="text"
-                          id="supervisor"
-                          formControlName="companySupervisor"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="supervisor">Company Supervisor</label>
-                      </p-floatLabel>
-
-                      <p-floatLabel>
-                        <input
-                          (input)="onSuperPhoneInput($event)"
-                          type="text"
-                          id="supervisorPhone"
-                          pattern="[0-9]*"
-                          maxlength="10"
-                          formControlName="supervisorPhone"
-                          pInputText
-                          class="border-red-700 h-10 w-full pl-3 focus:outline-none"
-                        />
-                        <label for="supervisorPhone">Supervisor Phone No</label>
-                      </p-floatLabel>
-                    </div>
-                    <div  class="w-[100%] 2xl:w-[35%] grid-flow-col gap-5 grid grid-col-1 md:grid-col-2 px-10  mt-10 ">
-
-                      <div class="w-full">
-                        <label class="font-medium text-base mb-2 text-Dark-Primary">Company Region:</label>
-                        <select
-                          required
-                          formControlName="companyRegion"
-                          class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field "
-                        >
-                          <option value="" disabled selected>Select region</option>
-                          <option class="text-black" *ngFor="let zone of zones">
-                            {{ zone.name }}
-                          </option>
-                        </select>
-                      </div>
-
-                      <div class="w-full">
-                        <label class="font-medium text-base mb-2 text-Dark-Primary">Letter Addressed To: </label>
-                        <select
-                          required
-                          formControlName="letterTo"
-                          class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field "
-                        >
-                          <option  value="" disabled selected>Select addressed</option>
-                          <option class="text-black custom-option" *ngFor="let option of letterToOptions">
-                            {{ option.name }}
-                          </option>
-                        </select>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="flex py-4 mx-10 mt-10">
-                    <button (click)="moveNext(nextCallback)" [ngClass]="{'bg-Primary-Blue':companyInfoForm.valid, 'bg-Lighter-Blue':!companyInfoForm.valid}" class=" hover:bg-Bright-Blue cursor-pointer text-white px-5 py-2 rounded-md " >Next</button>
-                    <!--                <p-button label="Next" />-->
-                  </div>
-                </form>
-              </div>
+    <p-stepperPanel header="Terms of Agreement">
+      <ng-template
+        [formGroup]="AgreementForm"
+        pTemplate="content"
+        let-prevCallback="prevCallback"
+        let-nextCallback="nextCallback"
+        let-index="index"
+      >
+        <div class="flex flex-col gap-10 px-10">
+          <!-- Terms & Conditions Section -->
+          <div class="w-full">
+            <p>
+              I agree that information provided on this form is genuine and
+              valid.
+            </p>
+            <div class="mt-3 gap-2 flex items-center">
+              <input
+                formControlName="termsAccepted"
+                type="checkbox"
+                class="cursor-pointer w-4 h-4"
+              />
+              <label>Accept Terms & Conditions</label>
             </div>
-          </ng-template>
-        </p-stepperPanel>
+          </div>
 
-        <p-stepperPanel header="Terms of Agreement">
-          <ng-template [formGroup]="AgreementForm"  pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
-            <div class="flex flex-col gap-10 px-10">
-              <!-- Terms & Conditions Section -->
-              <div class="w-full">
-                <p>
-                  I agree that information provided on this form is genuine and valid.
-                </p>
-                <div class="mt-3 gap-2 flex items-center">
-                  <input
-                    formControlName="termsAccepted"
-                    type="checkbox"
-                    class="cursor-pointer
-                w-4
-                h-4">
-                  <label >Accept Terms & Conditions</label>
-                </div>
-
-              </div>
-
-
-              <div class="flex py-4 gap-8">
-                <button class= "text-black border-[1px] border-gray-200 px-5 py-2 rounded-md"  (click)="moveBack(prevCallback)">Back</button>
-                <button  (click)="submitForm()"  [ngClass]="{'bg-Primary-Blue':companyInfoForm.valid, 'bg-Lighter-Blue': !companyInfoForm.valid}"  class=" hover:bg-Bright-Blue cursor-pointer text-white px-5 py-2 rounded-md "  >Submit</button>
-                <liaison-loader-modal [isOpen]="isModalOpen"></liaison-loader-modal>
-              </div>
-            </div>
-          </ng-template>
-        </p-stepperPanel>
-
-
-      </p-stepper>
-    </div>
-  }
-}
-
-
-
+          <div class="flex py-4 gap-8">
+            <button
+              type="button"
+              class="text-black border-[1px] border-gray-200 px-5 py-2 rounded-md"
+              (click)="moveBack(prevCallback)"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              (click)="submitForm()"
+              [ngClass]="{
+                'bg-Primary-Blue': companyInfoForm.valid,
+                'bg-Lighter-Blue': !companyInfoForm.valid
+              }"
+              class="hover:bg-Bright-Blue cursor-pointer text-white px-5 py-2 rounded-md"
+            >
+              Submit
+            </button>
+            <liaison-loader-modal [isOpen]="isModalOpen"></liaison-loader-modal>
+          </div>
+        </div>
+      </ng-template>
+    </p-stepperPanel>
+  </p-stepper>
+</div>
+} }

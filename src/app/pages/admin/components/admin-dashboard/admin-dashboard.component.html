@@ -21,7 +21,7 @@
           (ngModelChange)="getYears()"
           optionLabel="name"
           optionValue="value"
-          [placeholder]="lastyear.toString() + '/' + currentYear.toString()"
+          [placeholder]="currentYear.toString() + '/' + nextYear.toString()"
         >
         </p-dropdown>
       </div>
@@ -47,15 +47,25 @@
   </div>
 
   <div class="mt-8 sm:mt-10">
-    <p class="text-lg sm:text-xl font-medium mb-4">Top Zones</p>
+    <p class="text-lg sm:text-xl font-medium mb-4">Updated Assumption of Duties</p>
     <div class="overflow-x-auto">
-      <liaison-table
-        [HideCheckbox]="HideCheckbox"
-        [HidePagination]="HidePagination"
-        [columns]="columns"
-        [data]="data"
-      >
-      </liaison-table>
+        @switch (studentAssumptionOfDutyLogsQuery.status()) { @case ('pending') { @if
+        (studentAssumptionOfDutyLogsQuery.data()) {
+        <ng-container *ngTemplateOutlet="table" />
+        } @else {
+        <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" [HideCheckbox]="HideCheckbox" />
+        } } @case ('error') {
+        <liaison-table [columns]="columns" [data]="[]" [errorOccurred]="true" [HideCheckbox]="HideCheckbox" />
+        } @case ('success') {
+        <ng-container *ngTemplateOutlet="table" />
+        
+        } }
     </div>
   </div>
 </div>
+
+<ng-template #table>
+      <liaison-table [HideCheckbox]="HideCheckbox" [HidePagination]="HidePagination" [columns]="columns"
+        [data]="studentAssumptionOfDutyLogsQuery.data()!">
+      </liaison-table>
+</ng-template>

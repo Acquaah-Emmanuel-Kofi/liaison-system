@@ -30,23 +30,50 @@
 
 @if (showModal) {
   <liaison-modal-container [isOpen]="showModal" [title]="'Confirm Action'" (closeModal)="closeModal()" >
-   <div class="w-full h-56 flex flex-col justify-center items-center gap-3">
-     {{student.isSupervised}}
-     @if (student.status === "SUPERVISED"){
-       {{student.isSupervised}}
-       <h3 class="text-[26px] font-bold">Do you want to mark this student as Not Supervised ?</h3>
-     } @else {
-       <h3 class="text-[26px] font-bold">Do you want to mark this student as Supervised ?</h3>
-       {{student.isSupervised}}
-     }
-     <div class="mt-4 text-[20px]">
-       <h3>{{ student.name }}</h3>
-       <p>Supervision: {{ student.status |titlecase }}</p>
-     </div>
-     <div class="flex items-center gap-3 mt-5">
-       <button class="bg-gray-100 text-black p-2 rounded" (click)="closeModal()">Cancel</button>
-       <button class="bg-Dark-Blue text-white p-2 rounded" (click)="changeStatus()">Yes</button>
-     </div>
-   </div>
+<div class="w-full h-56 flex flex-col justify-center items-center gap-6 p-4">
+  <!-- Supervised Status -->
+  <span class="text-sm font-medium text-gray-500">
+    Supervised: {{ student.isSupervised }}
+  </span>
+
+  <!-- Conditional Message -->
+  <h3 class="text-2xl font-semibold text-center text-gray-700">
+    @if (student.status === "SUPERVISED") {
+    Do you want to mark this student as <span class="text-red-500">Not Supervised</span>?
+    } @else {
+    Do you want to mark this student as <span class="text-green-500">Supervised</span>?
+    }
+  </h3>
+
+  <!-- Student Details -->
+  <div class="text-lg text-gray-600 text-center">
+    <h3 class="font-medium text-gray-800">{{ student.name }}</h3>
+    <p>Supervision Status: <span class="font-semibold">{{ student.status | titlecase }}</span></p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex items-center gap-4 mt-5">
+    <!-- Cancel Button -->
+    <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md transition" (click)="closeModal()">
+      Cancel
+    </button>
+
+    <!-- Confirmation Button -->
+    <button type="button" [disabled]="changeStatusMutation.isPending()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition flex items-center gap-2 disabled:opacity-50"
+      (click)="changeStatus()">
+      @if (changeStatusMutation.isPending()) {
+      <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+      Processing...
+      } @else {
+      Yes
+      }
+    </button>
+  </div>
+</div>
+
   </liaison-modal-container>
 }

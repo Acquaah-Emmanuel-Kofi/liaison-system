@@ -20,13 +20,11 @@ import {
 } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs';
 import { AssumptionService } from '../../services/assumption/assumption.service';
-import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 import { RegionService } from '../../../../shared/services/regions/regions.service';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { dashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
-import { companyDetails } from '../../../../shared/interfaces/response.interface';
 import { SkeletalComponent } from './skeletal/skeletal.component';
-import { LocationService } from '../../../../shared/services/location/location.service';
+import { CompanyDetails, DutyData } from '../../../../shared/interfaces/response.interface';
 
 @Component({
   selector: 'liaison-assumption-of-duty',
@@ -50,8 +48,6 @@ import { LocationService } from '../../../../shared/services/location/location.s
   providers: [MessageService],
 })
 export class AssumptionOfDutyComponent implements OnInit {
-  private globalStore = inject(GlobalVariablesStore);
-  private locationService = inject(LocationService);
   dashboardService = inject(DashboardService);
   messageService = inject(MessageService);
   assumptionService = inject(AssumptionService);
@@ -59,13 +55,14 @@ export class AssumptionOfDutyComponent implements OnInit {
   isFocused: boolean = false;
   isModalOpen: boolean = false;
   isAsummed: boolean = false;
+  isEditMode = true;
 
   companyInfoForm!: FormGroup;
   AgreementForm!: FormGroup;
 
   zones: any;
-  AssumptionOfDutyInfo: any;
-  companyDetails!: companyDetails;
+  AssumptionOfDutyInfo: DutyData[] = [];
+  companyDetails!: CompanyDetails;
 
   letterToOptions = [
     { name: 'THE MANAGER', value: 'TheManager' },
@@ -115,54 +112,39 @@ export class AssumptionOfDutyComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.setCompanyLocation();
     this.zones = this.regionService.getRawRegions();
     this.buildForm();
     this.buildAgreementForm();
+    this.toggleEditMode();
   }
 
-  setCompanyLocation() {
-    this.locationService.getUserLocation().subscribe({
-      next: (data) => {
-        this.companyInfoForm.patchValue({
-          companyLongitude: data.longitude,
-          companyLatitude: data.latitude,
-        });
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail:
-            error ||
-            "An error occurred while getting company's location details",
-        });
-      },
-    });
+  dashQUery = injectQuery(() => ({
+    queryKey: [dashboardQueryKey.assumption],
+    queryFn: async () => {
+      const response = await this.dashboardService.getDashboardInfo();
+      this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
+      this.companyDetails = this.AssumptionOfDutyInfo[0].companyDetails;
+      this.companyInfoForm.patchValue(this.companyDetails);
+      this.isAsummed = response.data.isAssumeDuty;
+      return response.data;
+    },
+  }));
+
+  toggleEditMode(): void {
+    if (this.isAsummed && this.isEditMode) {
+      this.companyInfoForm.reset(this.companyDetails);
+
+      Object.keys(this.companyInfoForm.controls).forEach((key) => {
+        this.companyInfoForm.get(key)?.disable({ emitEvent: false });
+      });
+    } else {
+      Object.keys(this.companyInfoForm.controls).forEach((key) => {
+        this.companyInfoForm.get(key)?.enable({ emitEvent: false });
+      });
+    }
+
+    this.isEditMode = !this.isEditMode;
   }
-
-  dashQUery = injectQuery(()=> ({
-      queryKey: [dashboardQueryKey.assumption],
-      queryFn: async ()=>{
-        const response = await this.dashboardService.getDashboardInfo()
-        this.AssumptionOfDutyInfo = response.data.assumptionOfDuties
-        this.companyDetails =this.AssumptionOfDutyInfo[0].companyDetails
-        this.isAsummed = response.data.isAssumeDuty;
-        return response.data;
-      }
-    })
-
-  );
-  // dashQUery = injectQuery(() => ({
-  //   queryKey: [dashboardQueryKey.assumption],
-  //   queryFn: async () => {
-  //     const response = await this.dashboardService.getDashboardInfo();
-  //     this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
-  //     this.companyDetails = this.AssumptionOfDutyInfo[0].companyDetails;
-  //     this.isAsummed = response.data.isAssumeDuty;
-  //     return response.data;
-  //   },
-  // }));
 
   buildForm() {
     this.companyInfoForm = this.fb.group({
@@ -170,15 +152,13 @@ export class AssumptionOfDutyComponent implements OnInit {
       companyPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       companyExactLocation: ['', Validators.required],
       companyTown: ['', Validators.required],
-      commencementDate: ['', Validators.required],
+      dateCommenced: ['', Validators.required],
       companyAddress: ['', Validators.required],
       companyEmail: ['', [Validators.required, Validators.email]],
       companySupervisor: ['', Validators.required],
       supervisorPhone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       companyRegion: ['', Validators.required],
       letterTo: ['', Validators.required],
-      companyLongitude: [0],
-      companyLatitude: [0],
     });
   }
 
@@ -220,12 +200,7 @@ export class AssumptionOfDutyComponent implements OnInit {
   AssumptionMutation = injectMutation(() => ({
     mutationFn: async (formData) => {
       return await lastValueFrom(
-        this.assumptionService.submitAssumptionForm(
-          formData,
-          this.globalStore.startYear(),
-          this.globalStore.endYear(),
-          this.globalStore.type()
-        )
+        this.assumptionService.submitAssumptionForm(formData)
       );
     },
     onSuccess: (data: any) => {
@@ -233,7 +208,7 @@ export class AssumptionOfDutyComponent implements OnInit {
         severity: 'success',
         summary: 'Success',
         detail:
-          data.message || 'Assumption of duty form submission was successfully',
+          data.message ?? 'Assumption of duty form submission was successfully',
       });
       this.isModalOpen = false;
     },
@@ -242,7 +217,7 @@ export class AssumptionOfDutyComponent implements OnInit {
         severity: 'error',
         summary: 'Error',
         detail:
-          error.message || 'An error occurred while submitting the details',
+          error.message ?? 'An error occurred while submitting the details',
       });
       this.isModalOpen = false;
     },
@@ -265,6 +240,39 @@ export class AssumptionOfDutyComponent implements OnInit {
     } else {
       this.AgreementForm.markAllAsTouched();
     }
+  }
+
+  updateAssumptionMutation = injectMutation(() => ({
+    mutationFn: async (formData: CompanyDetails) => {
+      return await lastValueFrom(
+        this.assumptionService.updateAssuptionOfDuty(
+          formData,
+          this.AssumptionOfDutyInfo[0].id
+        )
+      );
+    },
+    onSuccess: (data: any) => {
+      this.toggleEditMode();
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: data.message ?? 'Assumption of duty form update was successful',
+      });
+      this.isModalOpen = false;
+    },
+    onError: (error: any) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail:
+          error.message ?? 'An error occurred while submitting the details',
+      });
+      this.isModalOpen = false;
+    },
+  }));
+
+  updateForm() {
+    this.updateAssumptionMutation.mutate(this.companyInfoForm.value);
   }
 
   formIsValid() {

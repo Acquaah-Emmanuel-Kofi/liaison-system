@@ -2,7 +2,6 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { TokenService } from '../../shared/services/token/token.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Router } from '@angular/router';
 import { AuthService } from '../../pages/auth/services/auth/auth.service';
 import { throwError } from 'rxjs';
 

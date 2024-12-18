@@ -6,7 +6,7 @@
       <p
         class="text-Primary-Black text-lg sm:text-xl lg:text-2xl 2xl:text-[26px] font-medium relative flex gap-2"
       >
-        Welcome back {{ username() || "lecturer"}}
+        Welcome back {{ username() || "lecturer" }}
         <img src="/assets/icons/waving_hand.svg" alt="Waving Hand" />
       </p>
       <p class="text-Dark-Blue text-lg">Here's an overview of your profile</p>
@@ -28,37 +28,59 @@
     </div>
   </div>
 
-
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     @for (card of statCard; track $index) {
-      <liaison-stat-card
-        [iconSrc]="card.iconSrc"
-        [title]="card.title"
-        [count]="card.count"
-        [showView] ="card.show"
-        [navigateTo]="card.navigateTo"
-        [isLoading]="analyticsQuery.isPending()"
-      >
-      </liaison-stat-card>
+    <liaison-stat-card
+      [iconSrc]="card.iconSrc"
+      [title]="card.title"
+      [count]="card.count"
+      [showView]="card.show"
+      [navigateTo]="card.navigateTo"
+      [isLoading]="analyticsQuery.isPending()"
+    >
+    </liaison-stat-card>
     }
   </div>
 
-
   <div class="mt-8 sm:mt-10">
     <p class="text-lg sm:text-xl font-medium mb-4">Top Industries</p>
+
     <div class="overflow-x-auto">
+      @switch (topIndustriesQuery.status()) { @case ('pending') { @if
+      (topIndustriesQuery.data()) {
+      <ng-container *ngTemplateOutlet="table" />
+      } @else {
+      <liaison-table
+        [columns]="topIndustriescolumns"
+        [data]="[]"
+        [dataIsLoading]="true"
+        [HideCheckbox]="HideCheckbox"
+      />
+      } } @case ('error') {
+      <liaison-table
+        [columns]="topIndustriescolumns"
+        [data]="[]"
+        [errorOccurred]="true"
+        [HideCheckbox]="HideCheckbox"
+      />
+      } @case ('success') {
+      <ng-container *ngTemplateOutlet="table" />
+
+      } }
+    </div>
+
+    <ng-template #table>
       <liaison-table
         [HideCheckbox]="HideCheckbox"
         [HidePagination]="HidePagination"
-        [columns]="columns"
-        [data]="data"
+        [columns]="topIndustriescolumns"
+        [data]="topIndustriesQuery.data()"
       >
       </liaison-table>
-    </div>
+    </ng-template>
   </div>
 
   <div class="mt-8 sm:mt-10">
-    <liaison-lecturer-chart/>
+    <liaison-lecturer-chart />
   </div>
-
 </div>

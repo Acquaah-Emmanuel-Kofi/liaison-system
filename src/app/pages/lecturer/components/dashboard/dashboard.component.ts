@@ -13,9 +13,13 @@ import { StatCardComponent } from '../../../../shared/components/stat-card/stat-
 import { IStartCard } from '../../../../shared/interfaces/constants.interface';
 import { LecturerChartComponent } from '../lecturer-chart/lecturer-chart.component';
 import { injectQuery } from '@tanstack/angular-query-experimental';
-import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import {
+  statAnalyticsQueryKey,
+  topIndustriesQueryKey,
+} from '../../../../shared/helpers/query-keys.helper';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { ILecturerDashboard } from '../../../../shared/interfaces/response.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'liaison-dashboard',
@@ -26,6 +30,7 @@ import { ILecturerDashboard } from '../../../../shared/interfaces/response.inter
     TableComponent,
     StatCardComponent,
     LecturerChartComponent,
+    CommonModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -43,52 +48,6 @@ export class DashboardComponent implements OnInit {
 
   HideCheckbox = true;
   HidePagination = true;
-
-  columns: TableColumn[] = [
-    {
-      label: 'Name',
-      key: 'name',
-    },
-    {
-      label: 'Region',
-      key: 'region',
-    },
-    {
-      label: 'Location',
-      key: 'location',
-    },
-    {
-      label: 'No of students',
-      key: 'studentsNo',
-    },
-  ];
-
-  data: TableData[] = [
-    {
-      name: 'Amalitech',
-      region: 'Western',
-      location: 'Town',
-      studentsNo: 30,
-    },
-    {
-      name: 'Ghana Revenue Authority',
-      region: 'Eastern',
-      location: 'Somanya',
-      studentsNo: 24,
-    },
-    {
-      name: 'Qliq Integration',
-      region: 'Western',
-      location: 'Anaji',
-      studentsNo: 14,
-    },
-    {
-      name: 'Eastern',
-      region: 'Central',
-      location: 'Cape coast',
-      studentsNo: 12,
-    },
-  ];
 
   statCard: IStartCard[] = [
     {
@@ -111,6 +70,25 @@ export class DashboardComponent implements OnInit {
       iconSrc: 'assets/lectures.svg',
       navigateTo: '/admin/internships',
       show: false,
+    },
+  ];
+
+  topIndustriescolumns: TableColumn[] = [
+    {
+      label: 'Name',
+      key: 'name',
+    },
+    {
+      label: 'Region',
+      key: 'region',
+    },
+    {
+      label: 'Location',
+      key: 'location',
+    },
+    {
+      label: 'No of students',
+      key: 'studentsNo',
     },
   ];
 
@@ -153,7 +131,7 @@ export class DashboardComponent implements OnInit {
     ],
     queryFn: async () => {
       const response = await this._dashboardService.getStatAnalytics();
-      
+
       this.updateCountsFromApiResponse(response.data);
       return response.data;
     },
@@ -163,14 +141,29 @@ export class DashboardComponent implements OnInit {
     this.statCard = this.statCard.map((card) => {
       switch (card.title) {
         case 'Industries':
-          return { ...card, count: data.company.totalCompanies };
+          return { ...card, count: data?.company?.totalCompanies };
         case 'Students':
-          return { ...card, count: data.student.totalStudents };
+          return { ...card, count: data?.student?.totalStudents };
         case 'Zone Supervisors':
-          return { ...card, count: data.lecturer.totalLecturers };
+          return { ...card, count: data?.lecturer?.totalLecturers };
         default:
           return card;
       }
     });
   }
+
+  topIndustriesQuery = injectQuery(() => ({
+    queryKey: [
+      ...topIndustriesQueryKey.data(
+        this.globalStore.type(),
+        this.globalStore.startYear() ?? this.currentYear,
+        this.globalStore.endYear() ?? this.nextYear
+      ),
+    ],
+    queryFn: async () => {
+      const response = await this._dashboardService.getTopIndustries();
+
+      return response.data;
+    },
+  }));
 }

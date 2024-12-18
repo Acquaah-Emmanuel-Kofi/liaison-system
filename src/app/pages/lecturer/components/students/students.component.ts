@@ -14,10 +14,8 @@ import {
   studentForLectureQuery,
   studentsQueryKey,
 } from '../../../../shared/helpers/query-keys.helper';
-import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 import { StudentTableService } from '../../../admin/service/students-table/student-table.service';
 import { IGetStudentForLecturerData } from '../../../../shared/interfaces/response.interface';
-import { formatDateToDDMMYYYY } from '../../../../shared/helpers/functions.helper';
 import { ModalContainerComponent } from '../../../../shared/components/modal-container/modal-container.component';
 import { lastValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';

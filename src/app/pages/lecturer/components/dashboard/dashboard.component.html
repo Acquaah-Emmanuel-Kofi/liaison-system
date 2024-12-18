@@ -21,7 +21,7 @@
           (ngModelChange)="getYears()"
           optionLabel="name"
           optionValue="value"
-          [placeholder]="nextYear.toString() + '/' + currentYear.toString()"
+          [placeholder]="currentYear.toString() + '/' + nextYear.toString()"
         >
         </p-dropdown>
       </div>
@@ -37,6 +37,7 @@
         [count]="card.count"
         [showView] ="card.show"
         [navigateTo]="card.navigateTo"
+        [isLoading]="analyticsQuery.isPending()"
       >
       </liaison-stat-card>
     }

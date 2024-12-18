@@ -1,14 +1,21 @@
-import {Component, computed, inject} from '@angular/core';
-import {DropdownModule} from "primeng/dropdown";
-import {UserStore} from "../../../../shared/store/user.store";
-import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
-import {FormsModule} from "@angular/forms";
-import {getYears} from '../../../../shared/helpers/functions.helper';
-import {TableComponent} from "../../../../shared/components/table/table.component";
-import {TableColumn, TableData} from "../../../../shared/components/table/table.interface";
-import {StatCardComponent} from "../../../../shared/components/stat-card/stat-card.component";
-import {IStartCard} from "../../../../shared/interfaces/constants.interface";
-import {LecturerChartComponent} from "../lecturer-chart/lecturer-chart.component";
+import { Component, computed, inject, OnInit } from '@angular/core';
+import { DropdownModule } from 'primeng/dropdown';
+import { UserStore } from '../../../../shared/store/user.store';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { FormsModule } from '@angular/forms';
+import { getYears } from '../../../../shared/helpers/functions.helper';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import {
+  TableColumn,
+  TableData,
+} from '../../../../shared/components/table/table.interface';
+import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
+import { IStartCard } from '../../../../shared/interfaces/constants.interface';
+import { LecturerChartComponent } from '../lecturer-chart/lecturer-chart.component';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { statAnalyticsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { DashboardService } from '../../services/dashboard/dashboard.service';
+import { ILecturerDashboard } from '../../../../shared/interfaces/response.interface';
 
 @Component({
   selector: 'liaison-dashboard',
@@ -23,7 +30,7 @@ import {LecturerChartComponent} from "../lecturer-chart/lecturer-chart.component
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   readonly userStore = inject(UserStore);
   private globalStore = inject(GlobalVariablesStore);
 
@@ -107,16 +114,22 @@ export class DashboardComponent {
     },
   ];
 
+  private _dashboardService = inject(DashboardService);
+
+  constructor() {
+    this.populateYears();
+  }
+
+  ngOnInit() {
+    this.updateCountsFromApiResponse(this.analyticsQuery.data()!);
+  }
+
   populateYears() {
     const startYear = 2020;
     for (let year = this.currentYear; year >= startYear; year--) {
       const academicYear = year + '/' + (year + 1);
       this.years.push({ name: academicYear, value: academicYear });
     }
-  }
-
-  constructor() {
-    this.populateYears();
   }
 
   getYears() {
@@ -128,5 +141,36 @@ export class DashboardComponent {
         this.globalStore.setEndOfAcademicYear(year?.endYear);
       }
     }
+  }
+
+  analyticsQuery = injectQuery(() => ({
+    queryKey: [
+      ...statAnalyticsQueryKey.data(
+        this.globalStore.type(),
+        this.globalStore.startYear() ?? this.currentYear,
+        this.globalStore.endYear() ?? this.nextYear
+      ),
+    ],
+    queryFn: async () => {
+      const response = await this._dashboardService.getStatAnalytics();
+      
+      this.updateCountsFromApiResponse(response.data);
+      return response.data;
+    },
+  }));
+
+  updateCountsFromApiResponse(data: ILecturerDashboard) {
+    this.statCard = this.statCard.map((card) => {
+      switch (card.title) {
+        case 'Industries':
+          return { ...card, count: data.company.totalCompanies };
+        case 'Students':
+          return { ...card, count: data.student.totalStudents };
+        case 'Zone Supervisors':
+          return { ...card, count: data.lecturer.totalLecturers };
+        default:
+          return card;
+      }
+    });
   }
 }

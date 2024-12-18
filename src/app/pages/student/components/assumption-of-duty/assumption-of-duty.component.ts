@@ -22,12 +22,15 @@ import { lastValueFrom } from 'rxjs';
 import { AssumptionService } from '../../services/assumption/assumption.service';
 import { RegionService } from '../../../../shared/services/regions/regions.service';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
-import { dashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import {
+  lecturerDashboardQueryKey,
+} from '../../../../shared/helpers/query-keys.helper';
 import { SkeletalComponent } from './skeletal/skeletal.component';
 import {
   CompanyDetails,
   DutyData,
 } from '../../../../shared/interfaces/response.interface';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-assumption-of-duty',
@@ -112,6 +115,8 @@ export class AssumptionOfDutyComponent implements OnInit {
     { name: 'THE COMMANDING OFFICER', value: 'TheCommandingOfficer' },
   ];
 
+  private globalStore = inject(GlobalVariablesStore);
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -122,7 +127,13 @@ export class AssumptionOfDutyComponent implements OnInit {
   }
 
   dashQUery = injectQuery(() => ({
-    queryKey: [dashboardQueryKey.assumption],
+    queryKey: [
+      ...lecturerDashboardQueryKey.assumption(
+        this.globalStore.type(),
+        this.globalStore.startYear(),
+        this.globalStore.endYear()
+      ),
+    ],
     queryFn: async () => {
       const response = await this.dashboardService.getDashboardInfo();
       this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
@@ -200,13 +211,17 @@ export class AssumptionOfDutyComponent implements OnInit {
       ?.setValue(input.value, { emitEvent: false });
   }
 
-  AssumptionMutation = injectMutation(() => ({
+  AssumptionMutation = injectMutation((client) => ({
     mutationFn: async (formData) => {
       return await lastValueFrom(
         this.assumptionService.submitAssumptionForm(formData)
       );
     },
     onSuccess: (data: any) => {
+      client
+        .invalidateQueries({ queryKey: lecturerDashboardQueryKey.all })
+        .then();
+
       this.messageService.add({
         severity: 'success',
         summary: 'Success',

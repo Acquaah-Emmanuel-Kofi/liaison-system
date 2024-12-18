@@ -6,7 +6,7 @@
       <p
         class="text-Primary-Black text-lg sm:text-xl lg:text-2xl 2xl:text-[26px] font-medium relative flex gap-2"
       >
-        Welcome back {{ username || "student" }}
+        Welcome back {{ username() || "student" }}
         <img
           ngSrc="/assets/icons/waving_hand.svg"
           alt="Waving Hand"
@@ -25,7 +25,9 @@
           class="h-5 w-44 skeleton rounded-full skeleton-text bg-gray-border"
         ></div>
       </div>
-      } @else { @if (student?.isSupervised) {
+      } @else { 
+        
+        @if (student?.isSupervised) {
       <div
         class="bg-green-200 w-40 px-2 h-8 rounded-full flex items-center justify-center"
       >

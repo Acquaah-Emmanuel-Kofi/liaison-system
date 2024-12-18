@@ -72,7 +72,7 @@ export const studentAssumptionOfDutyLogsQueryKey = {
   all: ['duty logs'] as const,
   data: (internshipType: boolean, startYear: number, endYear: number) =>
     [
-      ...statAnalyticsQueryKey.all,
+      ...studentAssumptionOfDutyLogsQueryKey.all,
       'all-logs',
       internshipType,
       startYear,
@@ -84,7 +84,7 @@ export const studentsLocationQueryKey = {
   all: ['students location'] as const,
   data: (internshipType: boolean, startYear: number, endYear: number) =>
     [
-      ...statAnalyticsQueryKey.all,
+      ...studentsLocationQueryKey.all,
       'all-students',
       internshipType,
       startYear,

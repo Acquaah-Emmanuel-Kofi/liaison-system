@@ -91,3 +91,15 @@ export const studentsLocationQueryKey = {
       endYear,
     ] as const,
 };
+
+export const topIndustriesQueryKey = {
+  all: ['top industries'] as const,
+  data: (internshipType: boolean, startYear: number, endYear: number) =>
+    [
+      ...topIndustriesQueryKey.all,
+      'all-industries',
+      internshipType,
+      startYear,
+      endYear,
+    ] as const,
+};

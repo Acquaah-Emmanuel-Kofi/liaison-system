@@ -25,7 +25,7 @@ export class StudentTableService {
       .set('endOfAcademicYear', this.globalStore.endYear())
       .set('internship', this.globalStore.type().toString())
       .set('page', 0)
-      .set('size', 1);
+      .set('size', 10);
   }
 
   getAllStudents(): Promise<IGetStudentResponse> {

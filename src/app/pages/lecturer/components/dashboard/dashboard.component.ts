@@ -18,10 +18,10 @@ import {LecturerChartComponent} from "../lecturer-chart/lecturer-chart.component
     FormsModule,
     TableComponent,
     StatCardComponent,
-    LecturerChartComponent
+    LecturerChartComponent,
   ],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
   readonly userStore = inject(UserStore);
@@ -32,11 +32,10 @@ export class DashboardComponent {
   years: { name: string; value: string }[] = [];
   selectedYear: string | null = null;
   currentYear: number = new Date().getFullYear();
-  lastyear = this.currentYear - 1;
+  nextYear = this.currentYear + 1;
 
   HideCheckbox = true;
   HidePagination = true;
-
 
   columns: TableColumn[] = [
     {
@@ -52,9 +51,9 @@ export class DashboardComponent {
       key: 'location',
     },
     {
-      label:'No of students',
+      label: 'No of students',
       key: 'studentsNo',
-    }
+    },
   ];
 
   data: TableData[] = [
@@ -62,28 +61,27 @@ export class DashboardComponent {
       name: 'Amalitech',
       region: 'Western',
       location: 'Town',
-      studentsNo: 30
+      studentsNo: 30,
     },
     {
       name: 'Ghana Revenue Authority',
       region: 'Eastern',
       location: 'Somanya',
-      studentsNo: 24
+      studentsNo: 24,
     },
     {
       name: 'Qliq Integration',
       region: 'Western',
       location: 'Anaji',
-      studentsNo: 14
+      studentsNo: 14,
     },
     {
       name: 'Eastern',
       region: 'Central',
       location: 'Cape coast',
-      studentsNo: 12
+      studentsNo: 12,
     },
   ];
-
 
   statCard: IStartCard[] = [
     {
@@ -91,29 +89,28 @@ export class DashboardComponent {
       count: 0,
       iconSrc: 'assets/students.svg',
       navigateTo: '/lecturer/students',
-      show: true
+      show: true,
     },
     {
       title: 'Industries',
       count: 0,
       iconSrc: 'assets/interns.svg',
       navigateTo: '/admin/internships',
-      show: false
+      show: false,
     },
     {
       title: 'Zone Supervisors',
       count: 0,
       iconSrc: 'assets/lectures.svg',
       navigateTo: '/admin/internships',
-      show: false
+      show: false,
     },
   ];
-
 
   populateYears() {
     const startYear = 2020;
     for (let year = this.currentYear; year >= startYear; year--) {
-      const academicYear = year - 1 + '/' + year;
+      const academicYear = year + '/' + (year + 1);
       this.years.push({ name: academicYear, value: academicYear });
     }
   }
@@ -121,7 +118,6 @@ export class DashboardComponent {
   constructor() {
     this.populateYears();
   }
-
 
   getYears() {
     if (this.selectedYear) {
@@ -133,8 +129,4 @@ export class DashboardComponent {
       }
     }
   }
-
-
-
-
 }

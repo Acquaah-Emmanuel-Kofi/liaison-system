@@ -1,4 +1,3 @@
-
 export const studentsQueryKey = {
   all: ['students'] as const,
   data: (
@@ -15,30 +14,46 @@ export const studentsQueryKey = {
       endOfAcademicYear,
       internship,
       page,
-      size
+      size,
     ] as const,
 };
 
 export const studentForLectureQuery = {
   all: ['students'] as const,
-
-}
+};
 
 export const zonesQueryData = {
   all: ['zones'] as const,
-  data: (startOfAcademicYear?: any, endOfAcademicYear?: any, internship?: boolean)=>
+  data: (
+    startOfAcademicYear?: any,
+    endOfAcademicYear?: any,
+    internship?: boolean
+  ) => [
+    ...zonesQueryData.all,
+    startOfAcademicYear,
+    endOfAcademicYear,
+    internship,
+  ],
+};
+export const lecturerDashboardQueryKey = {
+  all: ['lecturer dashboard'] as const,
+  assumption: (internshipType: boolean, startYear: number, endYear: number) =>
     [
-      ...zonesQueryData.all,
-      startOfAcademicYear,
-      endOfAcademicYear,
-      internship,
-  ]
-}
-export const dashboardQueryKey = {
-  all: ['dashboard'] as const,
-  assumption: ['assumption', 'lecturers'] as const,
-  colleagues: ['dashboard', 'colleagues'] as const,
-}
+      ...lecturerDashboardQueryKey.all,
+      'assumption',
+      internshipType,
+      startYear,
+      endYear,
+    ] as const,
+  colleagues: (internshipType: boolean, startYear: number, endYear: number) =>
+    [
+      ...lecturerDashboardQueryKey.all,
+      'colleagues',
+      internshipType,
+      startYear,
+      endYear,
+    ] as const,
+};
 
 export const lecturersQueryKey = {
   all: ['lecturers'] as const,

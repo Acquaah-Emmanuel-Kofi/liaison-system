@@ -37,4 +37,16 @@ export class DashboardService {
       })
     );
   }
+
+  getTopIndustries(): Promise<any> {
+    const endpoint = `${
+      environment.BACKEND_API_BASE_URL
+    }/lecturers/${this.userStore.id()}/get-top-industries`;
+
+    return lastValueFrom(
+      this._http.get<any>(endpoint, {
+        params: this.httpParams(),
+      })
+    );
+  }
 }

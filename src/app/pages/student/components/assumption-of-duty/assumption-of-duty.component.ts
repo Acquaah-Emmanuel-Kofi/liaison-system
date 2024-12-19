@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { StepperModule } from 'primeng/stepper';
 import {
   FormBuilder,
@@ -22,9 +22,15 @@ import { lastValueFrom } from 'rxjs';
 import { AssumptionService } from '../../services/assumption/assumption.service';
 import { RegionService } from '../../../../shared/services/regions/regions.service';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
-import { dashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import {
+  lecturerDashboardQueryKey,
+} from '../../../../shared/helpers/query-keys.helper';
 import { SkeletalComponent } from './skeletal/skeletal.component';
-import { CompanyDetails, DutyData } from '../../../../shared/interfaces/response.interface';
+import {
+  CompanyDetails,
+  DutyData,
+} from '../../../../shared/interfaces/response.interface';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-assumption-of-duty',
@@ -109,6 +115,8 @@ export class AssumptionOfDutyComponent implements OnInit {
     { name: 'THE COMMANDING OFFICER', value: 'TheCommandingOfficer' },
   ];
 
+  private globalStore = inject(GlobalVariablesStore);
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -119,7 +127,13 @@ export class AssumptionOfDutyComponent implements OnInit {
   }
 
   dashQUery = injectQuery(() => ({
-    queryKey: [dashboardQueryKey.assumption],
+    queryKey: [
+      ...lecturerDashboardQueryKey.assumption(
+        this.globalStore.type(),
+        this.globalStore.startYear(),
+        this.globalStore.endYear()
+      ),
+    ],
     queryFn: async () => {
       const response = await this.dashboardService.getDashboardInfo();
       this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
@@ -197,13 +211,17 @@ export class AssumptionOfDutyComponent implements OnInit {
       ?.setValue(input.value, { emitEvent: false });
   }
 
-  AssumptionMutation = injectMutation(() => ({
+  AssumptionMutation = injectMutation((client) => ({
     mutationFn: async (formData) => {
       return await lastValueFrom(
         this.assumptionService.submitAssumptionForm(formData)
       );
     },
     onSuccess: (data: any) => {
+      client
+        .invalidateQueries({ queryKey: lecturerDashboardQueryKey.all })
+        .then();
+
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
@@ -225,18 +243,9 @@ export class AssumptionOfDutyComponent implements OnInit {
 
   submitForm(): void {
     if (this.formIsValid()) {
-      if (this.isLoactionDetailsAvailable()) {
-        this.isModalOpen = true;
+      this.isModalOpen = true;
 
-        this.AssumptionMutation.mutate(this.companyInfoForm.value);
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed to retrieve location from browser.',
-          detail:
-            'We were unable to retrieve your location. Please ensure your browser supports geolocation and try again. If the issue persists, consider switching to a different browser.',
-        });
-      }
+      this.AssumptionMutation.mutate(this.companyInfoForm.value);
     } else {
       this.AgreementForm.markAllAsTouched();
     }
@@ -277,16 +286,6 @@ export class AssumptionOfDutyComponent implements OnInit {
 
   formIsValid() {
     return this.AgreementForm.valid && this.companyInfoForm.valid;
-  }
-
-  isLoactionDetailsAvailable(): boolean {
-    const { companyLatitude, companyLongitude } = this.companyInfoForm.value;
-    return Boolean(
-      companyLatitude &&
-        companyLongitude &&
-        companyLatitude !== '' &&
-        companyLongitude !== ''
-    );
   }
 
   protected readonly focus = focus;

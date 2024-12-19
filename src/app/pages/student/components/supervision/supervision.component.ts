@@ -6,10 +6,11 @@ import {TableColumn, TableData} from "../../../../shared/components/table/table.
 import {searchArray} from "../../../../shared/helpers/functions.helper";
 import {ColleagueHeaderComponent} from "./components/colleague-header/colleague-header.component";
 import {injectQuery} from "@tanstack/angular-query-experimental";
-import {dashboardQueryKey} from "../../../../shared/helpers/query-keys.helper";
 import {DashboardService} from "../../services/dashboard/dashboard.service";
 import {ActivatedRoute, RouterOutlet} from "@angular/router";
 import {IColleagueData} from "../../../../shared/interfaces/response.interface";
+import { lecturerDashboardQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-supervision',
@@ -19,10 +20,10 @@ import {IColleagueData} from "../../../../shared/interfaces/response.interface";
     TableComponent,
     ColleagueHeaderComponent,
     NgTemplateOutlet,
-    RouterOutlet
+    RouterOutlet,
   ],
   templateUrl: './supervision.component.html',
-  styleUrl: './supervision.component.scss'
+  styleUrl: './supervision.component.scss',
 })
 export class SupervisionComponent {
   dashboardService = inject(DashboardService);
@@ -37,11 +38,12 @@ export class SupervisionComponent {
 
   HideCheckbox = true;
 
+  private globalStore = inject(GlobalVariablesStore);
 
   columns: TableColumn[] = [
     { label: 'Name', key: 'name' },
     { label: 'Email', key: 'email' },
-    {label: 'Department', key: 'department' },
+    { label: 'Department', key: 'department' },
   ];
 
   students: any = [];
@@ -52,30 +54,33 @@ export class SupervisionComponent {
     this.pageSize.set(data.rows);
   }
 
-
   handleSearchTerm(value: string) {
     this.searchTerm.set(value);
 
-    const filteredLecturers = searchArray(this.dashboardDataQuery.data()!, value, [
-      'name',
-      'email',
-      'department'
-    ]);
+    const filteredLecturers = searchArray(
+      this.dashboardDataQuery.data()!,
+      value,
+      ['name', 'email', 'department']
+    );
 
     this.filteredData.set(filteredLecturers ?? []);
   }
 
-  dashboardDataQuery = injectQuery(()=> ({
-      queryKey: [dashboardQueryKey.colleagues],
-      queryFn: async ()=>{
-        const response = await this.dashboardService.getDashboardInfo()
-       this.students = response.data.colleagues;
+  dashboardDataQuery = injectQuery(() => ({
+    queryKey: [
+      ...lecturerDashboardQueryKey.colleagues(
+        this.globalStore.type(),
+        this.globalStore.startYear(),
+        this.globalStore.endYear()
+      ),
+    ],
+    queryFn: async () => {
+      const response = await this.dashboardService.getDashboardInfo();
+      this.students = response.data.colleagues;
 
-        return  this.destructureStudents(this.students);
-      }
-    })
-
-  );
+      return this.destructureStudents(this.students);
+    },
+  }));
 
   isChildRouteActive(): boolean {
     return this.activatedRoute.firstChild !== null;
@@ -86,12 +91,7 @@ export class SupervisionComponent {
     return data.map((student: IColleagueData) => ({
       name: student.name,
       email: student.email,
-      department:student.department
+      department: student.department,
     }));
   }
-
-
-
-
-
 }

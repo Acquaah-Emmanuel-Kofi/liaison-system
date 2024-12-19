@@ -167,3 +167,22 @@ export interface IStatAnalyticsResponse extends ICommonResponse {
 export interface IStudentCompanyMappingResponse extends ICommonResponse {
   data: IStudentCompanyMapping[];
 }
+
+export interface ILecturerDashboard {
+  student: {
+    students: any[];
+    totalStudents: number;
+  };
+  company: {
+    companies: Record<string, any>; 
+    totalCompanies: number;
+  };
+  lecturer: {
+    lecturers: string[]; 
+    totalLecturers: number;
+  };
+}
+
+export interface ILecturerDashboardResponse extends ICommonResponse {
+  data: ILecturerDashboard;
+}

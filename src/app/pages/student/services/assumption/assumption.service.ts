@@ -13,15 +13,6 @@ export class AssumptionService {
   private readonly userStore = inject(UserStore);
   private readonly globalStore = inject(GlobalVariablesStore);
 
-  private httpParams(): HttpParams {
-    return new HttpParams()
-      .set('startOfAcademicYear', this.globalStore.startYear())
-      .set('endOfAcademicYear', this.globalStore.endYear())
-      .set('internship', this.globalStore.type().toString())
-      .set('page', 0)
-      .set('size', 10);
-  }
-
   _http = inject(HttpClient);
 
   submitAssumptionForm(formData: any): Observable<any> {
@@ -29,7 +20,7 @@ export class AssumptionService {
       environment.BACKEND_API_BASE_URL
     }/assumption-of-duty/${this.userStore.id()}`;
 
-    return this._http.post(url, formData, { params: this.httpParams() }).pipe(
+    return this._http.post(url, formData).pipe(
       catchError((error) => {
         throw error;
       })
@@ -44,7 +35,7 @@ export class AssumptionService {
       environment.BACKEND_API_BASE_URL
     }/assumption-of-duty/${this.userStore.id()}/update/${dutyId}`;
 
-    return this._http.put(url, formData, { params: this.httpParams() }).pipe(
+    return this._http.put(url, formData).pipe(
       catchError((error) => {
         throw error;
       })

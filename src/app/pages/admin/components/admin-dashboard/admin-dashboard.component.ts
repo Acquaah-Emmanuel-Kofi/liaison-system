@@ -153,11 +153,11 @@ export class AdminDashboardComponent implements OnInit {
     this.statCard = this.statCard.map((card) => {
       switch (card.title) {
         case 'Lecturers':
-          return { ...card, count: data.lectures };
+          return { ...card, count: data?.lectures };
         case 'Students':
-          return { ...card, count: data.students };
+          return { ...card, count: data?.students };
         case 'Attachment':
-          return { ...card, count: data.internships };
+          return { ...card, count: data?.internships };
         default:
           return card;
       }

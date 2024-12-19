@@ -64,8 +64,9 @@ export class DashboardComponent {
       this.lecturers = response.data.assignedLecturers;
 
       this.otherLecturers = this.lecturers.filter(
-        (lecturer) => lecturer.isZoneLead === false
+        (lecturer) => lecturer.isZoneLead !== true
       );
+      console.log(this.otherLecturers)
       this.zoneLead =
         this.lecturers.find((lecturer) => lecturer.isZoneLead === true) || null;
       this.zoneSupervisorsCount = this.lecturers.length;

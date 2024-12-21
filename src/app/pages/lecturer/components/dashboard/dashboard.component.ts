@@ -79,16 +79,16 @@ export class DashboardComponent implements OnInit {
       key: 'name',
     },
     {
-      label: 'Region',
-      key: 'region',
+      label: 'Town',
+      key: 'town',
     },
     {
       label: 'Location',
-      key: 'location',
+      key: 'exactLocation',
     },
     {
       label: 'No of students',
-      key: 'studentsNo',
+      key: 'totalStudents',
     },
   ];
 

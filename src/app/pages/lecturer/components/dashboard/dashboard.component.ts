@@ -126,7 +126,8 @@ export class DashboardComponent implements OnInit {
       ...statAnalyticsQueryKey.data(
         this.globalStore.type(),
         this.globalStore.startYear() ?? this.currentYear,
-        this.globalStore.endYear() ?? this.nextYear
+        this.globalStore.endYear() ?? this.nextYear,
+        this.globalStore.semester()
       ),
     ],
     queryFn: async () => {

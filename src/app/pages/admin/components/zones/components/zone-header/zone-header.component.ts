@@ -1,20 +1,35 @@
-import {Component, inject, OnInit, output, signal} from '@angular/core';
-import {SearchbarComponent} from "../../../../../../shared/components/searchbar/searchbar.component";
-import {StudentTableService} from "../../../../service/students-table/student-table.service";
-import {Router} from "@angular/router";
-import {injectMutation, injectQuery} from "@tanstack/angular-query-experimental";
-import {lecturerListQueryKey} from "../../../../../../shared/helpers/query-keys.helper";
-import {ModalContainerComponent} from "../../../../../../shared/components/modal-container/modal-container.component";
-import {FormArray, FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgForOf} from "@angular/common";
-import {RegionService} from "../../../../../../shared/services/regions/regions.service";
-import {ZoneService} from "../../service/zone.service";
-import {lectureListResponse} from "../../zone.interface";
-import {lastValueFrom} from "rxjs";
-import {MessageService} from "primeng/api";
-import {ToastModule} from "primeng/toast";
-import {SidebarService} from "../../../../../../shared/services/sidebar/sidebar.service";
-import {DropdownModule} from "primeng/dropdown";
+import { Component, inject, OnInit, output, signal } from '@angular/core';
+import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
+import { StudentTableService } from '../../../../service/students-table/student-table.service';
+import { Router } from '@angular/router';
+import {
+  injectMutation,
+  injectQuery,
+} from '@tanstack/angular-query-experimental';
+import {
+  lecturerListQueryKey,
+  zonesQueryData,
+} from '../../../../../../shared/helpers/query-keys.helper';
+import { ModalContainerComponent } from '../../../../../../shared/components/modal-container/modal-container.component';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NgForOf } from '@angular/common';
+import { RegionService } from '../../../../../../shared/services/regions/regions.service';
+import { TownData, ZoneService } from '../../service/zone.service';
+import { lectureListResponse } from '../../zone.interface';
+import { lastValueFrom } from 'rxjs';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { SidebarService } from '../../../../../../shared/services/sidebar/sidebar.service';
+import { DropdownModule } from 'primeng/dropdown';
+import { LoaderModalComponent } from '../../../../../../shared/components/loader-modal/loader-modal/loader-modal.component';
 
 @Component({
   selector: 'liaison-zone-header',
@@ -26,21 +41,21 @@ import {DropdownModule} from "primeng/dropdown";
     NgForOf,
     ReactiveFormsModule,
     ToastModule,
-    DropdownModule
+    DropdownModule,
+    LoaderModalComponent
   ],
   templateUrl: './zone-header.component.html',
   styleUrl: './zone-header.component.scss',
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class ZoneHeaderComponent implements OnInit {
-  zoneService = inject(ZoneService)
-  studentService = inject(StudentTableService)
-  regionService = inject(RegionService)
-  messageService = inject(MessageService)
+  zoneService = inject(ZoneService);
+  studentService = inject(StudentTableService);
+  regionService = inject(RegionService);
+  messageService = inject(MessageService);
   protected sidebarService = inject(SidebarService);
 
-
-  fb = inject(FormBuilder)
+  fb = inject(FormBuilder);
   toggledFilterButton: boolean = false;
   route = inject(Router);
   searchValue = output<string>();
@@ -55,19 +70,15 @@ export class ZoneHeaderComponent implements OnInit {
   lecturers: lectureListResponse[] = [];
   selectedTowns: { [key: number]: string[] } = {};
   selectedLecturers: { [key: number]: string[] } = {};
-  lecturerNames: string[] = []
-  defaultPlaceholder = "Select town(s)"
+  lecturerNames: string[] = [];
+  defaultPlaceholder = 'Select town(s)';
   addZoneForm!: FormGroup;
-  enteredRegion = ''
-  enteredTown = ' '
+  enteredRegion = '';
+  enteredTown = ' ';
   currentZoneIndex: number = 0;
   isTownListOpened: any;
   isLecturerListOpened!: boolean;
-  currentYear: number = new Date().getFullYear();
-  lastyear = this.currentYear - 1;
-  internshipType!: boolean
-  startYear = signal<number >(this.lastyear);
-  endYear = signal<number>(this.currentYear);
+  internshipType!: boolean;
   toggledFilters: boolean = false;
   facultyFilterOptions: { name: string; value: string }[] = [];
   departmentsFilterOptions: { name: string; value: string }[] = [];
@@ -81,7 +92,7 @@ export class ZoneHeaderComponent implements OnInit {
 
   constructor() {
     this.addZoneForm = this.fb.group({
-      zones: this.fb.array([this.createZonesForm()])
+      zones: this.fb.array([this.createZonesForm()]),
     });
   }
 
@@ -99,16 +110,18 @@ export class ZoneHeaderComponent implements OnInit {
   //   this.selectedTowns = townFormArray.controls.map(control => control.value);
   // }
 
-  rawRegions:any
+  rawRegions: any;
   ngOnInit(): void {
-    this.rawRegions = this.regionService.getRawRegions()
-    this.fetchRegions()
-    this.sidebarService.isSwitched$.subscribe((value: boolean) => {this.internshipType = value });
+    this.rawRegions = this.regionService.getRawRegions();
+    this.fetchRegions();
+    this.sidebarService.isSwitched$.subscribe((value: boolean) => {
+      this.internshipType = value;
+    });
     this.lecturesQuery.refetch();
   }
 
-  async fetchRegions(){
-    this.regions =  await  this.regionService.getRegions();
+  async fetchRegions() {
+    this.regions = await this.regionService.getRegions();
   }
 
   filterOptions: string[] = [
@@ -122,16 +135,14 @@ export class ZoneHeaderComponent implements OnInit {
     'Graphic Design',
   ];
 
-
   lecturesQuery = injectQuery(() => ({
     queryKey: [...lecturerListQueryKey.data()],
     queryFn: async () => {
-      const  response = await this.zoneService.getAllLectures()
-      this.lecturers = response.data
-      return response
-    }
+      const response = await this.zoneService.getAllLectures();
+      this.lecturers = response.data;
+      return response;
+    },
   }));
-
 
   toggleFilterButton() {
     this.toggledFilterButton = !this.toggledFilterButton;
@@ -165,30 +176,28 @@ export class ZoneHeaderComponent implements OnInit {
     return this.addZoneForm.get('zones') as FormArray;
   }
 
-    createZonesForm(): FormGroup {
-      return this.fb.group({
-        name: ['', Validators.required],
-        region: ['', Validators.required],
-        towns: this.fb.array([], Validators.required),
-        zoneLead: ['', Validators.required],
-        lecturerIds: this.fb.array([], Validators.required),
-      });
+  createZonesForm(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      region: ['', Validators.required],
+      towns: this.fb.array([], Validators.required),
+      zoneLead: ['', Validators.required],
+      lecturerIds: this.fb.array([], Validators.required),
+    });
   }
 
   addZone() {
-    this.zones.push(this.createZonesForm())
-    this.isAddMoreTriggered = true
+    this.zones.push(this.createZonesForm());
+    this.isAddMoreTriggered = true;
   }
 
   removeZone(i: number) {
     this.zones.removeAt(i);
   }
 
-
   getTownsFormArray(index: number): FormArray {
     return this.zones.at(index).get('towns') as FormArray;
   }
-
 
   hasRegionSelected(zoneIndex: number): boolean {
     const zoneGroup = this.zones.at(zoneIndex);
@@ -218,10 +227,14 @@ export class ZoneHeaderComponent implements OnInit {
 
   toggleTownSelection(town: string, index: number): void {
     const townsFormArray = this.getTownsFormArray(index);
-    const townIndex = townsFormArray.controls.findIndex(control => control.value === town);
+    const townIndex = townsFormArray.controls.findIndex(
+      (control) => control.value === town
+    );
 
     if (this.selectedTowns[index]?.includes(town)) {
-      this.selectedTowns[index] = this.selectedTowns[index].filter(t => t !== town);
+      this.selectedTowns[index] = this.selectedTowns[index].filter(
+        (t) => t !== town
+      );
       if (townIndex >= 0) {
         townsFormArray.removeAt(townIndex);
       }
@@ -235,11 +248,17 @@ export class ZoneHeaderComponent implements OnInit {
   }
 
   toggleLecturesSelection(lecturer: lectureListResponse, index: number): void {
-    const lecturerFormArray = this.zones.at(index).get('lecturerIds') as FormArray;
-    const lecturerIndex = lecturerFormArray.controls.findIndex(control => control.value === lecturer.id);
+    const lecturerFormArray = this.zones
+      .at(index)
+      .get('lecturerIds') as FormArray;
+    const lecturerIndex = lecturerFormArray.controls.findIndex(
+      (control) => control.value === lecturer.id
+    );
 
     if (this.selectedLecturers[index]?.includes(lecturer.name)) {
-      this.selectedLecturers[index] = this.selectedLecturers[index].filter(l => l !== lecturer.name);
+      this.selectedLecturers[index] = this.selectedLecturers[index].filter(
+        (l) => l !== lecturer.name
+      );
       if (lecturerIndex >= 0) {
         lecturerFormArray.removeAt(lecturerIndex);
       }
@@ -262,17 +281,15 @@ export class ZoneHeaderComponent implements OnInit {
 
   onRegionChange(index: number): void {
     const townsFormArray = this.getTownsFormArray(index);
-    const region = this.zones.at(index).get('region') as FormArray
-    this.getTowns(region)
+    const region = this.zones.at(index).get('region') as FormArray;
+    this.getTowns(region);
     townsFormArray.clear();
     this.selectedTowns[index] = [];
   }
 
-  async getTowns(region: any){
-    this.towns = await this.regionService.getTownsByRegion(region.value)
-
+  async getTowns(region: any) {
+    this.towns = await this.regionService.getTownsByRegion(region.value);
   }
-
 
   // onRegionChange(index:number){
   //   const region = this.zones.at(index).get('region')?.value
@@ -281,105 +298,88 @@ export class ZoneHeaderComponent implements OnInit {
   //
   // }
 
-
   handleSearchTerm(value: string) {
     this.searchValue.emit(value);
   }
 
+  zoneMutation = injectMutation((client) => ({
+    mutationFn: async ({ formData }: { formData: any }) => {
+      this.isModalOpened = false;
 
-  zoneMutation = injectMutation(() => ({
-    mutationFn: async ({ formData, startYear, endYear, internship }: {
-      formData: any;
-      startYear: number;
-      endYear: number;
-      internship: boolean;
-    }) => {
-      return await lastValueFrom(
-        this.zoneService.submitZone(formData, startYear, endYear, internship)
-      );
+      return await lastValueFrom(this.zoneService.submitZone(formData));
+    },
+    onSuccess: (data: any) => {
+      client.invalidateQueries({ queryKey: zonesQueryData.all }).then();
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: data.message || 'Zone submitted successfully',
+      });
+      this.closeModal();
+    },
+    onError: (error: any) => {
+      this.isModalOpened = true;
+      
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.message || 'An error occurred while submitting the zone',
+      });
+      this.closeModal();
+    },
+  }));
+
+  TownMutation = injectMutation(() => ({
+    mutationFn: async ({ townData }: { townData: TownData }) => {
+      return await lastValueFrom(this.zoneService.submitTown(townData));
     },
     onSuccess: (data: any) => {
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: data.message || 'Zone submitted successfully'
+        detail: data.message || 'Town submitted successfully',
       });
-      this.closeModal();
-
+      this.closeTownModal();
     },
     onError: (error: any) => {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: error.message || 'An error occurred while submitting the zone'
+        detail:
+          error.message || 'An error occurred while submitting the new town',
       });
-      this.closeModal();
-
-    }
+      this.closeTownModal();
+    },
   }));
-
-
-  TownMutation = injectMutation(()=>(
-    {
-      mutationFn: async ({townData, startYear, endYear, internship }: {townData: {},startYear: number, endYear:number,internship: boolean})=>{
-        return await lastValueFrom(
-          this.zoneService.submitTown(townData, startYear, endYear, internship)
-        );
-      },
-      onSuccess: (data: any) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: data.message || 'Town submitted successfully'
-        });
-        this.closeTownModal()
-      },
-      onError: (error: any) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.message || 'An error occurred while submitting the new town'
-        });
-        this.closeTownModal()
-
-      }
-
-    }
-  ))
-
 
   onTownSubmit(newForm: NgForm) {
     if (newForm.invalid) {
       return;
     }
-
-    const startYear = this.startYear();
-    const endYear = this.endYear();
-    const internship = this.internshipType;
-    const townData = [{
+    const townData = {
       region: this.enteredRegion,
-      towns: [this.enteredTown]
-    }];
-    this.TownMutation.mutate({townData, startYear, endYear, internship})
+      towns: [this.enteredTown],
+    };
 
-
+    this.TownMutation.mutate({ townData });
   }
 
   onSubmit() {
     if (this.addZoneForm.valid) {
       const formData = this.addZoneForm.get('zones')?.value;
-      const startYear = this.startYear();
-      const endYear = this.endYear();
-      const internship = this.internshipType;
-      this.zoneMutation.mutate({ formData, startYear, endYear, internship });
+      this.zoneMutation.mutate({ formData });
     } else {
-      this.messageService.add({ severity: 'error', summary: "Couldn't Submit", detail: 'Form is invalid: make sure all form fields are filled'});
+      this.messageService.add({
+        severity: 'error',
+        summary: "Couldn't Submit",
+        detail: 'Form is invalid: make sure all form fields are filled',
+      });
     }
   }
 
-
   closeDropdown() {
-    this.isTownListOpened = false
+    this.isTownListOpened = false;
   }
 
   toggleFilter() {
@@ -387,7 +387,7 @@ export class ZoneHeaderComponent implements OnInit {
   }
 
   onFacultyChange(Region: string) {
-    this.filterValue.emit(Region)
+    this.filterValue.emit(Region);
   }
 
   refetchData() {
@@ -396,9 +396,6 @@ export class ZoneHeaderComponent implements OnInit {
 
   clearFilters() {
     this.selectedFilterRegion = null;
-    this.filterValue.emit('')
+    this.filterValue.emit('');
   }
-
-
-
 }

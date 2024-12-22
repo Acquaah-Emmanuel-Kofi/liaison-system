@@ -1,17 +1,23 @@
-import {Component, inject, signal} from '@angular/core';
-import {ZoneHeaderComponent} from "./components/zone-header/zone-header.component";
-import {TableComponent} from "../../../../shared/components/table/table.component";
-import {TableColumn, TableData} from "../../../../shared/components/table/table.interface";
-import {injectQuery} from "@tanstack/angular-query-experimental";
-import {zonesQueryData} from "../../../../shared/helpers/query-keys.helper";
-import {ZoneService} from "./service/zone.service";
-import {SidebarService} from "../../../../shared/services/sidebar/sidebar.service";
-import {NgTemplateOutlet} from "@angular/common";
-import {ActivatedRoute, RouterOutlet} from "@angular/router";
-import {ToastModule} from "primeng/toast";
-import {formatDateToDDMMYYYY, searchArray} from "../../../../shared/helpers/functions.helper";
-import {MessageService} from "primeng/api";
-import {GlobalVariablesStore} from "../../../../shared/store/global-variables.store";
+import { Component, inject, signal } from '@angular/core';
+import { ZoneHeaderComponent } from './components/zone-header/zone-header.component';
+import { TableComponent } from '../../../../shared/components/table/table.component';
+import {
+  TableColumn,
+  TableData,
+} from '../../../../shared/components/table/table.interface';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { zonesQueryData } from '../../../../shared/helpers/query-keys.helper';
+import { ZoneService } from './service/zone.service';
+import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
+import { NgTemplateOutlet } from '@angular/common';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import {
+  formatDateToDDMMYYYY,
+  searchArray,
+} from '../../../../shared/helpers/functions.helper';
+import { MessageService } from 'primeng/api';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 
 @Component({
   selector: 'liaison-zones',
@@ -71,11 +77,7 @@ export class ZonesComponent {
       ),
     ],
     queryFn: async () => {
-      const response = await this.zoneService.getAllCreatedZones(
-        this.globalStore.startYear(),
-        this.globalStore.endYear(),
-        this.globalStore.type()
-      );
+      const response = await this.zoneService.getAllCreatedZones();
 
       this.data = response.data.map((item: any) => ({
         ...item,

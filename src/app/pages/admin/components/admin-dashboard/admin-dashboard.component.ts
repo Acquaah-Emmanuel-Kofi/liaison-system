@@ -3,9 +3,7 @@ import { Router } from '@angular/router';
 import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
 import { AdminChartComponent } from '../admin-chart/admin-chart.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
-import {
-  TableColumn,
-} from '../../../../shared/components/table/table.interface';
+import { TableColumn } from '../../../../shared/components/table/table.interface';
 import { IStartCard } from '../../../../shared/interfaces/constants.interface';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -14,12 +12,17 @@ import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { UserStore } from '../../../../shared/store/user.store';
 import { injectQuery } from '@tanstack/angular-query-experimental';
-import { statAnalyticsQueryKey, studentAssumptionOfDutyLogsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import {
+  statAnalyticsQueryKey,
+  studentAssumptionOfDutyLogsQueryKey,
+} from '../../../../shared/helpers/query-keys.helper';
 import { DashboardService } from '../../service/dashboard/dashboard.service';
 import { IStartAnalytics } from '../../../../shared/interfaces/response.interface';
 import { getYears } from '../../../../shared/helpers/functions.helper';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 import { CommonModule } from '@angular/common';
+
+type NameValue = { name: string; value: string };
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -41,7 +44,14 @@ import { CommonModule } from '@angular/common';
 })
 export class AdminDashboardComponent implements OnInit {
   route = inject(Router);
-  years: { name: string; value: string }[] = [];
+  semesterOptions: NameValue[] = [
+    { name: 'Semester 1', value: '1' },
+    { name: 'Semester 2', value: '2' },
+    { name: 'Semester 3', value: '3' },
+  ];
+  selectedSemester: string | null = null;
+
+  years: NameValue[] = [];
   selectedYear: string | null = null;
   currentYear: number = new Date().getFullYear();
   nextYear = this.currentYear + 1;
@@ -133,12 +143,19 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  handleSemesterChange() {
+    if (this.selectedSemester) {
+      this.globalStore.setSemester(Number(this.selectedSemester));
+    }
+  }
+
   analyticsQuery = injectQuery(() => ({
     queryKey: [
       ...statAnalyticsQueryKey.data(
         this.globalStore.type(),
         this.globalStore.startYear() ?? this.currentYear,
-        this.globalStore.endYear() ?? this.nextYear
+        this.globalStore.endYear() ?? this.nextYear,
+        this.globalStore.semester()
       ),
     ],
     queryFn: async () => {
@@ -169,7 +186,8 @@ export class AdminDashboardComponent implements OnInit {
       ...studentAssumptionOfDutyLogsQueryKey.data(
         this.globalStore.type(),
         this.globalStore.startYear() ?? this.currentYear,
-        this.globalStore.endYear() ?? this.nextYear
+        this.globalStore.endYear() ?? this.nextYear,
+        this.globalStore.semester()
       ),
     ],
     queryFn: async () => {

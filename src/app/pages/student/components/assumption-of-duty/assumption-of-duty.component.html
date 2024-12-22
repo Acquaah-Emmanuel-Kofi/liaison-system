@@ -74,6 +74,7 @@
                 id="dateCommenced"
                 formControlName="dateCommenced"
                 type="date"
+                [value]="companyDetails.dateCommenced"
                 pInputText
                 class="border-red-700 h-10 w-full pl-3 focus:outline-none"
               />
@@ -146,7 +147,7 @@
                 <option value="" disabled selected>Select region</option>
                 <option
                   class="text-black"
-                  [value]="zone.value"
+                  [value]="companyDetails.companyRegion"
                   *ngFor="let zone of zones"
                 >
                   {{ zone.name }}
@@ -167,7 +168,7 @@
                 <option value="" disabled selected>Select addressed</option>
                 <option
                   class="text-black custom-option"
-                  [value]="option.value"
+                 [value]="companyDetails.letterTo"
                   *ngFor="let option of letterToOptions"
                 >
                   {{ option.name }}

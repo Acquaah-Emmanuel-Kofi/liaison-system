@@ -1,6 +1,6 @@
-import { PartialStateUpdater } from "@ngrx/signals";
-import { produce } from "immer";
-import { IGlobalVariables } from "../interfaces/global-variables.interface";
+import { PartialStateUpdater } from '@ngrx/signals';
+import { produce } from 'immer';
+import { IGlobalVariables } from '../interfaces/global-variables.interface';
 
 export function setInternshipType(
   type: boolean
@@ -26,5 +26,14 @@ export function setEndOfAcademicYear(
   return (baseState) =>
     produce(baseState, (draft) => {
       draft.endYear = date;
+    });
+}
+
+export function setSemester(
+  semester: number
+): PartialStateUpdater<IGlobalVariables> {
+  return (baseState) =>
+    produce(baseState, (draft) => {
+      draft.semester = semester;
     });
 }

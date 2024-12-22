@@ -118,3 +118,13 @@ export const topIndustriesQueryKey = {
       endYear,
     ] as const,
 };
+
+export const studentChartQueryKey = {
+  all: ['student chart'] as const,
+  data: () => [...studentChartQueryKey.all, 'chart'] as const,
+};
+
+export const lecturerChartQueryKey = {
+  all: ['lecturer chart'] as const,
+  data: () => [...lecturerChartQueryKey.all, 'chart'] as const,
+};

@@ -12,7 +12,20 @@
       <p class="text-Dark-Blue text-lg">Here's an overview of your profile</p>
     </div>
 
-    <div class="flex flex-col items-center mt-[-5px] gap-2 sm:gap-5">
+    <div class="flex items-center mt-[-5px] gap-2 sm:gap-5">
+      <!-- Dropdown for semesters -->
+      <div class="relative cursor-pointer">
+        <p-dropdown
+          [options]="semesterOptions"
+          [(ngModel)]="selectedSemester"
+          (ngModelChange)="handleSemesterChange()"
+          optionLabel="name"
+          optionValue="value"
+          [placeholder]="semesterOptions[0].name"
+        >
+        </p-dropdown>
+      </div>
+
       <!-- Dropdown for years -->
       <div class="relative cursor-pointer">
         <p-dropdown
@@ -35,7 +48,7 @@
       [title]="card.title"
       [count]="card.count"
       [navigateTo]="card.navigateTo"
-      [showView] ="card.show"
+      [showView]="card.show"
       [isLoading]="analyticsQuery.isPending()"
     >
     </liaison-stat-card>
@@ -47,25 +60,41 @@
   </div>
 
   <div class="mt-8 sm:mt-10">
-    <p class="text-lg sm:text-xl font-medium mb-4">Updated Assumption of Duties</p>
+    <p class="text-lg sm:text-xl font-medium mb-4">
+      Updated Assumption of Duties
+    </p>
     <div class="overflow-x-auto">
-        @switch (studentAssumptionOfDutyLogsQuery.status()) { @case ('pending') { @if
-        (studentAssumptionOfDutyLogsQuery.data()) {
-        <ng-container *ngTemplateOutlet="table" />
-        } @else {
-        <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" [HideCheckbox]="HideCheckbox" />
-        } } @case ('error') {
-        <liaison-table [columns]="columns" [data]="[]" [errorOccurred]="true" [HideCheckbox]="HideCheckbox" />
-        } @case ('success') {
-        <ng-container *ngTemplateOutlet="table" />
-        
-        } }
+      @switch (studentAssumptionOfDutyLogsQuery.status()) { @case ('pending') {
+      @if (studentAssumptionOfDutyLogsQuery.data()) {
+      <ng-container *ngTemplateOutlet="table" />
+      } @else {
+      <liaison-table
+        [columns]="columns"
+        [data]="[]"
+        [dataIsLoading]="true"
+        [HideCheckbox]="HideCheckbox"
+      />
+      } } @case ('error') {
+      <liaison-table
+        [columns]="columns"
+        [data]="[]"
+        [errorOccurred]="true"
+        [HideCheckbox]="HideCheckbox"
+      />
+      } @case ('success') {
+      <ng-container *ngTemplateOutlet="table" />
+
+      } }
     </div>
   </div>
 </div>
 
 <ng-template #table>
-      <liaison-table [HideCheckbox]="HideCheckbox" [HidePagination]="HidePagination" [columns]="columns"
-        [data]="studentAssumptionOfDutyLogsQuery.data()!">
-      </liaison-table>
+  <liaison-table
+    [HideCheckbox]="HideCheckbox"
+    [HidePagination]="HidePagination"
+    [columns]="columns"
+    [data]="studentAssumptionOfDutyLogsQuery.data()!"
+  >
+  </liaison-table>
 </ng-template>

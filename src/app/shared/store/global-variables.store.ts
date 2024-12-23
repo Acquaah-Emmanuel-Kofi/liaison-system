@@ -3,6 +3,7 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import {
   setEndOfAcademicYear,
   setInternshipType,
+  setSemester,
   setStartOfAcademicYear,
 } from './global-variables.actions';
 import { IGlobalVariables } from '../interfaces/global-variables.interface';
@@ -14,6 +15,7 @@ const initialInternshipTypeState: IGlobalVariables = {
   type: true,
   startYear: currentYear,
   endYear: nextYear,
+  semester: 1,
 };
 
 export const GlobalVariablesStore = signalStore(
@@ -29,6 +31,9 @@ export const GlobalVariablesStore = signalStore(
     },
     setEndOfAcademicYear: (payload: number) => {
       patchState(store, setEndOfAcademicYear(payload));
+    },
+    setSemester: (payload: number) => {
+      patchState(store, setSemester(payload));
     },
   }))
 );

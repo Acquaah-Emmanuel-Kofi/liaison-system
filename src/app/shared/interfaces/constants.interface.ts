@@ -20,3 +20,6 @@ export interface PayLoadData {
   profilePicture: string;
   phone: string;
 }
+
+
+export type NameValue = { name: string; value: string };

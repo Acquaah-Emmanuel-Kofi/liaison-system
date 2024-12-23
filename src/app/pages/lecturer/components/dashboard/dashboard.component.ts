@@ -7,10 +7,12 @@ import { getYears } from '../../../../shared/helpers/functions.helper';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import {
   TableColumn,
-  TableData,
 } from '../../../../shared/components/table/table.interface';
 import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
-import { IStartCard } from '../../../../shared/interfaces/constants.interface';
+import {
+  IStartCard,
+  NameValue,
+} from '../../../../shared/interfaces/constants.interface';
 import { LecturerChartComponent } from '../lecturer-chart/lecturer-chart.component';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import {
@@ -20,6 +22,7 @@ import {
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { ILecturerDashboard } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
+import { SemesterOptions } from '../../../../shared/helpers/constants.helper';
 
 @Component({
   selector: 'liaison-dashboard',
@@ -45,6 +48,9 @@ export class DashboardComponent implements OnInit {
   selectedYear: string | null = null;
   currentYear: number = new Date().getFullYear();
   nextYear = this.currentYear + 1;
+
+  semesterOptions: NameValue[] = SemesterOptions;
+  selectedSemester: string | null = null;
 
   HideCheckbox = true;
   HidePagination = true;
@@ -79,16 +85,16 @@ export class DashboardComponent implements OnInit {
       key: 'name',
     },
     {
-      label: 'Region',
-      key: 'region',
+      label: 'Town',
+      key: 'town',
     },
     {
       label: 'Location',
-      key: 'location',
+      key: 'exactLocation',
     },
     {
       label: 'No of students',
-      key: 'studentsNo',
+      key: 'totalStudents',
     },
   ];
 
@@ -121,12 +127,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  handleSemesterChange() {
+    if (this.selectedSemester) {
+      this.globalStore.setSemester(Number(this.selectedSemester));
+    }
+  }
+
   analyticsQuery = injectQuery(() => ({
     queryKey: [
       ...statAnalyticsQueryKey.data(
         this.globalStore.type(),
         this.globalStore.startYear() ?? this.currentYear,
-        this.globalStore.endYear() ?? this.nextYear
+        this.globalStore.endYear() ?? this.nextYear,
+        this.globalStore.semester()
       ),
     ],
     queryFn: async () => {
@@ -157,7 +170,8 @@ export class DashboardComponent implements OnInit {
       ...topIndustriesQueryKey.data(
         this.globalStore.type(),
         this.globalStore.startYear() ?? this.currentYear,
-        this.globalStore.endYear() ?? this.nextYear
+        this.globalStore.endYear() ?? this.nextYear,
+        this.globalStore.semester()
       ),
     ],
     queryFn: async () => {

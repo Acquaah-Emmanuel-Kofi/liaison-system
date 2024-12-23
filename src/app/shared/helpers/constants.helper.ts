@@ -1,3 +1,5 @@
+import { NameValue } from "../interfaces/constants.interface";
+
 export const ACCESS_TOKEN_KEY: string = 'LIAISON_SYSTEM_TOKEN';
 
 export const saveToLocalStorage = (key: string, value: any) => {
@@ -154,3 +156,10 @@ export const facultiesAndDepartments = {
     { name: 'Maritime Transport', value: 'maritime-transport' },
   ],
 };
+
+
+export const SemesterOptions: NameValue[] = [
+  { name: 'Semester 1', value: '1' },
+  { name: 'Semester 2', value: '2' },
+  { name: 'Semester 3', value: '3' },
+];

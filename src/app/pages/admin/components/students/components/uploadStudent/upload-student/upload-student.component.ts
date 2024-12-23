@@ -165,14 +165,13 @@ export class UploadStudentComponent implements OnDestroy {
 
   uploadFile = injectMutation((client) => ({
     mutationFn: async () =>
-      await this.dataService.sendFileToBackend(this.selectedFile,true),
+      await this.dataService.sendFileToBackend(this.selectedFile),
     onSuccess: (response) => {
-      // client.invalidateQueries({queryKey: studentsQueryKey.data()}).then();
+      client.invalidateQueries({ queryKey: studentsQueryKey.all });
       this.handleResponse(response as ICommonResponse);
     },
     onError: (error) => {
       this.showAlert('error', error?.message);
-      // client.invalidateQueries({queryKey: studentsQueryKey.data()}).then();
       this.isModalOpen = false;
     },
   }));

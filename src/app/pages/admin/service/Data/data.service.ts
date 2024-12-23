@@ -1,8 +1,6 @@
 // data.service.ts
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
-import {Password} from "primeng/password";
-import {EmailValidator} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'

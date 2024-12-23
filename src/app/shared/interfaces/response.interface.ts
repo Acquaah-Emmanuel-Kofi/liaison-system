@@ -186,3 +186,22 @@ export interface ILecturerDashboard {
 export interface ILecturerDashboardResponse extends ICommonResponse {
   data: ILecturerDashboard;
 }
+
+export interface AssignedStudentsData {
+  assignedStudents: IStudentData[];
+  count: number;
+}
+
+export interface UnassignedStudentsData {
+  unAssignedStudents: IStudentData[];
+  count: number;
+}
+
+export interface InternshipData {
+  assignedStudents: AssignedStudentsData;
+  unassignedStudents: UnassignedStudentsData;
+}
+
+export interface StudentInternshipDataResponse extends ICommonResponse {
+  data: InternshipData;
+}

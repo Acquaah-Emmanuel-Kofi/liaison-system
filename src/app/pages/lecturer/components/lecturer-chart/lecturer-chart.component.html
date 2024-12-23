@@ -13,7 +13,7 @@
       <canvas id="doughnut" class="w-full h-full ml-[20%]"></canvas>
     </div>
     <div class="w-[40%] pl-4">
-      <div *ngFor="let item of chartData; let i = index" class="flex items-center mb-4">
+      <div *ngFor="let item of chartData(); let i = index" class="flex items-center mb-4">
         <div class="w-4 h-4 rounded-full mr-2" [style.background-color]="colors[i]"></div>
         <span class="mr-2">{{ item.label }}:</span>
         <span class="font-bold">{{ item.percentage }}</span>

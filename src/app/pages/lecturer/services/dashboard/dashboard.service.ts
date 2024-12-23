@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ILecturerDashboardResponse } from '../../../../shared/interfaces/response.interface';
+import { IFacultyAnalytics, ILecturerDashboardResponse } from '../../../../shared/interfaces/response.interface';
 import { environment } from '../../../../../environments/environment.development';
 import { lastValueFrom } from 'rxjs';
 import { UserStore } from '../../../../shared/store/user.store';
@@ -46,6 +46,18 @@ export class DashboardService {
 
     return lastValueFrom(
       this._http.get<any>(endpoint, {
+        params: this.httpParams(),
+      })
+    );
+  }
+
+  getChartData(): Promise<IFacultyAnalytics> {
+    const endpoint = `${
+      environment.BACKEND_API_BASE_URL
+    }/lecturers/${this.userStore.id()}/student/faculty/analytics`;
+
+    return lastValueFrom(
+      this._http.get<IFacultyAnalytics>(endpoint, {
         params: this.httpParams(),
       })
     );

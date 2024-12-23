@@ -217,32 +217,6 @@ export interface ILecturerChartData {
   unAssignedLecturers: UnassignedLecturerData;
 }
 
-export interface StudentInternshipDataResponse extends ICommonResponse {
-  data: IStudentChartData;
-}
-
-export interface LecturerInternshipDataResponse extends ICommonResponse {
-  data: ILecturerChartData;
-}
-
-export interface IAssignedAndUnassignedGroup<T> {
-  assigned: {
-    items: T[];
-    count: number;
-  };
-  unassigned: {
-    items: T[];
-    count: number;
-  };
-  total: number;
-}
-
-export interface IAssignedAndUnassignedData {
-  assignedAndUnassignedStudents: IAssignedAndUnassignedGroup<IStudentData>;
-  assignedAndUnassignedLecturers: IAssignedAndUnassignedGroup<IStudentData>;
-}
-
-
 export interface IAssignedStudentsGroup {
   assignedStudents: AssignedStudentsData[];
   count: number;
@@ -279,5 +253,15 @@ export interface StudentAndLecturerChartResponse extends ICommonResponse {
   data: {
     assignedAndUnassignedStudents: IAssignedAndUnassignedStudents;
     assignedAndUnassignedLecturers: IAssignedAndUnassignedLecturers;
+  };
+}
+
+export interface IFacultyAnalytics extends ICommonResponse {
+  data: {
+    facultyData: {
+      name: string;
+      totalStudents: number; 
+    }[];
+    totalStudents: number; 
   };
 }

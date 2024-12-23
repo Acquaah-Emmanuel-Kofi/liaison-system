@@ -6,9 +6,7 @@ import { UserStore } from '../../../../shared/store/user.store';
 import {
   IStatAnalyticsResponse,
   IStudentCompanyMappingResponse,
-  LecturerInternshipDataResponse,
   StudentAndLecturerChartResponse,
-  StudentInternshipDataResponse,
   UpdatedDutiesResponse,
 } from '../../../../shared/interfaces/response.interface';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
@@ -71,30 +69,6 @@ export class DashboardService {
 
     return lastValueFrom(
       this._http.get<UpdatedDutiesResponse>(endpoint, {
-        params: this.httpParams(),
-      })
-    );
-  }
-
-  getAssignedAndUnassignedStudents(): Promise<StudentInternshipDataResponse> {
-    const endpoint = `${
-      environment.BACKEND_API_BASE_URL
-    }/admin/dashboard/${this.userStore.id()}/assigned/unassigned/students`;
-
-    return lastValueFrom(
-      this._http.get<StudentInternshipDataResponse>(endpoint, {
-        params: this.httpParams(),
-      })
-    );
-  }
-
-  getAssignedAndUnassignedLecturers(): Promise<LecturerInternshipDataResponse> {
-    const endpoint = `${
-      environment.BACKEND_API_BASE_URL
-    }/admin/dashboard/${this.userStore.id()}/assigned/unassigned/lecturers`;
-
-    return lastValueFrom(
-      this._http.get<LecturerInternshipDataResponse>(endpoint, {
         params: this.httpParams(),
       })
     );

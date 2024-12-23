@@ -2,7 +2,6 @@ import {
   Component,
   inject,
   signal,
-  OnInit,
   effect,
   AfterViewInit,
 } from '@angular/core';
@@ -115,6 +114,7 @@ export class AdminChartComponent implements AfterViewInit {
       this.initializeChart();
     }
   }
+  
   onOptionSelected(option: NameValue) {
     this.headerText = option.name;
     this.isToggled = false;

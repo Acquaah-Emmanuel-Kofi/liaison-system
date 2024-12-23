@@ -66,7 +66,7 @@ export class DashboardComponent {
       show: true,
     },
     {
-      title: 'Industries',
+      title: 'Assumed Duties',
       count: 0,
       iconSrc: 'assets/interns.svg',
       navigateTo: '/admin/internships',
@@ -123,7 +123,11 @@ export class DashboardComponent {
     ],
     queryFn: async () => {
       const response = await this.dashboardService.getDashboardInfo();
-      this.updateCountsFromApiResponse(response.data);
+      this.updateCountsFromApiResponse(
+        response.data,
+        response.data.totalAssumedDuties
+      );
+
       this.student = response.data;
       this.lecturers = response.data.assignedLecturers;
 
@@ -138,13 +142,13 @@ export class DashboardComponent {
     },
   }));
 
-  updateCountsFromApiResponse(data: IStatAnalytics) {
+  updateCountsFromApiResponse(data: IStatAnalytics, totalAssumedDuties: number) {
     this.statCard = this.statCard.map((card) => {
       switch (card.title) {
         case 'Colleague Students':
           return { ...card, count: data.totalColleagues };
-        case 'Industries':
-          return { ...card, count: data.totalLecturers };
+        case 'Assumed Duties':
+          return { ...card, count: totalAssumedDuties };
         case 'Zone Supervisors':
           return { ...card, count: data.totalLecturers };
         default:

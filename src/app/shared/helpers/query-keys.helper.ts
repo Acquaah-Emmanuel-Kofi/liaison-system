@@ -104,25 +104,35 @@ export const studentAssumptionOfDutyLogsQueryKey = {
 
 export const studentsLocationQueryKey = {
   all: ['students location'] as const,
-  data: (internshipType: boolean, startYear: number, endYear: number) =>
+  data: (
+    internshipType: boolean,
+    startYear: number,
+    endYear: number,
+  ) =>
     [
       ...studentsLocationQueryKey.all,
       'all-students',
-      internshipType,
       startYear,
       endYear,
+      internshipType,
     ] as const,
 };
 
 export const topIndustriesQueryKey = {
   all: ['top industries'] as const,
-  data: (internshipType: boolean, startYear: number, endYear: number) =>
+  data: (
+    internshipType: boolean,
+    startYear: number,
+    endYear: number,
+    semester: number
+  ) =>
     [
       ...topIndustriesQueryKey.all,
       'all-industries',
-      internshipType,
       startYear,
       endYear,
+      semester,
+      internshipType,
     ] as const,
 };
 

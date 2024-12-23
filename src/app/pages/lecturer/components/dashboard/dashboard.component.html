@@ -12,7 +12,7 @@
       <p class="text-Dark-Blue text-lg">Here's an overview of your profile</p>
     </div>
 
-    <div class="flex flex-col items-center mt-[-5px] gap-2 sm:gap-5">
+    <div class="flex items-center -mt-[5px] gap-2 sm:gap-5">
       <!-- Dropdown for years -->
       <div class="relative cursor-pointer">
         <p-dropdown
@@ -22,6 +22,19 @@
           optionLabel="name"
           optionValue="value"
           [placeholder]="currentYear.toString() + '/' + nextYear.toString()"
+        >
+        </p-dropdown>
+      </div>
+
+      <!-- Dropdown for semesters -->
+      <div class="relative cursor-pointer">
+        <p-dropdown
+          [options]="semesterOptions"
+          [(ngModel)]="selectedSemester"
+          (ngModelChange)="handleSemesterChange()"
+          optionLabel="name"
+          optionValue="value"
+          [placeholder]="semesterOptions[0].name"
         >
         </p-dropdown>
       </div>

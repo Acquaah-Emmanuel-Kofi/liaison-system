@@ -4,7 +4,7 @@ import { StatCardComponent } from '../../../../shared/components/stat-card/stat-
 import { AdminChartComponent } from '../admin-chart/admin-chart.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn } from '../../../../shared/components/table/table.interface';
-import { IStartCard } from '../../../../shared/interfaces/constants.interface';
+import { IStartCard, NameValue } from '../../../../shared/interfaces/constants.interface';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
@@ -21,8 +21,6 @@ import { IStartAnalytics } from '../../../../shared/interfaces/response.interfac
 import { getYears } from '../../../../shared/helpers/functions.helper';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 import { CommonModule } from '@angular/common';
-
-type NameValue = { name: string; value: string };
 
 @Component({
   selector: 'liaison-admin-dashboard',

@@ -10,7 +10,7 @@ import {
   TableData,
 } from '../../../../shared/components/table/table.interface';
 import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
-import { IStartCard } from '../../../../shared/interfaces/constants.interface';
+import { IStartCard, NameValue } from '../../../../shared/interfaces/constants.interface';
 import { LecturerChartComponent } from '../lecturer-chart/lecturer-chart.component';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import {
@@ -45,6 +45,13 @@ export class DashboardComponent implements OnInit {
   selectedYear: string | null = null;
   currentYear: number = new Date().getFullYear();
   nextYear = this.currentYear + 1;
+
+    semesterOptions: NameValue[] = [
+      { name: 'Semester 1', value: '1' },
+      { name: 'Semester 2', value: '2' },
+      { name: 'Semester 3', value: '3' },
+    ];
+    selectedSemester: string | null = null;
 
   HideCheckbox = true;
   HidePagination = true;
@@ -121,6 +128,12 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+    handleSemesterChange() {
+    if (this.selectedSemester) {
+      this.globalStore.setSemester(Number(this.selectedSemester));
+    }
+  }
+
   analyticsQuery = injectQuery(() => ({
     queryKey: [
       ...statAnalyticsQueryKey.data(
@@ -158,7 +171,8 @@ export class DashboardComponent implements OnInit {
       ...topIndustriesQueryKey.data(
         this.globalStore.type(),
         this.globalStore.startYear() ?? this.currentYear,
-        this.globalStore.endYear() ?? this.nextYear
+        this.globalStore.endYear() ?? this.nextYear,
+        this.globalStore.semester()
       ),
     ],
     queryFn: async () => {

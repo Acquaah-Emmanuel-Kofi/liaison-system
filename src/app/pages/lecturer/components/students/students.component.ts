@@ -117,7 +117,7 @@ export class StudentsComponent {
       );
     },
     onSuccess: (data: any) => {
-      client.invalidateQueries({ queryKey: studentsQueryKey.all }).then();
+      client.invalidateQueries({ queryKey: studentsQueryKey.all });
 
       this.messageService.add({
         severity: 'success',

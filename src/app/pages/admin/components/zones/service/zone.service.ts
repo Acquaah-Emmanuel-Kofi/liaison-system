@@ -22,12 +22,13 @@ export class ZoneService {
     return new HttpParams()
       .set('startOfAcademicYear', this.globalStore.startYear())
       .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('semester', this.globalStore.semester().toString())
       .set('internship', this.globalStore.type().toString())
       .set('page', 0)
       .set('size', 10);
   }
 
-  _http = inject(HttpClient);
+  private _http = inject(HttpClient);
 
   getAllLectures(): Promise<lectureListModule> {
     const url = `${

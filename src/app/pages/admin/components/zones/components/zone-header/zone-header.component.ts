@@ -309,7 +309,7 @@ export class ZoneHeaderComponent implements OnInit {
       return await lastValueFrom(this.zoneService.submitZone(formData));
     },
     onSuccess: (data: any) => {
-      client.invalidateQueries({ queryKey: zonesQueryData.all }).then();
+      client.invalidateQueries({ queryKey: zonesQueryData.all })
 
       this.messageService.add({
         severity: 'success',

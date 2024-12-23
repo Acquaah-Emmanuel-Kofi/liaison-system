@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { StepperModule } from 'primeng/stepper';
 import {
   FormBuilder,
@@ -22,9 +22,7 @@ import { lastValueFrom } from 'rxjs';
 import { AssumptionService } from '../../services/assumption/assumption.service';
 import { RegionService } from '../../../../shared/services/regions/regions.service';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
-import {
-  lecturerDashboardQueryKey,
-} from '../../../../shared/helpers/query-keys.helper';
+import { lecturerDashboardQueryKey, studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { SkeletalComponent } from './skeletal/skeletal.component';
 import {
   CompanyDetails,
@@ -60,15 +58,15 @@ export class AssumptionOfDutyComponent implements OnInit {
   regionService = inject(RegionService);
   isFocused: boolean = false;
   isModalOpen: boolean = false;
-  isAsummed: boolean = false;
+  isAsummed = signal<boolean>(false);
   isEditMode = true;
 
   companyInfoForm!: FormGroup;
   AgreementForm!: FormGroup;
 
   zones: any;
-  AssumptionOfDutyInfo: DutyData[] = [];
-  companyDetails!: CompanyDetails;
+  assumptionOfDutyInfo = signal<DutyData[]>([]);
+  companyDetails = signal<CompanyDetails>({} as CompanyDetails);
 
   letterToOptions = [
     { name: 'THE MANAGER', value: 'TheManager' },
@@ -128,24 +126,25 @@ export class AssumptionOfDutyComponent implements OnInit {
 
   dashQUery = injectQuery(() => ({
     queryKey: [
-      ...lecturerDashboardQueryKey.assumption(
-        this.globalStore.type(),
+      ...studentsQueryKey.data(
         this.globalStore.startYear(),
-        this.globalStore.endYear()
+        this.globalStore.endYear(),
+        this.globalStore.type(),
+        this.globalStore.semester()
       ),
     ],
     queryFn: async () => {
       const response = await this.dashboardService.getDashboardInfo();
-      this.AssumptionOfDutyInfo = response.data.assumptionOfDuties;
-      this.companyDetails = this.AssumptionOfDutyInfo[0].companyDetails;
+      this.assumptionOfDutyInfo.set(response.data.assumptionOfDuties);
+      this.companyDetails.set(this.assumptionOfDutyInfo()[0].companyDetails);
       this.companyInfoForm.patchValue(this.companyDetails);
-      this.isAsummed = response.data.isAssumeDuty;
+      this.isAsummed.set(response.data.isAssumeDuty);
       return response.data;
     },
   }));
 
   toggleEditMode(): void {
-    if (this.isAsummed && this.isEditMode) {
+    if (this.isAsummed() && this.isEditMode) {
       this.companyInfoForm.reset(this.companyDetails);
 
       Object.keys(this.companyInfoForm.controls).forEach((key) => {
@@ -211,16 +210,14 @@ export class AssumptionOfDutyComponent implements OnInit {
       ?.setValue(input.value, { emitEvent: false });
   }
 
-  AssumptionMutation = injectMutation((client) => ({
+  assumptionMutation = injectMutation((client) => ({
     mutationFn: async (formData) => {
       return await lastValueFrom(
         this.assumptionService.submitAssumptionForm(formData)
       );
     },
     onSuccess: (data: any) => {
-      client
-        .invalidateQueries({ queryKey: lecturerDashboardQueryKey.all })
-        .then();
+      client.invalidateQueries({ queryKey: lecturerDashboardQueryKey.all });
 
       this.messageService.add({
         severity: 'success',
@@ -245,7 +242,7 @@ export class AssumptionOfDutyComponent implements OnInit {
     if (this.formIsValid()) {
       this.isModalOpen = true;
 
-      this.AssumptionMutation.mutate(this.companyInfoForm.value);
+      this.assumptionMutation.mutate(this.companyInfoForm.value);
     } else {
       this.AgreementForm.markAllAsTouched();
     }
@@ -256,7 +253,7 @@ export class AssumptionOfDutyComponent implements OnInit {
       return await lastValueFrom(
         this.assumptionService.updateAssuptionOfDuty(
           formData,
-          this.AssumptionOfDutyInfo[0].id
+          this.assumptionOfDutyInfo()[0].id
         )
       );
     },

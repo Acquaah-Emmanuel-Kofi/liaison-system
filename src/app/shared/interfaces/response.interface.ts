@@ -174,11 +174,11 @@ export interface ILecturerDashboard {
     totalStudents: number;
   };
   company: {
-    companies: Record<string, any>; 
+    companies: Record<string, any>;
     totalCompanies: number;
   };
   lecturer: {
-    lecturers: string[]; 
+    lecturers: string[];
     totalLecturers: number;
   };
 }
@@ -197,11 +197,71 @@ export interface UnassignedStudentsData {
   count: number;
 }
 
-export interface InternshipData {
+export interface AssignedLecturerData {
+  assignedLecturers: IStudentData[];
+  count: number;
+}
+
+export interface UnassignedLecturerData {
+  unAssignedLecturers: IStudentData[];
+  count: number;
+}
+
+export interface IStudentChartData {
   assignedStudents: AssignedStudentsData;
   unassignedStudents: UnassignedStudentsData;
 }
 
-export interface StudentInternshipDataResponse extends ICommonResponse {
-  data: InternshipData;
+export interface ILecturerChartData {
+  assignedLecturers: AssignedLecturerData;
+  unAssignedLecturers: UnassignedLecturerData;
+}
+
+export interface IAssignedStudentsGroup {
+  assignedStudents: AssignedStudentsData[];
+  count: number;
+}
+
+export interface IUnassignedStudentsGroup {
+  unAssignedStudents: UnassignedStudentsData[];
+  count: number;
+}
+
+export interface IAssignedLecturersGroup {
+  assignedLecturers: AssignedLecturerData[];
+  count: number;
+}
+
+export interface IUnassignedLecturersGroup {
+  unAssignedLecturers: UnassignedLecturerData[];
+  count: number;
+}
+
+export interface IAssignedAndUnassignedStudents {
+  assignedStudents: IAssignedStudentsGroup;
+  unassignedStudents: IUnassignedStudentsGroup;
+  totalStudents: number;
+}
+
+export interface IAssignedAndUnassignedLecturers {
+  assignedLecturers: IAssignedLecturersGroup;
+  unassignedLecturers: IUnassignedLecturersGroup;
+  totalLecturers: number;
+}
+
+export interface StudentAndLecturerChartResponse extends ICommonResponse {
+  data: {
+    assignedAndUnassignedStudents: IAssignedAndUnassignedStudents;
+    assignedAndUnassignedLecturers: IAssignedAndUnassignedLecturers;
+  };
+}
+
+export interface IFacultyAnalytics extends ICommonResponse {
+  data: {
+    facultyData: {
+      name: string;
+      totalStudents: number; 
+    }[];
+    totalStudents: number; 
+  };
 }

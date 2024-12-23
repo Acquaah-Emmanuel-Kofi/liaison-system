@@ -20,10 +20,8 @@ export class DashboardService {
       return new HttpParams()
         .set('startOfAcademicYear', this.globalStore.startYear())
         .set('endOfAcademicYear', this.globalStore.endYear())
-        .set('semseter', this.globalStore.semester().toString())
+        .set('semester', this.globalStore.semester().toString())
         .set('internship', this.globalStore.type().toString())
-        .set('page', 0)
-        .set('size', 10);
     }
 
   getDashboardInfo() {

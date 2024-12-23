@@ -1,7 +1,24 @@
-import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { Chart, ChartConfiguration } from 'chart.js';
 import { NgForOf, NgIf } from '@angular/common';
-import {  PieController, ArcElement, Tooltip, Legend } from 'chart.js';
+import { PieController, ArcElement, Tooltip, Legend } from 'chart.js';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { studentAndlecturerChartQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { DashboardService } from '../../services/dashboard/dashboard.service';
+
+type ChartData = {
+  label: string;
+  value: number;
+  percentage: string;
+};
 
 Chart.register(PieController, ArcElement, Tooltip, Legend);
 
@@ -26,39 +43,22 @@ export class LecturerChartComponent implements AfterViewInit {
   isToggled: boolean = false;
   headerText: string = 'Students and Faculties';
   options: string[] = ['Faculties', 'Industries'];
-  chartData: { label: string; value: number; percentage: string }[] = [];
+  chartData = signal<ChartData[]>([]);
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  private globalStore = inject(GlobalVariablesStore);
+  private _dashboardService = inject(DashboardService);
+
+  constructor(private cdr: ChangeDetectorRef) { 
+    // Automatically update the chart when chartData changes
+      effect(() => {
+        if (this.chartData()?.length > 0) {
+          this.updateChart();
+        }
+      });
+    }
 
   ngAfterViewInit() {
-    this.updateChartData('Faculties');
     this.cdr.detectChanges();
-  }
-
-  updateChartData(option: string) {
-    if (option === 'Faculties') {
-      this.chartData = [
-        { label: 'Faculty of Applied Science', value: 200, percentage: '30%' },
-        { label: 'Faculty of Applied Arts', value: 150, percentage: '22.5%' },
-        {
-          label: 'Faculty of Building and Construction',
-          value: 120,
-          percentage: '18%',
-        },
-        { label: 'Faculty of Engineering', value: 90, percentage: '13.5%' },
-        { label: 'Faculty of Business', value: 80, percentage: '12%' },
-      ];
-    } else if (option === 'Industry Analysis') {
-      this.chartData = [
-        { label: 'New York', value: 100, percentage: '40%' },
-        { label: 'Los Angeles', value: 50, percentage: '20%' },
-        { label: 'Chicago', value: 30, percentage: '12%' },
-        { label: 'Houston', value: 20, percentage: '8%' },
-        { label: 'Phoenix', value: 25, percentage: '10%' },
-        { label: 'Philadelphia', value: 25, percentage: '10%' },
-      ];
-    }
-    this.initializeChart();
   }
 
   initializeChart() {
@@ -73,11 +73,11 @@ export class LecturerChartComponent implements AfterViewInit {
     const config: ChartConfiguration<'pie'> = {
       type: 'pie',
       data: {
-        labels: this.chartData.map((item) => item.label),
+        labels: this.chartData()?.map((item) => item.label),
         datasets: [
           {
             backgroundColor: this.colors,
-            data: this.chartData.map((item) => item.value),
+            data: this.chartData()?.map((item) => item.value),
             borderWidth: 1,
             borderColor: '#ffffff',
             hoverBorderColor: '#ffffff',
@@ -104,9 +104,43 @@ export class LecturerChartComponent implements AfterViewInit {
     this.chart = new Chart(ctx, config);
   }
 
-  onOptionSelected(option: string) {
-    this.headerText = option;
-    this.isToggled = false;
-    this.updateChartData(option);
+  updateChart() {
+    if (this.chart) {
+      // Update chart labels and data
+      this.chart.data.labels = this.chartData().map((item) => item.label);
+      this.chart.data.datasets[0].data = this.chartData().map(
+        (item) => item.value
+      );
+      this.chart.update(); // Re-render the chart with updated data
+    } else {
+      // Initialize the chart if it doesn't exist
+      this.initializeChart();
+    }
   }
+
+  chartDataQuery = injectQuery(() => ({
+    queryKey: [
+      ...studentAndlecturerChartQueryKey.data(
+        this.globalStore.type(),
+        this.globalStore.startYear(),
+        this.globalStore.endYear(),
+        this.globalStore.semester()
+      ),
+    ],
+    queryFn: async () => {
+      const response = await this._dashboardService.getChartData();
+      const totalStudents = response.data.totalStudents;
+
+      const data = response.data.facultyData.map((faculty) => ({
+        label: faculty.name,
+        value: faculty.totalStudents,
+        percentage:
+          ((faculty.totalStudents / totalStudents) * 100).toFixed(2) + '%',
+      }));
+
+      this.chartData.set(data);
+
+      return response.data;
+    },
+  }));
 }

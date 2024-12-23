@@ -6,6 +6,8 @@ import { UserStore } from '../../../../shared/store/user.store';
 import {
   IStatAnalyticsResponse,
   IStudentCompanyMappingResponse,
+  LecturerInternshipDataResponse,
+  StudentAndLecturerChartResponse,
   StudentInternshipDataResponse,
   UpdatedDutiesResponse,
 } from '../../../../shared/interfaces/response.interface';
@@ -45,13 +47,19 @@ export class DashboardService {
   }
 
   getStudentsLocation(): Promise<IStudentCompanyMappingResponse> {
+    const params = new HttpParams()
+      .set('startOfAcademicYear', this.globalStore.startYear())
+      .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('semester', this.globalStore.semester().toString())
+      .set('internship', this.globalStore.type().toString());
+
     const endpoint = `${
       environment.BACKEND_API_BASE_URL
     }/admin/${this.userStore.id()}/students/location`;
 
     return lastValueFrom(
       this._http.get<IStudentCompanyMappingResponse>(endpoint, {
-        params: this.httpParams(),
+        params,
       })
     );
   }
@@ -80,14 +88,32 @@ export class DashboardService {
     );
   }
 
-  getAssignedAndUnassignedLecturers(): Promise<StudentInternshipDataResponse> {
+  getAssignedAndUnassignedLecturers(): Promise<LecturerInternshipDataResponse> {
     const endpoint = `${
       environment.BACKEND_API_BASE_URL
     }/admin/dashboard/${this.userStore.id()}/assigned/unassigned/lecturers`;
 
     return lastValueFrom(
-      this._http.get<StudentInternshipDataResponse>(endpoint, {
+      this._http.get<LecturerInternshipDataResponse>(endpoint, {
         params: this.httpParams(),
+      })
+    );
+  }
+
+  getAssignedAndUnassigned(): Promise<StudentAndLecturerChartResponse> {
+    const params = new HttpParams()
+      .set('startOfAcademicYear', this.globalStore.startYear())
+      .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('semester', this.globalStore.semester().toString())
+      .set('internship', this.globalStore.type().toString());
+
+    const endpoint = `${
+      environment.BACKEND_API_BASE_URL
+    }/admin/dashboard/${this.userStore.id()}/assigned/unassigned/students-and-lecturers`;
+
+    return lastValueFrom(
+      this._http.get<StudentAndLecturerChartResponse>(endpoint, {
+        params,
       })
     );
   }

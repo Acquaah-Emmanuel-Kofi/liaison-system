@@ -71,7 +71,8 @@ export class SupervisionComponent {
       ...lecturerDashboardQueryKey.colleagues(
         this.globalStore.type(),
         this.globalStore.startYear(),
-        this.globalStore.endYear()
+        this.globalStore.endYear(),
+        this.globalStore.semester(),
       ),
     ],
     queryFn: async () => {

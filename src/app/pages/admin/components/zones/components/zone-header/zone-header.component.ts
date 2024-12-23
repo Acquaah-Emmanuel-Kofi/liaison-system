@@ -42,7 +42,7 @@ import { LoaderModalComponent } from '../../../../../../shared/components/loader
     ReactiveFormsModule,
     ToastModule,
     DropdownModule,
-    LoaderModalComponent
+    LoaderModalComponent,
   ],
   templateUrl: './zone-header.component.html',
   styleUrl: './zone-header.component.scss',
@@ -101,14 +101,6 @@ export class ZoneHeaderComponent implements OnInit {
     this.isTownListOpened = index;
     this.towns = this.getAvailableTownsForZone(index);
   }
-  // openTownList( event: Event, index: number) {
-  //   event.stopPropagation();
-  //   this.currentZoneIndex = index;
-  //   this.isTownListOpened = !this.isTownListOpened;
-  //
-  //   const townFormArray = this.zones.at(index).get('towns') as FormArray;
-  //   this.selectedTowns = townFormArray.controls.map(control => control.value);
-  // }
 
   rawRegions: any;
   ngOnInit(): void {
@@ -219,11 +211,6 @@ export class ZoneHeaderComponent implements OnInit {
     this.currentZoneIndex = zoneIndex;
     this.isTownListOpened = true;
   }
-  //
-  // getAvailableTownsForZone(zoneIndex: number): string[] {
-  //   const selectedRegion = this.zones.at(zoneIndex).get('region')?.value;
-  //   return this.regionService.getTownsByRegion(selectedRegion);
-  // }
 
   toggleTownSelection(town: string, index: number): void {
     const townsFormArray = this.getTownsFormArray(index);
@@ -291,13 +278,6 @@ export class ZoneHeaderComponent implements OnInit {
     this.towns = await this.regionService.getTownsByRegion(region.value);
   }
 
-  // onRegionChange(index:number){
-  //   const region = this.zones.at(index).get('region')?.value
-  //   this.towns = this.regionService.getTownsByRegion(region)
-  //   const townFormArray = this.zones.at(index).get('towns') as FormArray;
-  //
-  // }
-
   handleSearchTerm(value: string) {
     this.searchValue.emit(value);
   }
@@ -309,22 +289,22 @@ export class ZoneHeaderComponent implements OnInit {
       return await lastValueFrom(this.zoneService.submitZone(formData));
     },
     onSuccess: (data: any) => {
-      client.invalidateQueries({ queryKey: zonesQueryData.all })
+      client.invalidateQueries({ queryKey: zonesQueryData.all });
 
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: data.message || 'Zone submitted successfully',
+        detail: data.message ?? 'Zone submitted successfully',
       });
       this.closeModal();
     },
     onError: (error: any) => {
       this.isModalOpened = true;
-      
+
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: error.message || 'An error occurred while submitting the zone',
+        detail: error.message ?? 'An error occurred while submitting the zone',
       });
       this.closeModal();
     },
@@ -338,7 +318,7 @@ export class ZoneHeaderComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: data.message || 'Town submitted successfully',
+        detail: data.message ?? 'Town submitted successfully',
       });
       this.closeTownModal();
     },
@@ -347,7 +327,7 @@ export class ZoneHeaderComponent implements OnInit {
         severity: 'error',
         summary: 'Error',
         detail:
-          error.message || 'An error occurred while submitting the new town',
+          error.message ?? 'An error occurred while submitting the new town',
       });
       this.closeTownModal();
     },

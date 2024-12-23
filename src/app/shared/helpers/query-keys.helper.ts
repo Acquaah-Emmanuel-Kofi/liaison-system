@@ -4,6 +4,7 @@ export const studentsQueryKey = {
     startOfAcademicYear: number,
     endOfAcademicYear: number,
     internship: boolean,
+    semester: number,
     page?: number,
     size?: number
   ) =>
@@ -12,6 +13,7 @@ export const studentsQueryKey = {
       'all-students',
       startOfAcademicYear,
       endOfAcademicYear,
+      semester,
       internship,
       page,
       size,
@@ -19,7 +21,7 @@ export const studentsQueryKey = {
 };
 
 export const studentForLectureQuery = {
-  all: ['students'] as const,
+  all: ['lecturer students'] as const,
   data: (
     internshipType: boolean,
     startYear: number,
@@ -28,7 +30,7 @@ export const studentForLectureQuery = {
   ) =>
     [
       ...statAnalyticsQueryKey.all,
-      'all-students',
+      'all-lecturer-students',
       startYear,
       endYear,
       semester,
@@ -52,21 +54,33 @@ export const zonesQueryData = {
 
 export const lecturerDashboardQueryKey = {
   all: ['lecturer dashboard'] as const,
-  assumption: (internshipType: boolean, startYear: number, endYear: number) =>
+  assumption: (
+    internshipType: boolean,
+    startYear: number,
+    endYear: number,
+    semester: number
+  ) =>
     [
       ...lecturerDashboardQueryKey.all,
       'assumption',
-      internshipType,
       startYear,
       endYear,
+      semester,
+      internshipType,
     ] as const,
-  colleagues: (internshipType: boolean, startYear: number, endYear: number) =>
+  colleagues: (
+    internshipType: boolean,
+    startYear: number,
+    endYear: number,
+    semester: number
+  ) =>
     [
       ...lecturerDashboardQueryKey.all,
       'colleagues',
-      internshipType,
       startYear,
       endYear,
+      semester,
+      internshipType,
     ] as const,
 };
 
@@ -88,7 +102,12 @@ export const lecturerListQueryKey = {
 
 export const statAnalyticsQueryKey = {
   all: ['stat analytics'] as const,
-  data: (internshipType: boolean, startYear: number, endYear: number, semester: number) =>
+  data: (
+    internshipType: boolean,
+    startYear: number,
+    endYear: number,
+    semester: number
+  ) =>
     [
       ...statAnalyticsQueryKey.all,
       'all-stats',
@@ -119,11 +138,7 @@ export const studentAssumptionOfDutyLogsQueryKey = {
 
 export const studentsLocationQueryKey = {
   all: ['students location'] as const,
-  data: (
-    internshipType: boolean,
-    startYear: number,
-    endYear: number,
-  ) =>
+  data: (internshipType: boolean, startYear: number, endYear: number) =>
     [
       ...studentsLocationQueryKey.all,
       'all-students',
@@ -151,12 +166,20 @@ export const topIndustriesQueryKey = {
     ] as const,
 };
 
-export const studentChartQueryKey = {
-  all: ['student chart'] as const,
-  data: () => [...studentChartQueryKey.all, 'chart'] as const,
-};
-
-export const lecturerChartQueryKey = {
-  all: ['lecturer chart'] as const,
-  data: () => [...lecturerChartQueryKey.all, 'chart'] as const,
+export const studentAndlecturerChartQueryKey = {
+  all: ['chartData'] as const,
+  data: (
+    internshipType: boolean,
+    startYear: number,
+    endYear: number,
+    semester: number
+  ) =>
+    [
+      ...studentAndlecturerChartQueryKey.all,
+      'all-chart',
+      startYear,
+      endYear,
+      semester,
+      internshipType,
+    ] as const,
 };

@@ -66,6 +66,7 @@ export class InternshipsComponent implements OnInit {
         this.globalStore.endYear(),
         this.globalStore.startYear(),
         this.globalStore.type(),
+        this.globalStore.semester(),
         this.currentPage(),
         this.totalData()
       ),

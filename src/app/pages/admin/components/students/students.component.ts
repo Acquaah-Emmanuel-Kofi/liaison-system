@@ -68,6 +68,7 @@ export class StudentsComponent implements OnInit {
         this.globalStore.startYear(),
         this.globalStore.endYear(),
         this.globalStore.type(),
+        this.globalStore.semester(),
         this.currentPage(),
         this.totalData()
       ),

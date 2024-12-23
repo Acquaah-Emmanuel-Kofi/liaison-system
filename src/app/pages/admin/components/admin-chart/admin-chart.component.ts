@@ -1,15 +1,18 @@
 import {
   Component,
-  AfterViewInit,
   inject,
   signal,
+  OnInit,
   effect,
+  AfterViewInit,
 } from '@angular/core';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { Chart, ChartConfiguration } from 'chart.js';
 import { registerables } from 'chart.js';
 import { DashboardService } from '../../service/dashboard/dashboard.service';
-import { lecturerChartQueryKey, studentChartQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { studentAndlecturerChartQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { NameValue } from '../../../../shared/interfaces/constants.interface';
+import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 Chart.register(...registerables);
 
 type ChartData = {
@@ -17,6 +20,8 @@ type ChartData = {
   value: number;
   percentage: string;
 };
+
+type RoleAnalytics = 'studentAnalytics' | 'lecturerAnalytics';
 
 @Component({
   selector: 'liaison-admin-chart',
@@ -29,73 +34,33 @@ export class AdminChartComponent implements AfterViewInit {
   colors: string[] = ['#475C98', '#DDAC25', '#CBC7BD14'];
   isToggled: boolean = false;
   headerText: string = 'Student Analytics';
-  options: string[] = ['Student Analytics', 'Lecture Analytics'];
+  options: NameValue[] = [
+    {
+      name: 'Student Analytics',
+      value: 'studentAnalytics',
+    },
+    {
+      name: 'Lecture Analytics',
+      value: 'lecturerAnalytics',
+    },
+  ];
+
+  optionSelected = signal<RoleAnalytics>('studentAnalytics');
   chartData = signal<ChartData[]>([]);
 
   private _dashboardService = inject(DashboardService);
+  private globalStore = inject(GlobalVariablesStore);
 
-  studentChartData = signal<ChartData[]>([]);
-  lecturerChartData = signal<ChartData[]>([]);
-
+  // Automatically update the chart when chartData changes
   constructor() {
-    effect(
-      () => {
-        this.studentChartData();
-        this.lecturerChartData();
-
-        this.updateChartData('Student Analytics');
-      },
-      {
-        allowSignalWrites: true,
+    effect(() => {
+      if (this.chartData()?.length > 0) {
+        this.updateChart();
       }
-    );
+    });
   }
 
-  ngAfterViewInit() {
-    this.updateChartData('Student Analytics');
-  }
-
-  updateChartData(option: string) {
-    if (option === 'Student Analytics') {
-      this.chartData.set([
-        {
-          label: 'Assigned Students',
-          value: this.studentChartQuery.data()?.assignedStudents.count!,
-          percentage: `${
-            this.studentChartQuery.data()?.assignedStudents.count! / 100 ||
-            '---'
-          }%`,
-        },
-        {
-          label: 'Unassigned Students',
-          value: this.studentChartQuery.data()?.unassignedStudents.count!,
-          percentage: `${
-            this.studentChartQuery.data()?.unassignedStudents.count! / 100 ||
-            '---'
-          }%`,
-        },
-      ]);
-    } else if (option === 'Lecture Analytics') {
-      this.chartData.set([
-        {
-          label: 'Assigned Students',
-          value: this.lecturerChartQuery.data()?.assignedStudents.count!,
-          percentage: `${
-            this.lecturerChartQuery.data()?.assignedStudents.count! / 100 ||
-            '---'
-          }%`,
-        },
-        {
-          label: 'Unassigned Students',
-          value: this.lecturerChartQuery.data()?.unassignedStudents.count!,
-          percentage: `${
-            this.lecturerChartQuery.data()?.unassignedStudents.count! / 100 ||
-            '---'
-          }%`,
-        },
-      ]);
-    }
-
+  ngAfterViewInit(): void {
     this.initializeChart();
   }
 
@@ -137,58 +102,89 @@ export class AdminChartComponent implements AfterViewInit {
     this.chart = new Chart(ctx, config);
   }
 
-  onOptionSelected(option: string) {
-    this.headerText = option;
+  updateChart() {
+    if (this.chart) {
+      // Update chart labels and data
+      this.chart.data.labels = this.chartData().map((item) => item.label);
+      this.chart.data.datasets[0].data = this.chartData().map(
+        (item) => item.value
+      );
+      this.chart.update(); // Re-render the chart with updated data
+    } else {
+      // Initialize the chart if it doesn't exist
+      this.initializeChart();
+    }
+  }
+  onOptionSelected(option: NameValue) {
+    this.headerText = option.name;
     this.isToggled = false;
-    this.updateChartData(option);
+    this.optionSelected.set(option.value as RoleAnalytics);
+
+    this.studentAndlecturerChartQuery.refetch();
   }
 
-  studentChartQuery = injectQuery(() => ({
-    queryKey: [...studentChartQueryKey.data()],
+  studentAndlecturerChartQuery = injectQuery(() => ({
+    queryKey: [
+      ...studentAndlecturerChartQueryKey.data(
+        this.globalStore.type(),
+        this.globalStore.startYear(),
+        this.globalStore.endYear(),
+        this.globalStore.semester()
+      ),
+    ],
     queryFn: async () => {
-      const response =
-        await this._dashboardService.getAssignedAndUnassignedStudents();
+      const response = await this._dashboardService.getAssignedAndUnassigned();
+      const isStudentAnalytics = this.optionSelected() === 'studentAnalytics';
 
-      const data = [
-        {
-          label: 'Assigned Students',
-          value: response.data.assignedStudents.count,
-          percentage: `${response.data.assignedStudents.count / 100}%`,
-        },
-        {
-          label: 'Unassigned Students',
-          value: response.data.unassignedStudents.count,
-          percentage: `${response.data.unassignedStudents.count / 100}%`,
-        },
-      ];
+      if (isStudentAnalytics) {
+        const assignedStudents =
+          response.data.assignedAndUnassignedStudents.assignedStudents.count;
+        const unassignedStudents =
+          response.data.assignedAndUnassignedStudents.unassignedStudents.count;
+        const totalStudents = assignedStudents + unassignedStudents;
 
-      this.studentChartData.set(data);
+        this.chartData.set([
+          {
+            label: 'Assigned Students',
+            value: assignedStudents,
+            percentage: `${((assignedStudents / totalStudents) * 100).toFixed(
+              2
+            )}%`,
+          },
+          {
+            label: 'Unassigned Students',
+            value: unassignedStudents,
+            percentage: `${((unassignedStudents / totalStudents) * 100).toFixed(
+              2
+            )}%`,
+          },
+        ]);
+      } else {
+        const assignedLecturers =
+          response.data.assignedAndUnassignedLecturers.assignedLecturers.count;
+        const unassignedLecturers =
+          response.data.assignedAndUnassignedLecturers.unassignedLecturers
+            .count;
+        const totalLecturers = assignedLecturers + unassignedLecturers;
 
-      return response.data;
-    },
-  }));
-
-  lecturerChartQuery = injectQuery(() => ({
-    queryKey: [...lecturerChartQueryKey.data()],
-    queryFn: async () => {
-      const response =
-        await this._dashboardService.getAssignedAndUnassignedLecturers();
-
-      const data = [
-        {
-          label: 'Assigned Students',
-          value: response.data.assignedStudents.count,
-          percentage: `${response.data.assignedStudents.count / 100}%`,
-        },
-        {
-          label: 'Unassigned Students',
-          value: response.data.unassignedStudents.count,
-          percentage: `${response.data.unassignedStudents.count / 100}%`,
-        },
-      ];
-
-      this.lecturerChartData.set(data);
-
+        this.chartData.set([
+          {
+            label: 'Assigned Lecturers',
+            value: assignedLecturers,
+            percentage: `${((assignedLecturers / totalLecturers) * 100).toFixed(
+              2
+            )}%`,
+          },
+          {
+            label: 'Unassigned Lecturers',
+            value: unassignedLecturers,
+            percentage: `${(
+              (unassignedLecturers / totalLecturers) *
+              100
+            ).toFixed(2)}%`,
+          },
+        ]);
+      }
       return response.data;
     },
   }));

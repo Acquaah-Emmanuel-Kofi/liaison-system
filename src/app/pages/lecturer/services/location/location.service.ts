@@ -21,6 +21,7 @@ export class LocationService {
     const params = new HttpParams()
       .set('startOfAcademicYear', this.globalStore.startYear())
       .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('semester', this.globalStore.semester().toString())
       .set('internship', this.globalStore.type().toString());
 
     const endpoint = `${

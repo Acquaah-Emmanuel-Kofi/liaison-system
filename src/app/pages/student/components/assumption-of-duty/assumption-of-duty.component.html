@@ -2,7 +2,7 @@
 @if (dashQUery.isPending()) {
 <liaison-skeletal />
 
-} @else { @if (isAsummed) {
+} @else { @if (isAsummed()) {
 <div class="assumption-filled-ui">
   <h2 class="text-center text-lg font-bold text-success">
     Assumption of Duty Already Submitted
@@ -74,7 +74,7 @@
                 id="dateCommenced"
                 formControlName="dateCommenced"
                 type="date"
-                [value]="companyDetails.dateCommenced"
+                [value]="companyDetails().dateCommenced"
                 pInputText
                 class="border-red-700 h-10 w-full pl-3 focus:outline-none"
               />
@@ -141,13 +141,13 @@
 
               <select
                 formControlName="companyRegion"
-                [value]="companyDetails.companyRegion"
+                [value]="companyDetails().companyRegion"
                 class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field"
               >
                 <option value="" disabled selected>Select region</option>
                 <option
                   class="text-black"
-                  [value]="companyDetails.companyRegion"
+                  [value]="companyDetails().companyRegion"
                   *ngFor="let zone of zones"
                 >
                   {{ zone.name }}
@@ -162,13 +162,13 @@
 
               <select
                 formControlName="letterTo"
-                [value]="companyDetails.letterTo"
+                [value]="companyDetails().letterTo"
                 class="bg-transparent border text-sm font-normal border-gray-30 rounded-lg block w-full p-3 input-field"
               >
                 <option value="" disabled selected>Select addressed</option>
                 <option
                   class="text-black custom-option"
-                 [value]="companyDetails.letterTo"
+                 [value]="companyDetails().letterTo"
                   *ngFor="let option of letterToOptions"
                 >
                   {{ option.name }}
@@ -237,9 +237,9 @@
 <div class="px-8 mt-8">
   <h1 class="text-xl font-bold mb-4">History</h1>
 
-  @if (AssumptionOfDutyInfo && AssumptionOfDutyInfo.length > 0) {
+  @if (assumptionOfDutyInfo() && assumptionOfDutyInfo().length > 0) {
     <div>
-      @for (duty of AssumptionOfDutyInfo.reverse(); track $index) {
+      @for (duty of assumptionOfDutyInfo().reverse(); track $index) {
         <div
           class="border border-gray-300 rounded-lg p-4 mb-4 shadow-md bg-white">
           <h2 class="text-lg font-semibold text-primary mb-2">

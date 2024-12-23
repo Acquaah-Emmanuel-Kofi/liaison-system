@@ -135,17 +135,19 @@ export class AssumptionOfDutyComponent implements OnInit {
     ],
     queryFn: async () => {
       const response = await this.dashboardService.getDashboardInfo();
+      this.isAsummed.set(response.data.isAssumeDuty);
+
       this.assumptionOfDutyInfo.set(response.data.assumptionOfDuties);
       this.companyDetails.set(this.assumptionOfDutyInfo()[0].companyDetails);
-      this.companyInfoForm.patchValue(this.companyDetails);
-      this.isAsummed.set(response.data.isAssumeDuty);
+      this.companyInfoForm.patchValue(this.companyDetails());
+
       return response.data;
     },
   }));
 
   toggleEditMode(): void {
     if (this.isAsummed() && this.isEditMode) {
-      this.companyInfoForm.reset(this.companyDetails);
+      this.companyInfoForm.reset(this.companyDetails());
 
       Object.keys(this.companyInfoForm.controls).forEach((key) => {
         this.companyInfoForm.get(key)?.disable({ emitEvent: false });

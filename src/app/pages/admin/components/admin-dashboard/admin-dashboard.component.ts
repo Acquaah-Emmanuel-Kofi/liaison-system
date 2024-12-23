@@ -4,7 +4,10 @@ import { StatCardComponent } from '../../../../shared/components/stat-card/stat-
 import { AdminChartComponent } from '../admin-chart/admin-chart.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumn } from '../../../../shared/components/table/table.interface';
-import { IStartCard, NameValue } from '../../../../shared/interfaces/constants.interface';
+import {
+  IStartCard,
+  NameValue,
+} from '../../../../shared/interfaces/constants.interface';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
@@ -21,6 +24,7 @@ import { IStartAnalytics } from '../../../../shared/interfaces/response.interfac
 import { getYears } from '../../../../shared/helpers/functions.helper';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 import { CommonModule } from '@angular/common';
+import { SemesterOptions } from '../../../../shared/helpers/constants.helper';
 
 @Component({
   selector: 'liaison-admin-dashboard',
@@ -42,11 +46,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AdminDashboardComponent implements OnInit {
   route = inject(Router);
-  semesterOptions: NameValue[] = [
-    { name: 'Semester 1', value: '1' },
-    { name: 'Semester 2', value: '2' },
-    { name: 'Semester 3', value: '3' },
-  ];
+  semesterOptions: NameValue[] = SemesterOptions;
   selectedSemester: string | null = null;
 
   years: NameValue[] = [];

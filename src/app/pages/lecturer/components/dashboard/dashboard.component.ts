@@ -7,10 +7,12 @@ import { getYears } from '../../../../shared/helpers/functions.helper';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import {
   TableColumn,
-  TableData,
 } from '../../../../shared/components/table/table.interface';
 import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
-import { IStartCard, NameValue } from '../../../../shared/interfaces/constants.interface';
+import {
+  IStartCard,
+  NameValue,
+} from '../../../../shared/interfaces/constants.interface';
 import { LecturerChartComponent } from '../lecturer-chart/lecturer-chart.component';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import {
@@ -20,6 +22,7 @@ import {
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { ILecturerDashboard } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
+import { SemesterOptions } from '../../../../shared/helpers/constants.helper';
 
 @Component({
   selector: 'liaison-dashboard',
@@ -46,12 +49,8 @@ export class DashboardComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   nextYear = this.currentYear + 1;
 
-    semesterOptions: NameValue[] = [
-      { name: 'Semester 1', value: '1' },
-      { name: 'Semester 2', value: '2' },
-      { name: 'Semester 3', value: '3' },
-    ];
-    selectedSemester: string | null = null;
+  semesterOptions: NameValue[] = SemesterOptions;
+  selectedSemester: string | null = null;
 
   HideCheckbox = true;
   HidePagination = true;
@@ -128,7 +127,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-    handleSemesterChange() {
+  handleSemesterChange() {
     if (this.selectedSemester) {
       this.globalStore.setSemester(Number(this.selectedSemester));
     }

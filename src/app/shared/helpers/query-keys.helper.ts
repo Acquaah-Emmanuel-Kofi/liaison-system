@@ -20,6 +20,20 @@ export const studentsQueryKey = {
 
 export const studentForLectureQuery = {
   all: ['students'] as const,
+  data: (
+    internshipType: boolean,
+    startYear: number,
+    endYear: number,
+    semester: number
+  ) =>
+    [
+      ...statAnalyticsQueryKey.all,
+      'all-students',
+      startYear,
+      endYear,
+      semester,
+      internshipType,
+    ] as const,
 };
 
 export const zonesQueryData = {
@@ -35,6 +49,7 @@ export const zonesQueryData = {
     internship,
   ],
 };
+
 export const lecturerDashboardQueryKey = {
   all: ['lecturer dashboard'] as const,
   assumption: (internshipType: boolean, startYear: number, endYear: number) =>

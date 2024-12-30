@@ -25,6 +25,7 @@ const routeValueKey: { [key: string]: string } = {
   courses: 'Courses',
   location: 'Location',
   zones: 'Zones',
+  'zones/details': 'Zone Details',
   'assumption-of-duty': 'Assumption of Duty',
 };
 

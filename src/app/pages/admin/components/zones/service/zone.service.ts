@@ -5,6 +5,7 @@ import { catchError, lastValueFrom, Observable, tap } from 'rxjs';
 import { UserStore } from '../../../../../shared/store/user.store';
 import { lectureListModule } from '../zone.interface';
 import { GlobalVariablesStore } from '../../../../../shared/store/global-variables.store';
+import { SingleZoneResponse, ZoneResponse } from '../../../../../shared/interfaces/response.interface';
 
 export type TownData = {
   region: string;
@@ -80,7 +81,14 @@ export class ZoneService {
       environment.BACKEND_API_BASE_URL
     }/zones/${this.userStore.id()}`;
     return lastValueFrom(
-      this._http.get<any>(url, { params: this.httpParams() })
+      this._http.get<ZoneResponse>(url, { params: this.httpParams() })
     );
+  }
+
+  getZoneDeatils(zoneId: string): Promise<SingleZoneResponse> {
+    const url = `${
+      environment.BACKEND_API_BASE_URL
+    }/zones/${this.userStore.id()}/zone/${zoneId}`;
+    return lastValueFrom(this._http.get<SingleZoneResponse>(url));
   }
 }

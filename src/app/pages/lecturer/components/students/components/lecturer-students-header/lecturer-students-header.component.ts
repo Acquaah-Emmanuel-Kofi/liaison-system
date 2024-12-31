@@ -1,21 +1,19 @@
 import { Component, inject, output } from '@angular/core';
-import { StudentTableService } from '../../../../../admin/service/students-table/student-table.service';
-import { Router, RouterLink } from '@angular/router';
 import { facultiesAndDepartments } from '../../../../../../shared/helpers/constants.helper';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import { SelectFilterComponent } from '../../../../../../shared/components/select-filter/select-filter.component';
 import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
+import { DashboardService } from '../../../../services/dashboard/dashboard.service';
+import { LoaderModalComponent } from '../../../../../../shared/components/loader-modal/loader-modal/loader-modal.component';
 
 @Component({
   selector: 'liaison-lecturer-students-header',
   standalone: true,
   imports: [
     SearchbarComponent,
-    SelectFilterComponent,
-    RouterLink,
     DropdownModule,
     FormsModule,
+    LoaderModalComponent,
   ],
   templateUrl: './lecturer-students-header.component.html',
   styleUrl: './lecturer-students-header.component.scss',
@@ -36,8 +34,7 @@ export class LecturerStudentsHeaderComponent {
   facultiesAndDepartments: Record<string, { name: string; value: string }[]> =
     {};
 
-  studentService = inject(StudentTableService);
-  route = inject(Router);
+  public _dashboardService = inject(DashboardService);
 
   constructor() {
     this.facultiesAndDepartments = facultiesAndDepartments;
@@ -81,5 +78,10 @@ export class LecturerStudentsHeaderComponent {
 
   handleSearchTerm(value: string) {
     this.searchValue.emit(value);
+  }
+
+  downloadReport() {
+    const fileName = 'Student Supervision Report.xlsx';
+    this._dashboardService.downloadFile(fileName);
   }
 }

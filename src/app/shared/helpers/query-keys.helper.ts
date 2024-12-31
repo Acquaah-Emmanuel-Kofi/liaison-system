@@ -40,6 +40,7 @@ export const studentForLectureQuery = {
 
 export const zonesQueryData = {
   all: ['zones'] as const,
+  details: () => [...zonesQueryData.all, 'details'] as const,
   data: (
     startOfAcademicYear?: any,
     endOfAcademicYear?: any,

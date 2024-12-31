@@ -8,6 +8,7 @@ import { InternshipsComponent } from "./components/internships/internships.compo
 import { ZonesComponent } from "./components/zones/zones.component";
 import { ProfilePageComponent } from "../../shared/components/profile-page/profile-page.component";
 import { StudentLocationComponent } from "./components/students/components/student-location/student-location.component";
+import { ZoneDetailsComponent } from "./components/zones/components/zone-details/zone-details.component";
 
 export const adminRoutes: Routes = [
   {
@@ -48,6 +49,17 @@ export const adminRoutes: Routes = [
   {
     path: 'zones',
     component: ZonesComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'zones',
+        pathMatch: 'full',
+      },
+      {
+        path: 'details',
+        component: ZoneDetailsComponent,
+      },
+    ],
   },
   {
     path: 'profile',

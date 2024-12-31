@@ -13,3 +13,5 @@ export interface IUser {
   phone: string;
   id: string;
 }
+
+export type TRole = 'LECTURER' | 'STUDENT' | 'ADMIN';

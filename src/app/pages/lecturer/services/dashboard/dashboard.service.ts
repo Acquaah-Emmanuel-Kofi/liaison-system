@@ -1,7 +1,10 @@
-import { inject, Injectable } from '@angular/core';
-import { IFacultyAnalytics, ILecturerDashboardResponse } from '../../../../shared/interfaces/response.interface';
+import { inject, Injectable, signal } from '@angular/core';
+import {
+  IFacultyAnalytics,
+  ILecturerDashboardResponse,
+} from '../../../../shared/interfaces/response.interface';
 import { environment } from '../../../../../environments/environment.development';
-import { lastValueFrom } from 'rxjs';
+import { finalize, lastValueFrom, throwError } from 'rxjs';
 import { UserStore } from '../../../../shared/store/user.store';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -14,8 +17,6 @@ export class DashboardService {
   private readonly globalStore = inject(GlobalVariablesStore);
 
   private _http = inject(HttpClient);
-
-  constructor() {}
 
   private httpParams(): HttpParams {
     return new HttpParams()
@@ -61,5 +62,52 @@ export class DashboardService {
         params: this.httpParams(),
       })
     );
+  }
+
+  downloading = signal<boolean>(false);
+
+  /**
+   * Downloads a file from the given URL.
+   * @param defaultFileName - The default name to save the file as (optional).
+   */
+  downloadFile(defaultFileName?: string): void {
+    const params = new HttpParams()
+      .set('startOfAcademicYear', this.globalStore.startYear())
+      .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('semester', this.globalStore.semester().toString())
+      .set('internship', this.globalStore.type().toString());
+
+    const endpoint = `${
+      environment.BACKEND_API_BASE_URL
+    }/lecturers/${this.userStore.id()}/supervision/report`;
+
+    this.downloading.set(true);
+
+    this._http
+      .get(endpoint, {
+        params,
+        observe: 'response',
+        responseType: 'blob',
+      })
+      .pipe(finalize(() => this.downloading.set(false)))
+      .subscribe({
+        next: (response) => {
+          const filename = defaultFileName || 'downloaded-report.xlsx';
+
+          const url = window.URL.createObjectURL(response.body!);
+
+          const anchor = document.createElement('a');
+          anchor.href = url;
+          anchor.download = filename;
+          document.body.appendChild(anchor);
+          anchor.click();
+          document.body.removeChild(anchor);
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          console.error('File download failed:', error);
+        },
+      });
   }
 }

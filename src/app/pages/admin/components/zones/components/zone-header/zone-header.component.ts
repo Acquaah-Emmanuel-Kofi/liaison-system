@@ -204,7 +204,7 @@ export class ZoneHeaderComponent implements OnInit {
     }
     // Return towns based on the selected region
     const selectedRegion = this.zones.at(zoneIndex).get('region')?.value;
-    return this.towns;
+    return selectedRegion;
   }
 
   openTownList(event: any, zoneIndex: number) {

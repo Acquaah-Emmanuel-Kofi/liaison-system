@@ -1,30 +1,9 @@
-import { IUser } from './user.interface';
+import { IUser, TRole } from './user.interface';
 import { IStudentCompanyMapping } from './location.interface';
 
 export interface ICommonResponse {
   status: number;
   message: string;
-}
-
-export interface IZones {
-  dateCreated?: string;
-  dateUpdated?: string;
-  endOfAcademicYear?: string;
-  id?: string;
-  internshipType?: string;
-  lecturers?: string[];
-  name?: string;
-  region?: string;
-  startOfAcademicYear?: string;
-  towns?: string[];
-  zoneLead?: string;
-}
-interface IBackendRegion {
-  dateCreated: string;
-  dateUpdated: string;
-  id: string;
-  region: string;
-  town: { towns: string[] };
 }
 
 interface IPagableResponse {
@@ -264,4 +243,49 @@ export interface IFacultyAnalytics extends ICommonResponse {
     }[];
     totalStudents: number; 
   };
+}
+
+export interface ILecturer {
+  id: string;
+  lecturerId: string;
+  createdAt: string;
+  updatedAt: string;
+  firstName: string;
+  lastName: string;
+  otherName?: string;
+  email: string;
+  phone: string;
+  company: string;
+  password: string;
+  faculty: string;
+  department: string;
+  semester: number;
+  role: TRole;
+  zoneLead: boolean;
+}
+
+export interface IZone {
+  id: string;
+  name: string;
+  region: string;
+  zoneLead: string;
+  startOfAcademicYear: string;
+  endOfAcademicYear: string;
+  dateCreated: string;
+  dateUpdated: string;
+  internshipType: 'INTERNSHIP' | string;
+  lecturers: {
+    lecturers: ILecturer[];
+    totalLecturers: number;
+  };
+  towns: string[];
+  totalLecturers: number;
+}
+
+export interface ZoneResponse extends ICommonResponse {
+  data: IZone[]
+}
+
+export interface SingleZoneResponse extends ICommonResponse {
+  data: IZone;
 }

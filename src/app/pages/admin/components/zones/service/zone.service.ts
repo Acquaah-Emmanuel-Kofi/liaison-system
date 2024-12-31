@@ -5,6 +5,10 @@ import { catchError, lastValueFrom, Observable, tap } from 'rxjs';
 import { UserStore } from '../../../../../shared/store/user.store';
 import { lectureListModule } from '../zone.interface';
 import { GlobalVariablesStore } from '../../../../../shared/store/global-variables.store';
+import {
+  SingleZoneResponse,
+  ZoneResponse,
+} from '../../../../../shared/interfaces/response.interface';
 
 export type TownData = {
   region: string;
@@ -50,11 +54,15 @@ export class ZoneService {
       environment.BACKEND_API_BASE_URL
     }/zones/${this.userStore.id()}`;
 
-    return this._http.post(url, formData, { params }).pipe(
-      catchError((error) => {
-        throw error;
-      })
-    );
+    return this._http.post(url, formData, { params });
+  }
+
+  updateZone(formData: object, zoneId: string): Observable<any> {
+    const url = `${
+      environment.BACKEND_API_BASE_URL
+    }/zones/${this.userStore.id()}/update/${zoneId}`;
+
+    return this._http.put(url, formData);
   }
 
   submitTown(townData: TownData): Observable<any> {
@@ -68,11 +76,7 @@ export class ZoneService {
       environment.BACKEND_API_BASE_URL
     }/regions/${this.userStore.id()}`;
 
-    return this._http.post(url, townData, { params }).pipe(
-      catchError((error) => {
-        throw error;
-      })
-    );
+    return this._http.post(url, townData, { params });
   }
 
   getAllCreatedZones() {
@@ -80,7 +84,14 @@ export class ZoneService {
       environment.BACKEND_API_BASE_URL
     }/zones/${this.userStore.id()}`;
     return lastValueFrom(
-      this._http.get<any>(url, { params: this.httpParams() })
+      this._http.get<ZoneResponse>(url, { params: this.httpParams() })
     );
+  }
+
+  getZoneDeatils(zoneId: string): Promise<SingleZoneResponse> {
+    const url = `${
+      environment.BACKEND_API_BASE_URL
+    }/zones/${this.userStore.id()}/zone/${zoneId}`;
+    return lastValueFrom(this._http.get<SingleZoneResponse>(url));
   }
 }

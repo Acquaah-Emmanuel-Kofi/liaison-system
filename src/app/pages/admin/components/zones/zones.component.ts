@@ -10,7 +10,7 @@ import { zonesQueryData } from '../../../../shared/helpers/query-keys.helper';
 import { ZoneService } from './service/zone.service';
 import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
 import { NgTemplateOutlet } from '@angular/common';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import {
   formatDateToDDMMYYYY,
@@ -18,6 +18,8 @@ import {
 } from '../../../../shared/helpers/functions.helper';
 import { MessageService } from 'primeng/api';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { IZone } from '../../../../shared/interfaces/response.interface';
+import { UserStore } from '../../../../shared/store/user.store';
 
 @Component({
   selector: 'liaison-zones',
@@ -34,7 +36,9 @@ import { GlobalVariablesStore } from '../../../../shared/store/global-variables.
   providers: [MessageService],
 })
 export class ZonesComponent {
-  private globalStore = inject(GlobalVariablesStore);
+  private readonly globalStore = inject(GlobalVariablesStore);
+  private readonly userStore = inject(UserStore);
+
   activatedRoute = inject(ActivatedRoute);
   zoneService = inject(ZoneService);
   protected sidebarService = inject(SidebarService);
@@ -47,6 +51,8 @@ export class ZonesComponent {
   FilterValue = signal<string>('');
   filteredData = signal<TableData[]>([]);
   data: TableData[] = [];
+
+  _router = inject(Router);
 
   isChildRouteActive(): boolean {
     return this.activatedRoute.firstChild !== null;
@@ -79,7 +85,7 @@ export class ZonesComponent {
     queryFn: async () => {
       const response = await this.zoneService.getAllCreatedZones();
 
-      this.data = response.data.map((item: any) => ({
+      this.data = response.data.map((item: IZone) => ({
         ...item,
         dateCreated: formatDateToDDMMYYYY(item.dateCreated),
       }));
@@ -103,5 +109,16 @@ export class ZonesComponent {
       'region',
     ]);
     this.filteredData.set(filteredZones ?? []);
+  }
+
+  handleOnRowClicked(rowData: any) {
+    this._router.navigate(
+      [this.userStore.role().toLowerCase(), 'zones', 'details'],
+      {
+        queryParams: {
+          id: rowData.id,
+        },
+      }
+    );
   }
 }

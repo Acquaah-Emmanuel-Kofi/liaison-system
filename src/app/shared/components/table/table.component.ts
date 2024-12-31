@@ -40,12 +40,14 @@ export class TableComponent implements OnInit {
   errorOccurred = input<boolean>(false);
   @Input() selectedRow: TableData | null = null;
   actionClicked = output<TableData>();
+  rowClicked = output<TableData>();
+
+  @Input() isRowClickable: boolean = false;
 
   @Input() first: number | undefined = 0;
   @Input() pageSize: number | undefined = 0;
   @Input() totalData: number | undefined = 0;
   @Output() checkboxClicked = new EventEmitter<void>();
-
 
   @Output() pageChange = new EventEmitter<{
     first: number;
@@ -81,12 +83,15 @@ export class TableComponent implements OnInit {
     this.pageChange.emit(event);
   }
 
-
   onCheckboxClick(row: any): void {
     this.checkboxClicked.emit(row);
   }
 
   onActionClick(row: TableData) {
     this.actionClicked.emit(row);
+  }
+
+  onRowClick(row: any): void {
+    this.rowClicked.emit(row);
   }
 }

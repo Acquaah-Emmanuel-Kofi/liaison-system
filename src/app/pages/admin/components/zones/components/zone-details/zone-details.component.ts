@@ -216,7 +216,7 @@ export class ZoneDetailsComponent {
       this._messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: data.message ?? 'Zone submitted successfully',
+        detail: data.message ?? 'Zone updated successfully',
       });
       this.closeModal();
     },
@@ -226,7 +226,7 @@ export class ZoneDetailsComponent {
       this._messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: error.message ?? 'An error occurred while submitting the zone',
+        detail: error.message ?? 'An error occurred while updating the zone',
       });
       this.closeModal();
     },
@@ -235,7 +235,6 @@ export class ZoneDetailsComponent {
   onSubmit() {
     const formDataArray = this.addZoneForm.get('zones')?.value;
     const formData = formDataArray[0]; 
-    console.log('formData: ', formData);
     this.zoneMutation.mutate({ formData });
   }
 

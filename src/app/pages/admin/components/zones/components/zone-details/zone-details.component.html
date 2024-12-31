@@ -1,0 +1,407 @@
+@switch (zoneDeatilsQuery.status()) { @case('pending') { @if
+(zoneDeatilsQuery.data()) {
+<ng-container *ngTemplateOutlet="zoneDetails" />
+} @else {
+<div class="container mx-auto p-6 space-y-4">
+  <!-- Zone Details Header Skeleton -->
+  <div class="bg-Primary-Blue text-white rounded-lg shadow-md p-4 space-y-4">
+    <div class="h-6 bg-gray-200 rounded animate-pulse w-3/4"></div>
+    <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
+    <div class="h-4 bg-gray-200 rounded animate-pulse w-1/3"></div>
+  </div>
+
+  <!-- Lecturers Details Skeleton -->
+  <div>
+    <div class="h-5 bg-gray-200 rounded animate-pulse w-1/4 mb-2"></div>
+    <div class="grid lg:grid-cols-3 grid-cols-1 gap-3">
+      <div class="border py-4 px-6 rounded-lg shadow bg-gray-50 animate-pulse space-y-2" *ngFor="let i of [1, 2, 3]">
+        <div class="h-5 bg-gray-200 rounded w-2/3"></div>
+        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div class="h-4 bg-gray-200 rounded w-3/5"></div>
+        <div class="h-4 bg-gray-200 rounded w-4/5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Towns Skeleton -->
+  <div>
+    <div class="h-5 bg-gray-200 rounded animate-pulse w-1/5 mb-2"></div>
+    <div class="bg-white p-4 rounded-lg shadow space-y-2">
+      <div *ngFor="let i of [1, 2, 3]" class="h-4 bg-gray-200 rounded w-1/2"></div>
+    </div>
+  </div>
+
+  <!-- Toggle Edit Mode Button Skeleton -->
+  <div class="h-10 bg-gray-200 rounded animate-pulse w-32"></div>
+</div>
+
+} } @case ('error') {
+<h1 class="text-center text-2xl font-semibold text-red-500">
+  Error Occurred: {{ zoneDeatilsQuery.error()?.name }}
+</h1>
+} @case('success') {
+<ng-container *ngTemplateOutlet="zoneDetails" />
+} }
+
+<ng-template #zoneDetails>
+  <div class="container mx-auto p-6 space-y-4">
+    <!-- Zone Details Header -->
+    <div class="bg-Primary-Blue text-white rounded-lg shadow-md p-4 space-y-4">
+      <h1 class="text-2xl font-bold">
+        {{ zoneDeatilsQuery.data()?.name }}
+      </h1>
+      <p class="text-sm">
+        Region:
+        {{ zoneDeatilsQuery.data()?.region }}
+      </p>
+      <p class="text-sm">
+        Zone Lead:
+        {{ zoneDeatilsQuery.data()?.zoneLead }}
+      </p>
+    </div>
+
+    <!-- Lecturers Details -->
+    <div>
+      <h2 class="font-semibold text-lg mb-2">
+        Lecturers: {{ zoneDeatilsQuery.data()?.lecturers?.totalLecturers }}
+      </h2>
+
+      <div class="grid lg:grid-cols-3 grid-cols-1 gap-3">
+        @for (lecturer of zoneDeatilsQuery.data()?.lecturers?.lecturers; track
+        $index) {
+        <div
+          class="border py-4 px-6 rounded-lg shadow text-center bg-gray-50 hover:bg-gray-100 transition-all"
+        >
+          <h3 class="text-lg font-bold truncate">
+            {{ lecturer.firstName }} {{ lecturer.otherName }}
+            {{ lecturer.lastName }}
+          </h3>
+          <p class="text-sm text-gray-600 truncate">{{ lecturer.email }}</p>
+          <p class="text-sm text-gray-600 truncate">{{ lecturer.phone }}</p>
+          <p class="text-sm text-gray-600 truncate">{{ lecturer.company }}</p>
+          <p class="text-sm text-gray-600 truncate">{{ lecturer.faculty }}</p>
+          <p class="text-sm text-gray-600 truncate">
+            {{ lecturer.department }}
+          </p>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Towns -->
+    <div>
+      <h2 class="font-semibold text-lg mb-2">Towns</h2>
+      <div class="bg-white p-4 rounded-lg shadow mb-6">
+        <ul class="list-disc ml-6">
+          @for (town of zoneDeatilsQuery.data()?.towns; track $index) {
+          <li>{{ town }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Toggle Edit Mode -->
+    <button
+      type="button"
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-5"
+      (click)="isModalOpened = !isModalOpened"
+    >
+       Edit
+    </button>
+  </div>
+</ng-template>
+
+<liaison-modal-container
+  [isOpen]="isModalOpened"
+  [title]="'Update Zone'"
+  (closeModal)="closeModal()"
+>
+  <form
+    [formGroup]="addZoneForm"
+    (ngSubmit)="onSubmit()"
+    class="space-y-6 w-full max-w-md mx-auto px-10"
+  >
+    <div formArrayName="zones">
+      <div
+        *ngFor="let zone of zones.controls; let i = index"
+        [formGroupName]="i"
+      >
+        @if(isAddMoreTriggered){
+        <div class="flex items-center justify-between mt-5">
+          @if (i !== 0){
+          <div class="mt-[32px] cursor-pointer" (click)="removeZone(i)">
+            <svg
+              width="29"
+              height="29"
+              viewBox="0 0 29 29"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14.5005 24.3596C9.23647 24.3596 4.98047 19.9516 4.98047 14.4996C4.98047 9.04765 9.23647 4.63965 14.5005 4.63965C19.7645 4.63965 24.0205 9.04765 24.0205 14.4996C24.0205 19.9516 19.7645 24.3596 14.5005 24.3596ZM14.5005 5.79965C9.85247 5.79965 6.10047 9.68565 6.10047 14.4996C6.10047 19.3136 9.85247 23.1996 14.5005 23.1996C19.1485 23.1996 22.9005 19.3136 22.9005 14.4996C22.9005 9.68565 19.1485 5.79965 14.5005 5.79965Z"
+                fill="#707070"
+              />
+              <path
+                d="M9.46094 13.9199H19.5409V15.0799H9.46094V13.9199Z"
+                fill="#707070"
+              />
+            </svg>
+          </div>
+          }
+        </div>
+
+        }
+        <div class="flex flex-col gap-2">
+          <div class="w-full mt">
+            <div class="w-full flex flex-col items-start">
+              <label
+                for="zoneName"
+                class="font-medium text-base mb-2 text-Dark-Primary"
+                >Zone Name</label
+              >
+              <input
+                id="zoneName"
+                formControlName="name"
+                placeholder="Enter zone name"
+                [value]="zoneData().name"
+                type="text"
+                class="w-full p-2 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div class="w-full">
+            <div class="w-full flex flex-col items-start">
+              <label
+                for="region"
+                class="font-medium text-base mb-2 text-Dark-Primary"
+                >Select Region</label
+              >
+              <div class="relative w-full">
+                <select
+                  id="region"
+                  formControlName="region"
+                  name="region"
+                  [value]="zoneData().region"
+                  (change)="onRegionChange(i)"
+                  required
+                  class="appearance-none w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
+                >
+                  <option value="" disabled selected>Select a region</option>
+                  <option *ngFor="let region of regions" [value]="region">
+                    {{ region }}
+                  </option>
+                </select>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                >
+                  <svg
+                    width="11"
+                    height="6"
+                    viewBox="0 0 11 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full">
+            <div class="w-full flex flex-col items-start">
+              <label
+                for="region"
+                class="font-medium text-base mb-2 text-Dark-Primary"
+                >Select Town(s)</label
+              >
+              <div class="relative w-full">
+                <input
+                  (focus)="openTownList($event, i)"
+                  [value]="
+                    getTownsForZone(i).length
+                      ? getTownsForZone(i).join(', ')
+                      : zoneData().towns 
+                  "
+                  id="towns"
+                  formArrayName="towns"
+                  name="towns"
+                  required
+                  class="appearance-none w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
+                />
+
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                >
+                  <svg
+                    width="11"
+                    height="6"
+                    viewBox="0 0 11 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368" />
+                  </svg>
+                </div>
+              </div>
+              @if(isTownListOpened && currentZoneIndex === i){
+              <div
+                class="mt-2 flex flex-col py-5 items-center w-[100%] border-2 border-Dark-Blue rounded-[10px] min-h-24 max-h-72 bg-white z-10 overflow-y-auto overflow-x-hidden"
+              >
+                <div
+                  *ngFor="let town of towns(); let idx = index"
+                  class="flex my-1 items-center justify-between w-[80%] h-10 py-3 px-3"
+                >
+                  <div class="flex justify-center gap-5">
+                    <p class="font-medium text-Primary-Blue mt-1">{{ town }}</p>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      class="form-checkbox cursor-pointer h-4 w-4 accent-[#19337E]"
+                      [checked]="getTownsForZone(i).includes(town)"
+                      (change)="toggleTownSelection(town, i)"
+                    />
+                  </div>
+                </div>
+                @if(!zones.at(i).get('region')?.value){
+                <p>Select a region first</p>
+                }
+                <button
+                  (click)="closeDropdown()"
+                  class="bg-Dark-Blue text-white p-2 rounded"
+                >
+                  Done
+                </button>
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="w-full">
+            <div class="w-full flex flex-col items-start">
+              <label
+                for="zoneLead"
+                class="font-medium text-base mb-2 text-Dark-Primary"
+                >Select Zone Lead</label
+              >
+              <div class="relative w-full">
+                <select
+                  id="zoneLead"
+                  formControlName="zoneLead"
+                  [value]="zoneData().zoneLead"
+                  name="zoneLead"
+                  required
+                  class="appearance-none w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
+                >
+                  <option value="" disabled selected>Select a zone lead</option>
+                  <option *ngFor="let lead of lecturers()" [value]="lead.id">
+                    {{ lead.name }}
+                  </option>
+                </select>
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                >
+                  <svg
+                    width="11"
+                    height="6"
+                    viewBox="0 0 11 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full">
+            <div class="w-full flex flex-col items-start">
+              <label
+                for="zoneLead"
+                class="font-medium text-base mb-2 text-Dark-Primary"
+                >Assign Lecturer(s)</label
+              >
+              <div class="relative w-full">
+                <input
+                  [value]="
+                    getLecturersForZone(i).length
+                      ? getLecturersForZone(i).join(', ')
+                      : 'select lecturer(s)'
+                  "
+                  (focus)="isLecturerListOpened = !isLecturerListOpened"
+                  id="lecturers"
+                  formArrayName="lecturerIds"
+                  name="zoneLead"
+                  required
+                  class="appearance-none w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
+                />
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+                >
+                  <svg
+                    width="11"
+                    height="6"
+                    viewBox="0 0 11 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M5.5 5.5L0.5 0.5H10.5L5.5 5.5Z" fill="#5F6368" />
+                  </svg>
+                </div>
+              </div>
+              @if(isLecturerListOpened && currentZoneIndex === i){
+              <div
+                class="mt-2 flex flex-col py-5 items-center w-[100%] border-2 border-Dark-Blue rounded-[10px] min-h-24 max-h-72 bg-white z-10 overflow-y-auto overflow-x-hidden"
+              >
+                <div
+                  *ngFor="let lecturer of lecturers(); let idx = index"
+                  class="flex my-1 items-center justify-between w-[80%] h-10 py-3 px-3"
+                >
+                  <div class="flex justify-center gap-5">
+                    <p class="font-medium text-Primary-Blue mt-1">
+                      {{ lecturer.name }}
+                    </p>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      class="form-checkbox cursor-pointer h-4 w-4 accent-[#19337E]"
+                      [checked]="selectedLecturers[i]?.includes(lecturer.name)"
+                      (change)="toggleLecturesSelection(lecturer, i)"
+                    />
+                  </div>
+                </div>
+                <button
+                  (click)="isLecturerListOpened = false"
+                  class="bg-Dark-Blue text-white p-2 rounded"
+                >
+                  Done
+                </button>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 sticky mt-6">
+        <button
+          (click)="closeModal()"
+          type="button"
+          class="w-1/3 px-4 py-2 text-Dark-Blue bg-white rounded-full border-2 border-Dark-Blue hover:bg-gray-100"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="w-2/3 px-4 py-2 text-white bg-Dark-Blue rounded-full border-2 border-Dark-Blue"
+        >
+          Update Zone
+        </button>
+      </div>
+    </div>
+  </form>
+</liaison-modal-container>

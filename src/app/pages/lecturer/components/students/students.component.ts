@@ -128,8 +128,8 @@ export class StudentsComponent {
     },
     onError: (error: any) => {
       this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
+        severity: 'error',
+        summary: 'Error',
         detail: 'change was not successful',
       });
     },

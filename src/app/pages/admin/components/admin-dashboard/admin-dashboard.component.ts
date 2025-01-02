@@ -113,6 +113,7 @@ export class AdminDashboardComponent implements OnInit {
   public username = computed(() => this.userStore.firstName());
 
   private _dashboardService = inject(DashboardService);
+  private _router = inject(Router);
 
   constructor() {
     this.populateYears();
@@ -193,6 +194,7 @@ export class AdminDashboardComponent implements OnInit {
 
       // Map the response data to match the columns
       return response.data.map((log) => ({
+        id: log.id,
         companyName: log.companyDetails?.companyName ?? 'N/A',
         companySupervisor: log.companyDetails?.companySupervisor ?? 'N/A',
         supervisorPhone: log.companyDetails?.supervisorPhone ?? 'N/A',
@@ -206,4 +208,16 @@ export class AdminDashboardComponent implements OnInit {
       }));
     },
   }));
+
+  handleOnRowClicked(rowData: any) {
+    this._router.navigate([
+      this.userStore.role().toLowerCase(),
+      'dashboard',
+      'duty-details',
+    ], {
+      queryParams: {
+        id: rowData.id
+      }
+    });
+  }
 }

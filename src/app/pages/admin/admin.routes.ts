@@ -9,6 +9,7 @@ import { ZonesComponent } from "./components/zones/zones.component";
 import { ProfilePageComponent } from "../../shared/components/profile-page/profile-page.component";
 import { StudentLocationComponent } from "./components/students/components/student-location/student-location.component";
 import { ZoneDetailsComponent } from "./components/zones/components/zone-details/zone-details.component";
+import { DutyDetailsComponent } from "./components/duty-details/duty-details.component";
 
 export const adminRoutes: Routes = [
   {
@@ -19,15 +20,27 @@ export const adminRoutes: Routes = [
   {
     path: 'dashboard',
     component: AdminDashboardComponent,
-  },
-  {
-    path: 'upload',
-    component: UploadComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'duty-details',
+        component: DutyDetailsComponent,
+      },
+    ],
   },
   {
     path: 'students',
     component: StudentsComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'students',
+        pathMatch: 'full',
+      },
       {
         path: 'upload',
         component: UploadStudentComponent,

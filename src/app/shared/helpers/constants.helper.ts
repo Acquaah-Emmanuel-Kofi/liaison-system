@@ -16,6 +16,7 @@ export const removeFromLocalStorage = (key: string) => {
 
 const routeValueKey: { [key: string]: string } = {
   dashboard: 'Dashboard',
+  'duty-details': 'Assumption of Duty Details',
   lecturers: 'Lecturers',
   students: 'Students',
   'students/location': 'Students Location',

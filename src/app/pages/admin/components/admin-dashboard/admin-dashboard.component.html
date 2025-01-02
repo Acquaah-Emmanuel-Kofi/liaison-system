@@ -1,4 +1,4 @@
-<div class="px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+<section class="px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
   <div
     class="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full mb-6 sm:mb-8"
   >
@@ -87,7 +87,7 @@
       } }
     </div>
   </div>
-</div>
+</section>
 
 <ng-template #table>
   <liaison-table
@@ -95,6 +95,8 @@
     [HidePagination]="HidePagination"
     [columns]="columns"
     [data]="studentAssumptionOfDutyLogsQuery.data()!"
+    [isRowClickable]="true"
+    (rowClicked)="handleOnRowClicked($event)"
   >
   </liaison-table>
 </ng-template>

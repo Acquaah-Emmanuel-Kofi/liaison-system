@@ -1,10 +1,10 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   IFacultyAnalytics,
   ILecturerDashboardResponse,
 } from '../../../../shared/interfaces/response.interface';
 import { environment } from '../../../../../environments/environment.development';
-import { finalize, lastValueFrom, throwError } from 'rxjs';
+import { lastValueFrom, tap } from 'rxjs';
 import { UserStore } from '../../../../shared/store/user.store';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -64,13 +64,11 @@ export class DashboardService {
     );
   }
 
-  downloading = signal<boolean>(false);
-
   /**
    * Downloads a file from the given URL.
    * @param defaultFileName - The default name to save the file as (optional).
    */
-  downloadFile(defaultFileName?: string): void {
+  downloadFile(defaultFileName?: string) {
     const params = new HttpParams()
       .set('startOfAcademicYear', this.globalStore.startYear())
       .set('endOfAcademicYear', this.globalStore.endYear())
@@ -81,17 +79,14 @@ export class DashboardService {
       environment.BACKEND_API_BASE_URL
     }/lecturers/${this.userStore.id()}/supervision/report`;
 
-    this.downloading.set(true);
-
-    this._http
+    return this._http
       .get(endpoint, {
         params,
         observe: 'response',
         responseType: 'blob',
       })
-      .pipe(finalize(() => this.downloading.set(false)))
-      .subscribe({
-        next: (response) => {
+      .pipe(
+        tap((response) => {
           const filename = defaultFileName || 'downloaded-report.xlsx';
 
           const url = window.URL.createObjectURL(response.body!);
@@ -104,10 +99,7 @@ export class DashboardService {
           document.body.removeChild(anchor);
 
           window.URL.revokeObjectURL(url);
-        },
-        error: (error) => {
-          console.error('File download failed:', error);
-        },
-      });
+        })
+      );
   }
 }

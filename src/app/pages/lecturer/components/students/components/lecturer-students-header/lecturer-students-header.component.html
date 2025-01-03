@@ -1,4 +1,5 @@
-<liaison-loader-modal [isOpen]="_dashboardService.downloading()"></liaison-loader-modal>
+<p-toast></p-toast>
+<liaison-loader-modal [isOpen]="isLoading()"></liaison-loader-modal>
 
 <header class="flex md:flex-row flex-col items-center justify-between my-6">
     <div class="flex gap-4">

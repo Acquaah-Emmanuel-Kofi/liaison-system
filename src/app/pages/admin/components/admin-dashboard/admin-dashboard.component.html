@@ -1,3 +1,4 @@
+@if (!isChildRouteActive()){
 <section class="px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
   <div
     class="flex flex-col sm:flex-row items-center sm:items-center justify-between w-full mb-6 sm:mb-8"
@@ -88,6 +89,7 @@
     </div>
   </div>
 </section>
+}
 
 <ng-template #table>
   <liaison-table
@@ -100,3 +102,5 @@
   >
   </liaison-table>
 </ng-template>
+
+<router-outlet></router-outlet>

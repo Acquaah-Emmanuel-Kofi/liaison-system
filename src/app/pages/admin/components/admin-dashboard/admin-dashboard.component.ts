@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { StatCardComponent } from '../../../../shared/components/stat-card/stat-card.component';
 import { AdminChartComponent } from '../admin-chart/admin-chart.component';
 import { TableComponent } from '../../../../shared/components/table/table.component';
@@ -40,6 +40,7 @@ import { SemesterOptions } from '../../../../shared/helpers/constants.helper';
     FormsModule,
     DropdownModule,
     CommonModule,
+    RouterOutlet,
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss',
@@ -114,6 +115,7 @@ export class AdminDashboardComponent implements OnInit {
 
   private _dashboardService = inject(DashboardService);
   private _router = inject(Router);
+  private _activatedRoute = inject(ActivatedRoute);
 
   constructor() {
     this.populateYears();
@@ -121,6 +123,10 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.updateCountsFromApiResponse(this.analyticsQuery.data()!);
+  }
+
+  isChildRouteActive(): boolean {
+    return this._activatedRoute.firstChild !== null;
   }
 
   populateYears() {
@@ -210,14 +216,13 @@ export class AdminDashboardComponent implements OnInit {
   }));
 
   handleOnRowClicked(rowData: any) {
-    this._router.navigate([
-      this.userStore.role().toLowerCase(),
-      'dashboard',
-      'duty-details',
-    ], {
-      queryParams: {
-        id: rowData.id
+    this._router.navigate(
+      [this.userStore.role().toLowerCase(), 'dashboard', 'duty-details'],
+      {
+        queryParams: {
+          id: rowData.id,
+        },
       }
-    });
+    );
   }
 }

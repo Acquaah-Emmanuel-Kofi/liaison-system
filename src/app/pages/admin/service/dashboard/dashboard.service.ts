@@ -4,6 +4,7 @@ import { environment } from '../../../../../environments/environment.development
 import { lastValueFrom } from 'rxjs';
 import { UserStore } from '../../../../shared/store/user.store';
 import {
+  AssumptionOfDutyDetailsResponse,
   IStatAnalyticsResponse,
   IStudentCompanyMappingResponse,
   StudentAndLecturerChartResponse,
@@ -90,5 +91,13 @@ export class DashboardService {
         params,
       })
     );
+  }
+
+  getUpdatedAssumptionOfDutyDetails(dutyId: string): Promise<AssumptionOfDutyDetailsResponse> {
+    const endpoint = `${
+      environment.BACKEND_API_BASE_URL
+      }/admin/${this.userStore.id()}/assumption-of-duties/${dutyId}`;
+    
+    return lastValueFrom(this._http.get<AssumptionOfDutyDetailsResponse>(endpoint));
   }
 }

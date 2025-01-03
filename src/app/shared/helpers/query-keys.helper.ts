@@ -121,6 +121,8 @@ export const statAnalyticsQueryKey = {
 
 export const studentAssumptionOfDutyLogsQueryKey = {
   all: ['duty logs'] as const,
+  details: () =>
+    [...studentAssumptionOfDutyLogsQueryKey.all, 'details'] as const,
   data: (
     internshipType: boolean,
     startYear: number,

@@ -139,6 +139,17 @@ export interface UpdatedDutiesResponse extends ICommonResponse {
   data: DutyData[];
 }
 
+
+export interface AssumptionOfDutyData {
+  oldAssumptionOfDuties: DutyData[];
+  updatedAssumptionOfDuty: DutyData;
+}
+
+export interface AssumptionOfDutyDetailsResponse extends ICommonResponse {
+  data: AssumptionOfDutyData;
+}
+
+
 export interface IStatAnalyticsResponse extends ICommonResponse {
   data: IStartAnalytics;
 }

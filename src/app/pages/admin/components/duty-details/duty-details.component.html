@@ -4,7 +4,7 @@
       Details Overview
     </h1>
 
-    @switch (dutyDetailsQuery.status()) { @case ('pending') { @if
+    @switch (dutyDetailsQuery.status()) { @case ('pending') {@if
     (dutyDetailsQuery.data()) {
     <ng-container *ngTemplateOutlet="overview" />
     } @else {
@@ -12,23 +12,25 @@
         <!-- Old Duty Skeleton -->
         <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 shadow">
           <div class="h-8 bg-gray-300 rounded mb-4"></div>
+         @for (skeleton of numberOfSkeletons; track $index) {
           <div class="h-4 bg-gray-300 rounded mb-2"></div>
-          <div class="h-4 bg-gray-300 rounded mb-2"></div>
-          <div class="h-4 bg-gray-300 rounded mb-2"></div>
+         }
           <div class="h-4 bg-gray-300 rounded"></div>
         </div>
       
         <!-- Updated Duty Skeleton -->
         <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 shadow">
           <div class="h-8 bg-gray-300 rounded mb-4"></div>
-          <div class="h-4 bg-gray-300 rounded mb-2"></div>
-          <div class="h-4 bg-gray-300 rounded mb-2"></div>
-          <div class="h-4 bg-gray-300 rounded mb-2"></div>
+        @for (skeleton of numberOfSkeletons; track $index) {
+        <div class="h-4 bg-gray-300 rounded mb-2"></div>
+        }
           <div class="h-4 bg-gray-300 rounded"></div>
         </div>
       </div>
     } } @case ('error') {
-    <h1 class="text-red-500">Error occured: {{ dutyDetailsQuery.error()?.message }}</h1>
+    <div class="min-h-[250px] flex items-center justify-center flex-col">
+      <h1 class="text-red-500 text-center">An Error occured: {{ dutyDetailsQuery.error()?.message }}</h1>
+    </div>
     } @case ('success') {
     <ng-container *ngTemplateOutlet="overview" />
     } }
@@ -38,38 +40,12 @@
         <!-- Old Duty Section -->
         <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 shadow">
           <h2 class="text-2xl font-semibold text-gray-700 mb-4">Old Duty</h2>
-          <p class="mb-2 truncate">
-            <strong>Student ID: </strong>
-            <span>{{ dutyDetailsQuery.data()?.oldDuty?.id ?? 'N/A' }}</span>
-          </p>
-          <p class="mb-2 truncate">
-            <strong>Company: </strong>
-            <span>{{
-              dutyDetailsQuery.data()?.oldDuty?.companyDetails?.companyName ?? 'N/A'
-            }}</span>
-          </p>
-          <p class="mb-2 truncate">
-            <strong>Date Commenced: </strong>
-            <span>{{ dutyDetailsQuery.data()?.oldDuty?.dateCommenced ?? 'N/A' }}</span>
-          </p>
-          <p class="mb-2 truncate">
-            <strong>Internship: </strong>
-            <span>{{ dutyDetailsQuery.data()?.oldDuty?.internship ?? 'N/A' }}</span>
-          </p>
-          <p>
-            <strong>Academic Year: </strong>
-            <span
-              >{{
-                dutyDetailsQuery.data()?.oldDuty?.startOfAcademicYear
-                  | date : "yyyy" 
-              }}
-              /
-              {{
-                dutyDetailsQuery.data()?.oldDuty?.endOfAcademicYear
-                  | date : "yyyy"
-              }} </span
-            >
-          </p>
+          @for (key of oldDutyKeys; track $index) {
+            <p class="mb-2 truncate">
+              <strong>{{ key.label }}: </strong>
+              <span class="text-red-500">{{ key.value }}</span>
+            </p>
+          }
         </div>
 
         <!-- Updated Duty Section -->
@@ -77,44 +53,15 @@
           <h2 class="text-2xl font-semibold text-gray-700 mb-4">
             Updated Duty
           </h2>
+
+          @for (key of updatedDutyKeys; track $index) {
           <p class="mb-2 truncate">
-            <strong>Student ID: </strong>
-            <span class="text-red-500 font-medium">{{
-              dutyDetailsQuery.data()?.updatedDuty?.id ?? 'N/A'
-            }}</span>
+            <strong>{{ key.label }}: </strong>
+            <span [ngClass]="{'text-red-500': isEqual(key), 'text-green-500': !isEqual(key)}">
+              {{ key.value }}
+            </span>
           </p>
-          <p class="mb-2 truncate">
-            <strong>Company: </strong>
-            <span class="text-red-500 font-medium">{{
-              dutyDetailsQuery.data()?.updatedDuty?.companyDetails?.companyName ?? 'N/A'
-            }}</span>
-          </p>
-          <p class="mb-2 truncate">
-            <strong>Date Commenced: </strong>
-            <span class="text-red-500 font-medium">{{
-              dutyDetailsQuery.data()?.updatedDuty?.dateCommenced ?? 'N/A'
-            }}</span>
-          </p>
-          <p class="mb-2 truncate">
-            <strong>Internship: </strong>
-            <span class="text-red-500 font-medium">{{
-              dutyDetailsQuery.data()?.updatedDuty?.internship ?? 'N/A'
-            }}</span>
-          </p>
-          <p>
-            <strong>Academic Year: </strong>
-            <span class="text-red-500 font-medium"
-              >{{
-                dutyDetailsQuery.data()?.updatedDuty?.startOfAcademicYear
-                  | date : "yyyy"
-              }}
-              /
-              {{
-                dutyDetailsQuery.data()?.updatedDuty?.endOfAcademicYear
-                  | date : "yyyy"
-              }}</span
-            >
-          </p>
+          }
         </div>
       </div>
     </ng-template>

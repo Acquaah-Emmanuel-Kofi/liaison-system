@@ -22,7 +22,10 @@ import { lastValueFrom } from 'rxjs';
 import { AssumptionService } from '../../services/assumption/assumption.service';
 import { RegionService } from '../../../../shared/services/regions/regions.service';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
-import { lecturerDashboardQueryKey, studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import {
+  lecturerDashboardQueryKey,
+  studentsQueryKey,
+} from '../../../../shared/helpers/query-keys.helper';
 import { SkeletalComponent } from './skeletal/skeletal.component';
 import {
   CompanyDetails,
@@ -250,7 +253,7 @@ export class AssumptionOfDutyComponent implements OnInit {
     }
   }
 
-  updateAssumptionMutation = injectMutation(() => ({
+  updateAssumptionMutation = injectMutation((client) => ({
     mutationFn: async (formData: CompanyDetails) => {
       return await lastValueFrom(
         this.assumptionService.updateAssuptionOfDuty(
@@ -260,7 +263,10 @@ export class AssumptionOfDutyComponent implements OnInit {
       );
     },
     onSuccess: (data: any) => {
+      client.invalidateQueries({ queryKey: studentsQueryKey.all });
+
       this.toggleEditMode();
+
       this.messageService.add({
         severity: 'success',
         summary: 'Success',

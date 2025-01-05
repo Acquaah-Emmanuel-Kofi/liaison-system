@@ -1,3 +1,4 @@
+@if (!isChildRouteActive()){
 <section>
   <liaison-header
     (searchValue)="handleSearchTerm($event)"
@@ -30,3 +31,6 @@
     (pageChange)="handlePageChange($event)"
   />
 </ng-template>
+}
+
+<router-outlet></router-outlet>

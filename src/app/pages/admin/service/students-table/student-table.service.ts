@@ -1,7 +1,8 @@
-import { inject, Injectable, OutputEmitterRef } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import {
+  IGetAllAttachmentsResponse,
   IGetLecturersResponse,
   IGetStudentForLecturer,
   IGetStudentResponse,
@@ -35,6 +36,15 @@ export class StudentTableService {
     }/admin/${this.userStore.id()}/students`;
     return lastValueFrom(
       this._http.get<IGetStudentResponse>(url, { params: this.httpParams() })
+    );
+  }
+
+  getAllAttachments(): Promise<IGetAllAttachmentsResponse> {
+    const url = `${
+      environment.BACKEND_API_BASE_URL
+    }/assumption-of-duty/${this.userStore.id()}/all/duties`;
+    return lastValueFrom(
+      this._http.get<IGetAllAttachmentsResponse>(url, { params: this.httpParams() })
     );
   }
 

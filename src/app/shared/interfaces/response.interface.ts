@@ -70,6 +70,10 @@ export interface IStudentData extends IUser {
   status: 'IN_PROGRESS' | 'COMPLETED';
 }
 
+export interface IGetAllAttachmentsResponse extends ICommonResponse {
+  data: IStudentData[];
+}
+
 export interface IGetLecturersResponse extends ICommonResponse {
   data: ILecturersResponseData;
 }

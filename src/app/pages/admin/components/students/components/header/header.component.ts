@@ -1,5 +1,4 @@
 import {Component, inject, OnInit, output} from '@angular/core';
-import {SelectFilterComponent} from '../../../../../../shared/components/select-filter/select-filter.component';
 import {Router, RouterLink} from "@angular/router";
 import {SearchbarComponent} from '../../../../../../shared/components/searchbar/searchbar.component';
 import {StudentTableService} from "../../../../service/students-table/student-table.service";
@@ -12,7 +11,6 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [
     SearchbarComponent,
-    SelectFilterComponent,
     RouterLink,
     DropdownModule,
     FormsModule,

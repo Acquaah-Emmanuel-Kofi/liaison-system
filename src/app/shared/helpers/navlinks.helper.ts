@@ -17,9 +17,9 @@ export const ADMIN_NAVLINKS: INavLinks[] = [
     routerLink: 'students',
   },
   {
-    title: 'Internships',
+    title: 'Attachment',
     defaultIconSrc: '/assets/icons/internships.svg',
-    routerLink: 'internships',
+    routerLink: 'attachment',
   },
   {
     title: 'Zones',
@@ -31,13 +31,13 @@ export const ADMIN_NAVLINKS: INavLinks[] = [
     //     defaultIconSrc: '/assets/icons/zones.svg',
     //     routerLink: 'zones',
     //   },
-      // {
-      //   title: 'Notification Settings',
-      //   defaultIconSrc: '/assets/icons/notifications.svg',
-      //   routerLink: 'notification-settings',
-      // },
+    // {
+    //   title: 'Notification Settings',
+    //   defaultIconSrc: '/assets/icons/notifications.svg',
+    //   routerLink: 'notification-settings',
+    // },
     // ],
-  }
+  },
 ];
 
 export const LECTURER_NAVLINKS: INavLinks[] = [

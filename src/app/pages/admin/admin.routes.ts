@@ -56,7 +56,7 @@ export const adminRoutes: Routes = [
     component: LecturersComponent,
   },
   {
-    path: 'internships',
+    path: 'attachment',
     component: InternshipsComponent,
   },
   {

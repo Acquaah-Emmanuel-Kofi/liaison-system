@@ -20,6 +20,28 @@ export const studentsQueryKey = {
     ] as const,
 };
 
+export const attachmentsQueryKey = {
+  all: ['attachments'] as const,
+  data: (
+    startOfAcademicYear: number,
+    endOfAcademicYear: number,
+    internship: boolean,
+    semester: number,
+    page?: number,
+    size?: number
+  ) =>
+    [
+      ...attachmentsQueryKey.all,
+      'all-attachments',
+      startOfAcademicYear,
+      endOfAcademicYear,
+      semester,
+      internship,
+      page,
+      size,
+    ] as const,
+};
+
 export const studentForLectureQuery = {
   all: ['lecturer students'] as const,
   data: (

@@ -9,6 +9,7 @@ import { ProfilePageComponent } from '../../shared/components/profile-page/profi
 import { StudentLocationComponent } from './components/internships/components/student-location/student-location.component';
 import { ZoneDetailsComponent } from './components/zones/components/zone-details/zone-details.component';
 import { DutyDetailsComponent } from './components/duty-details/duty-details.component';
+import { UploadDutyComponent } from './components/internships/components/upload-duty/upload-duty.component';
 
 export const adminRoutes: Routes = [
   {
@@ -62,6 +63,10 @@ export const adminRoutes: Routes = [
       {
         path: 'location',
         component: StudentLocationComponent,
+      },
+      {
+        path: 'upload',
+        component: UploadDutyComponent,
       },
     ],
   },

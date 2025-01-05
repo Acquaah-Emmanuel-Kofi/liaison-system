@@ -62,7 +62,7 @@ export class InternshipsComponent implements OnInit {
     { label: 'Department', key: 'department' },
     { label: 'Place of internships', key: 'place_of_internships' },
     { label: 'Start Date', key: 'start_date' },
-    { label: 'End Date', key: 'end_start' },
+    // { label: 'End Date', key: 'end_start' },
     { label: 'Status', key: 'status' },
   ];
 

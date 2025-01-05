@@ -1,15 +1,15 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
-import { DataService } from '../../../../../service/student-upload/data.service';
+import { DataService } from '../../../../service/student-upload/data.service';
 import * as XLSX from 'xlsx';
 import { MessageService } from 'primeng/api';
-import { SidebarService } from '../../../../../../../shared/services/sidebar/sidebar.service';
+import { SidebarService } from '../../../../../../shared/services/sidebar/sidebar.service';
 import { ToastModule } from 'primeng/toast';
 import { Router } from '@angular/router';
-import { LoaderModalComponent } from '../../../../../../../shared/components/loader-modal/loader-modal/loader-modal.component';
+import { LoaderModalComponent } from '../../../../../../shared/components/loader-modal/loader-modal/loader-modal.component';
 import { injectMutation } from '@tanstack/angular-query-experimental';
-import { studentsQueryKey } from '../../../../../../../shared/helpers/query-keys.helper';
-import { ICommonResponse } from '../../../../../../../shared/interfaces/response.interface';
+import { studentsQueryKey } from '../../../../../../shared/helpers/query-keys.helper';
+import { ICommonResponse } from '../../../../../../shared/interfaces/response.interface';
 
 @Component({
   selector: 'liaison-upload-student',

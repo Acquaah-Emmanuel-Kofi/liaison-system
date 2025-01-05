@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { StudentsComponent } from './components/students/students.component';
-import { UploadStudentComponent } from './components/students/components/uploadStudent/upload-student/upload-student.component';
+import { UploadStudentComponent } from './components/students/components/uploadStudent/upload-student.component';
 import { LecturersComponent } from './components/lecturers/lecturers.component';
 import { InternshipsComponent } from './components/internships/internships.component';
 import { ZonesComponent } from './components/zones/zones.component';

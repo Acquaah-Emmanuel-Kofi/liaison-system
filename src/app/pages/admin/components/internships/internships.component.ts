@@ -18,11 +18,12 @@ import {
 } from '../../../../shared/helpers/functions.helper';
 import { SidebarService } from '../../../../shared/services/sidebar/sidebar.service';
 import { GlobalVariablesStore } from '../../../../shared/store/global-variables.store';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'liaison-internships',
   standalone: true,
-  imports: [HeaderComponent, TableComponent, CommonModule],
+  imports: [HeaderComponent, TableComponent, CommonModule, RouterOutlet],
   templateUrl: './internships.component.html',
   styleUrl: './internships.component.scss',
 })
@@ -42,12 +43,17 @@ export class InternshipsComponent implements OnInit {
 
   filteredData = signal<TableData[]>([]);
 
-  studentService = inject(StudentTableService);
+  private studentService = inject(StudentTableService);
+  private activatedRoute = inject(ActivatedRoute);
 
   ngOnInit() {
     this.sidebarService.isSwitched$.subscribe((value: boolean) => {
       this.internshipType = value;
     });
+  }
+
+  isChildRouteActive(): boolean {
+    return this.activatedRoute.firstChild !== null;
   }
 
   columns: TableColumn[] = [

@@ -1,20 +1,20 @@
 import { Component, OnInit, output } from '@angular/core';
-import { SelectFilterComponent } from '../../../../../../shared/components/select-filter/select-filter.component';
 import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
 import { facultiesAndDepartments } from '../../../../../../shared/helpers/constants.helper';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'liaison-header',
   standalone: true,
   imports: [
     SearchbarComponent,
-    SelectFilterComponent,
     DropdownModule,
     FormsModule,
     CalendarModule,
+    RouterLink
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',

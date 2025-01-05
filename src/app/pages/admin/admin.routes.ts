@@ -1,15 +1,14 @@
-import { Routes } from "@angular/router";
-import { AdminDashboardComponent } from "./components/admin-dashboard/admin-dashboard.component";
-import { UploadComponent } from "./components/upload/upload.component";
-import { StudentsComponent } from "./components/students/students.component";
-import { UploadStudentComponent } from "./components/students/components/uploadStudent/upload-student/upload-student.component";
-import { LecturersComponent } from "./components/lecturers/lecturers.component";
-import { InternshipsComponent } from "./components/internships/internships.component";
-import { ZonesComponent } from "./components/zones/zones.component";
-import { ProfilePageComponent } from "../../shared/components/profile-page/profile-page.component";
-import { StudentLocationComponent } from "./components/students/components/student-location/student-location.component";
-import { ZoneDetailsComponent } from "./components/zones/components/zone-details/zone-details.component";
-import { DutyDetailsComponent } from "./components/duty-details/duty-details.component";
+import { Routes } from '@angular/router';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { StudentsComponent } from './components/students/students.component';
+import { UploadStudentComponent } from './components/students/components/uploadStudent/upload-student/upload-student.component';
+import { LecturersComponent } from './components/lecturers/lecturers.component';
+import { InternshipsComponent } from './components/internships/internships.component';
+import { ZonesComponent } from './components/zones/zones.component';
+import { ProfilePageComponent } from '../../shared/components/profile-page/profile-page.component';
+import { StudentLocationComponent } from './components/internships/components/student-location/student-location.component';
+import { ZoneDetailsComponent } from './components/zones/components/zone-details/zone-details.component';
+import { DutyDetailsComponent } from './components/duty-details/duty-details.component';
 
 export const adminRoutes: Routes = [
   {
@@ -45,10 +44,6 @@ export const adminRoutes: Routes = [
         path: 'upload',
         component: UploadStudentComponent,
       },
-      {
-        path: 'location',
-        component: StudentLocationComponent,
-      },
     ],
   },
   {
@@ -58,6 +53,17 @@ export const adminRoutes: Routes = [
   {
     path: 'attachment',
     component: InternshipsComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'attachment',
+        pathMatch: 'full',
+      },
+      {
+        path: 'location',
+        component: StudentLocationComponent,
+      },
+    ],
   },
   {
     path: 'zones',

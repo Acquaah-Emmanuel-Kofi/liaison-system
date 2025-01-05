@@ -7,7 +7,7 @@ import {
 } from '../../../../shared/components/table/table.interface';
 import { StudentTableService } from '../../service/students-table/student-table.service';
 import { injectQuery } from '@tanstack/angular-query-experimental';
-import { studentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
+import { attachmentsQueryKey } from '../../../../shared/helpers/query-keys.helper';
 import { IStudentData } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import {
@@ -62,7 +62,7 @@ export class InternshipsComponent implements OnInit {
 
   studentsQuery = injectQuery(() => ({
     queryKey: [
-      ...studentsQueryKey.data(
+      ...attachmentsQueryKey.data(
         this.globalStore.endYear(),
         this.globalStore.startYear(),
         this.globalStore.type(),
@@ -72,11 +72,11 @@ export class InternshipsComponent implements OnInit {
       ),
     ],
     queryFn: async () => {
-      const response = await this.studentService.getAllStudents();
+      const response = await this.studentService.getAllAttachments();
 
-      this.totalData.set(response.data.totalData);
+      this.totalData.set(response.data.length);
 
-      return this.destructureStudents(response.data.students);
+      return this.destructureStudents(response.data);
     },
   }));
 

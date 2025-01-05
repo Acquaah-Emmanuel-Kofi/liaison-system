@@ -76,7 +76,7 @@ export class AdminDashboardComponent implements OnInit {
       title: 'Attachment',
       count: 0,
       iconSrc: 'assets/interns.svg',
-      navigateTo: '/admin/internships',
+      navigateTo: '/admin/attachment',
       show: true,
     },
   ];

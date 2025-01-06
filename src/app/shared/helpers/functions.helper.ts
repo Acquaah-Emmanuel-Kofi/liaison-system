@@ -121,3 +121,31 @@ export const filterStudentsByStatus = (
 ): IStudentData[] => {
   return students?.filter((student) => student.status === status);
 };
+
+
+/**
+ * Validates file headers against expected headers.
+ *
+ * @param {string[]} fileHeaders - Headers extracted from the file.
+ * @param {string[]} expectedHeaders - The expected headers to validate against.
+ * @returns {Object} - An object containing validation results.
+ */
+export const validateHeaders = (fileHeaders: string[], expectedHeaders: string[]) => {
+  // Trim all file headers for consistency
+  const trimmedFileHeaders = fileHeaders.map((header) => header.trim());
+
+  // Identify missing and unexpected headers
+  const missingHeaders = expectedHeaders.filter(
+    (header) => !trimmedFileHeaders.includes(header)
+  );
+  const unexpectedHeaders = trimmedFileHeaders.filter(
+    (header) => !expectedHeaders.includes(header)
+  );
+
+  // Return results
+  return {
+    isValid: missingHeaders.length === 0 && unexpectedHeaders.length === 0,
+    missingHeaders,
+    unexpectedHeaders,
+  };
+}

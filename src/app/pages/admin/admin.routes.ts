@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { StudentsComponent } from './components/students/students.component';
-import { UploadStudentComponent } from './components/students/components/uploadStudent/upload-student/upload-student.component';
+import { UploadStudentComponent } from './components/students/components/uploadStudent/upload-student.component';
 import { LecturersComponent } from './components/lecturers/lecturers.component';
 import { InternshipsComponent } from './components/internships/internships.component';
 import { ZonesComponent } from './components/zones/zones.component';
@@ -9,6 +9,7 @@ import { ProfilePageComponent } from '../../shared/components/profile-page/profi
 import { StudentLocationComponent } from './components/internships/components/student-location/student-location.component';
 import { ZoneDetailsComponent } from './components/zones/components/zone-details/zone-details.component';
 import { DutyDetailsComponent } from './components/duty-details/duty-details.component';
+import { UploadDutyComponent } from './components/internships/components/upload-duty/upload-duty.component';
 
 export const adminRoutes: Routes = [
   {
@@ -62,6 +63,10 @@ export const adminRoutes: Routes = [
       {
         path: 'location',
         component: StudentLocationComponent,
+      },
+      {
+        path: 'upload',
+        component: UploadDutyComponent,
       },
     ],
   },

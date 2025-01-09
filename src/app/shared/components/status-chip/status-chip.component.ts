@@ -9,5 +9,11 @@ import { Component, input } from '@angular/core';
   styleUrl: './status-chip.component.scss',
 })
 export class StatusChipComponent {
-  status = input.required<'IN_PROGRESS' | 'COMPLETED' |'SUPERVISED' | 'NOT SUPERVISED'>();
+  status = input.required<
+    | 'IN_PROGRESS'
+    | 'COMPLETED'
+    | 'SUPERVISED'
+    | 'NOT SUPERVISED'
+    | 'NOT_STARTED'
+  >();
 }

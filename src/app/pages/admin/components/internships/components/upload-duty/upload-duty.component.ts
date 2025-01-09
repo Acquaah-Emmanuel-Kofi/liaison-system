@@ -102,6 +102,8 @@ export class UploadDutyComponent implements OnDestroy {
         'Company Supervisor',
         'Supervisor Phone',
         'Letter To',
+        'Company Longitude',
+        'Company Latitude',
       ];
 
       const { isValid, missingHeaders, unexpectedHeaders } = validateHeaders(
@@ -185,7 +187,7 @@ export class UploadDutyComponent implements OnDestroy {
 
   uploadFile = injectMutation((client) => ({
     mutationFn: async () =>
-      await this.dataService.sendFileToBackend(this.selectedFile()!),
+      await this.dataService.sendFileToBackend(this.selectedFile()!, 'duty'),
     onSuccess: (response) => {
       client.invalidateQueries({ queryKey: attachmentsQueryKey.all });
       this.handleResponse(response as ICommonResponse);

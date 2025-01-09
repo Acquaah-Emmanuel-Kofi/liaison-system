@@ -92,7 +92,7 @@ export class UploadStudentComponent implements OnDestroy {
       );
 
       // Define expected headers
-      const expectedHeaders = [
+      const expectedHeaders: string[] = [
         'Student ID',
         'First Name',
         'Last Name',
@@ -111,6 +111,7 @@ export class UploadStudentComponent implements OnDestroy {
         'End date',
         'Status',
       ];
+
       const { isValid, missingHeaders, unexpectedHeaders } = validateHeaders(
         fileHeaders,
         expectedHeaders
@@ -191,7 +192,7 @@ export class UploadStudentComponent implements OnDestroy {
 
   uploadFile = injectMutation((client) => ({
     mutationFn: async () =>
-      await this.dataService.sendFileToBackend(this.selectedFile()!),
+      await this.dataService.sendFileToBackend(this.selectedFile()!, 'student'),
     onSuccess: (response) => {
       client.invalidateQueries({ queryKey: studentsQueryKey.all });
       this.handleResponse(response as ICommonResponse);

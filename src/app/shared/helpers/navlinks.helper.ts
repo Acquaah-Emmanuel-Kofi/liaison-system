@@ -7,9 +7,9 @@ export const ADMIN_NAVLINKS: INavLinks[] = [
     routerLink: 'dashboard',
   },
   {
-    title: 'Lecturers',
+    title: 'Supervisors',
     defaultIconSrc: '/assets/icons/lecturers.svg',
-    routerLink: 'lecturers',
+    routerLink: 'supervisors',
   },
   {
     title: 'Students',
@@ -68,7 +68,6 @@ export const LECTURER_NAVLINKS: INavLinks[] = [
   },
 ];
 
-
 export const STUDENT_NAVLINKS: INavLinks[] = [
   {
     title: 'Dashboard',
@@ -84,5 +83,5 @@ export const STUDENT_NAVLINKS: INavLinks[] = [
     title: 'Colleague Information',
     defaultIconSrc: '/assets/icons/supervise.svg',
     routerLink: 'supervision',
-  }
+  },
 ];

@@ -253,7 +253,7 @@
               <label for="zoneLead" class="font-medium text-base mb-2 text-Dark-Primary">Assign Lecturer(s)</label>
               <div class="relative w-full">
                 <input
-                  [value]="getLecturersForZone(i).length ? getLecturersForZone(i).join(', '): 'select lecturer(s)'"
+                  [value]="getLecturersForZone(i).length ? getLecturersForZone(i).join(', '): 'select supervisor(s)'"
                   (focus)="isLecturerListOpened =!isLecturerListOpened"
                   id="lecturers"
                   formArrayName="lecturerIds"

@@ -70,7 +70,7 @@ export class ZonesComponent {
     { label: 'Zone Name', key: 'name' },
     { label: 'Region', key: 'region' },
     { label: 'Zone Lead', key: 'zoneLead' },
-    { label: 'No. of Lecturers', key: 'totalLecturers' },
+    { label: 'No. of Supervisors', key: 'totalLecturers' },
     { label: 'Date Created', key: 'dateCreated' },
   ];
 

@@ -114,7 +114,7 @@ export class AdminChartComponent implements AfterViewInit {
       this.initializeChart();
     }
   }
-  
+
   onOptionSelected(option: NameValue) {
     this.headerText = option.name;
     this.isToggled = false;
@@ -169,14 +169,14 @@ export class AdminChartComponent implements AfterViewInit {
 
         this.chartData.set([
           {
-            label: 'Assigned Lecturers',
+            label: 'Assigned Supervisors',
             value: assignedLecturers,
             percentage: `${((assignedLecturers / totalLecturers) * 100).toFixed(
               2
             )}%`,
           },
           {
-            label: 'Unassigned Lecturers',
+            label: 'Unassigned Supervisors',
             value: unassignedLecturers,
             percentage: `${(
               (unassignedLecturers / totalLecturers) *

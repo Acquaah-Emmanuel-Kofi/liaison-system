@@ -119,7 +119,7 @@ export const lecturersQueryKey = {
 };
 
 export const lecturerListQueryKey = {
-  all: ['Lecturers list'] as const,
+  all: ['Supervisors list'] as const,
   data: () => [...lecturerListQueryKey.all, 'list'] as const,
 };
 

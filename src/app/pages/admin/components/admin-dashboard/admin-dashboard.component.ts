@@ -59,10 +59,10 @@ export class AdminDashboardComponent implements OnInit {
 
   statCard: IStartCard[] = [
     {
-      title: 'Lecturers',
+      title: 'Supervisors',
       count: 0,
       iconSrc: 'assets/lectures.svg',
-      navigateTo: '/admin/lecturers',
+      navigateTo: '/admin/supervisors',
       show: true,
     },
     {
@@ -174,7 +174,7 @@ export class AdminDashboardComponent implements OnInit {
   updateCountsFromApiResponse(data: IStartAnalytics) {
     this.statCard = this.statCard.map((card) => {
       switch (card.title) {
-        case 'Lecturers':
+        case 'Supervisors':
           return { ...card, count: data?.lectures };
         case 'Students':
           return { ...card, count: data?.students };

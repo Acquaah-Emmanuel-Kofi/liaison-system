@@ -1,4 +1,4 @@
-import { NameValue } from "../interfaces/constants.interface";
+import { NameValue } from '../interfaces/constants.interface';
 
 export const ACCESS_TOKEN_KEY: string = 'LIAISON_SYSTEM_TOKEN';
 
@@ -17,7 +17,7 @@ export const removeFromLocalStorage = (key: string) => {
 const routeValueKey: { [key: string]: string } = {
   dashboard: 'Dashboard',
   'duty-details': 'Assumption of Duty Details',
-  lecturers: 'Lecturers',
+  supervisors: 'Supervisors',
   students: 'Students',
   'students/location': 'Students Location',
   attachment: 'Attachment',
@@ -114,7 +114,7 @@ export const facultiesAndDepartments = {
     },
     { name: 'Estate Management', value: 'estate-management' },
   ],
-  'Engineering': [
+  Engineering: [
     { name: 'Civil Engineering', value: 'civil-engineering' },
     {
       name: 'Electricals/ Electronics Engineering',
@@ -158,7 +158,6 @@ export const facultiesAndDepartments = {
     { name: 'Maritime Transport', value: 'maritime-transport' },
   ],
 };
-
 
 export const SemesterOptions: NameValue[] = [
   { name: 'Semester 1', value: '1' },

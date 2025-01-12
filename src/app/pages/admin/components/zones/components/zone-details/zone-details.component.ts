@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { IZone } from '../../../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import {
@@ -23,6 +23,8 @@ import {
   lecturerListQueryKey,
   zonesQueryData,
 } from '../../../../../../shared/helpers/query-keys.helper';
+import { LoaderModalComponent } from '../../../../../../shared/components/loader-modal/loader-modal/loader-modal.component';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'liaison-zone-details',
@@ -32,12 +34,14 @@ import {
     FormsModule,
     ModalContainerComponent,
     ReactiveFormsModule,
+    ToastModule,
+    LoaderModalComponent,
   ],
   templateUrl: './zone-details.component.html',
   styleUrl: './zone-details.component.scss',
   providers: [MessageService],
 })
-export class ZoneDetailsComponent {
+export class ZoneDetailsComponent implements OnInit {
   id = input.required<string>();
   isModalOpened: boolean = false;
   isAddMoreTriggered: boolean = false;
@@ -52,6 +56,8 @@ export class ZoneDetailsComponent {
   zoneData = signal<IZone>({} as IZone);
   rawRegions: NameValue[];
   regions: string[] = [];
+
+  isFormChanged: boolean = false;
 
   private _messageService = inject(MessageService);
   private _zoneService = inject(ZoneService);
@@ -68,6 +74,13 @@ export class ZoneDetailsComponent {
 
     this.rawRegions = this._regionService.getRawRegions();
     this.fetchRegions();
+  }
+
+  ngOnInit(): void {
+    // Subscribe to changes in the form array
+    this.addZoneForm.get('zones')?.valueChanges.subscribe(() => {
+      this.isFormChanged = this.addZoneForm.dirty; 
+    });
   }
 
   async fetchRegions() {
@@ -105,10 +118,10 @@ export class ZoneDetailsComponent {
 
   updateZonesForm(): FormGroup {
     return this.fb.group({
-      name: [this.zoneDeatilsQuery.data()?.name],
-      region: [this.zoneDeatilsQuery.data()?.region],
+      name: [],
+      region: [],
       towns: this.fb.array([]),
-      zoneLead: [this.zoneDeatilsQuery.data()?.zoneLead],
+      zoneLead: [],
       lecturerIds: this.fb.array([]),
     });
   }
@@ -234,8 +247,37 @@ export class ZoneDetailsComponent {
 
   onSubmit() {
     const formDataArray = this.addZoneForm.get('zones')?.value;
-    const formData = formDataArray[0]; 
+
+    if (!formDataArray || formDataArray.length === 0) {
+      console.error('No form data found.');
+      return;
+    }
+
+    const firstZoneData = formDataArray[0];
+
+    const lecturerIds =
+      firstZoneData?.lecturerIds?.length > 0
+        ? firstZoneData.lecturerIds.map((lecturer: any) => lecturer.id)
+        : this.zoneDeatilsQuery
+            .data()
+            ?.lecturers.lecturers.map((lecturer: any) => lecturer.id);
+
+    const selectedTowns =
+      firstZoneData?.towns?.length > 0
+        ? firstZoneData.towns
+        : this.zoneDeatilsQuery.data()?.towns ?? [];
+
+    const formData = {
+      name: firstZoneData?.name ?? this.zoneData().name,
+      region: firstZoneData?.region ?? this.zoneData().region,
+      towns: selectedTowns,
+      zoneLead: firstZoneData?.zoneLead ?? this.zoneData().zoneLead,
+      lecturerIds: lecturerIds,
+    };
+
     this.zoneMutation.mutate({ formData });
+
+    this.isFormChanged = false;
   }
 
   closeDropdown() {

@@ -58,10 +58,16 @@ export class StudentTableService {
   }
 
   changeStudentSupervision(studentID: string): Observable<any> {
+    const params = new HttpParams()
+      .set('startOfAcademicYear', this.globalStore.startYear())
+      .set('endOfAcademicYear', this.globalStore.endYear())
+      .set('semester', this.globalStore.semester().toString())
+      .set('internship', this.globalStore.type().toString())
+    
     const url = `${
       environment.BACKEND_API_BASE_URL
     }/lecturers/${this.userStore.id()}/supervise/${studentID}`;
-    return this._http.put<any>(url, {});
+    return this._http.put<any>(url, {}, { params });
   }
 
   getAllLecturers(): Observable<IGetLecturersResponse> {

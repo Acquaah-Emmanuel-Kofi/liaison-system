@@ -69,7 +69,7 @@
               {{ username() || "Full Name" }}
             </p>
             <p class="text-xs font-semibold text-[#19337E]">
-              {{ userRole() || "Role" }}
+              {{ userRole() === "LECTURER" ? "SUPERVISOR" : userRole() || "Role" }}
             </p>
           </div>
 

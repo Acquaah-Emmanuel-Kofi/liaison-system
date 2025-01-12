@@ -1,3 +1,6 @@
+<p-toast />
+<liaison-loader-modal [isOpen]="zoneMutation.isPending()"></liaison-loader-modal>
+
 @switch (zoneDeatilsQuery.status()) { @case('pending') { @if
 (zoneDeatilsQuery.data()) {
 <ng-container *ngTemplateOutlet="zoneDetails" />
@@ -245,7 +248,7 @@
                   [value]="
                     getTownsForZone(i).length
                       ? getTownsForZone(i).join(', ')
-                      : zoneData().towns
+                      : zoneData().towns?.join(', ')
                   "
                   id="towns"
                   formArrayName="towns"
@@ -313,7 +316,7 @@
                 <select
                   id="zoneLead"
                   formControlName="zoneLead"
-                  [value]="zoneData().zoneLead"
+                  [value]="zoneDeatilsQuery.data()?.zoneLead"
                   name="zoneLead"
                   required
                   class="appearance-none w-full p-2 pr-8 border border-white-Tertiary text-Dark-Primary rounded-lg placeholder:font-normal placeholder:text-sm input-field focus:outline-none focus:ring-2 focus:ring-Dark-Blue focus:border-transparent"
@@ -419,7 +422,8 @@
         </button>
         <button
           type="submit"
-          class="w-2/3 px-4 py-2 text-white bg-Dark-Blue rounded-full border-2 border-Dark-Blue"
+          [disabled]="!isFormChanged"
+          class="w-2/3 px-4 py-2 text-white bg-Dark-Blue rounded-full border-2 border-Dark-Blue disabled:bg-blue-800 disabled:cursor-not-allowed"
         >
           Update Zone
         </button>

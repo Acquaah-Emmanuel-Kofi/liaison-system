@@ -30,16 +30,17 @@
     </div>
   </div>
 
-  <!-- Towns Skeleton -->
-  <div>
-    <div class="h-5 bg-gray-200 rounded animate-pulse w-1/5 mb-4"></div>
-    <div class="bg-white p-4 rounded-lg shadow space-y-2">
-      <div
-        *ngFor="let i of [1, 2, 3, 4, 5, 6]"
-        class="h-4 bg-gray-200 rounded w-1/2"
-      ></div>
+<!-- Towns Skeleton -->
+<div>
+  <div class="h-5 bg-gray-200 rounded animate-pulse w-1/5 mb-4"></div>
+  <div class="bg-white p-4 rounded-lg shadow">
+    <div class="grid grid-cols-5 gap-4">
+      <div *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]"
+        class="h-4 bg-gray-200 rounded"></div>
     </div>
   </div>
+</div>
+
 
   <!-- Toggle Edit Mode Button Skeleton -->
   <div class="h-10 bg-gray-200 rounded animate-pulse w-32"></div>
@@ -118,13 +119,14 @@
     <div>
       <h2 class="font-semibold text-lg mb-2">Towns</h2>
       <div class="bg-white p-4 rounded-lg shadow mb-6">
-        <ul class="list-disc ml-6">
+        <ul class="grid grid-cols-5 gap-4">
           @for (town of zoneDeatilsQuery.data()?.towns; track $index) {
           <li>{{ town }}</li>
           }
         </ul>
       </div>
     </div>
+
 
     <!-- Toggle Edit Mode -->
     <button

@@ -32,7 +32,6 @@ import { ErrorOccurredComponent } from './components/error-occurred/error-occurr
 export class TableComponent implements OnInit {
   @Input() HideCheckbox!: boolean;
   @Input() HidePagination!: boolean;
-  @Input() checked!: boolean;
   columns = input.required<TableColumn[]>();
   data = input.required<TableData[]>();
   numberOfPlaceholderRows: number[] = new Array<number>(10);
@@ -47,7 +46,6 @@ export class TableComponent implements OnInit {
   @Input() first: number | undefined = 0;
   @Input() pageSize: number | undefined = 0;
   @Input() totalData: number | undefined = 0;
-  @Output() checkboxClicked = new EventEmitter<void>();
 
   @Output() pageChange = new EventEmitter<{
     first: number;
@@ -81,10 +79,6 @@ export class TableComponent implements OnInit {
 
   onPageChange(event: any) {
     this.pageChange.emit(event);
-  }
-
-  onCheckboxClick(row: any): void {
-    this.checkboxClicked.emit(row);
   }
 
   onActionClick(row: TableData) {

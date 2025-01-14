@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  DashboardAnalyticsResponse,
   IFacultyAnalytics,
-  ILecturerDashboardResponse,
 } from '../../../../shared/interfaces/response.interface';
 import { environment } from '../../../../../environments/environment.development';
 import { lastValueFrom, tap } from 'rxjs';
@@ -28,13 +28,13 @@ export class DashboardService {
       .set('size', 10);
   }
 
-  getStatAnalytics(): Promise<ILecturerDashboardResponse> {
+  getStatAnalytics(): Promise<DashboardAnalyticsResponse> {
     const endpoint = `${
       environment.BACKEND_API_BASE_URL
     }/lecturers/dashboard/${this.userStore.id()}`;
 
     return lastValueFrom(
-      this._http.get<ILecturerDashboardResponse>(endpoint, {
+      this._http.get<DashboardAnalyticsResponse>(endpoint, {
         params: this.httpParams(),
       })
     );

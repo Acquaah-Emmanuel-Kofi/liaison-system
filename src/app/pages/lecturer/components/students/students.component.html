@@ -21,9 +21,7 @@
     [first]="first()"
     [pageSize]="pageSize()"
     [totalData]="totalData()"
-    [checked] = "checkStatus"
-    (checkboxClicked)="openModal($event)"
-
+    (actionClicked)="openModal($event)"
     (pageChange)="handlePageChange($event)"
   />
 </ng-template>
@@ -31,14 +29,10 @@
 @if (showModal) {
   <liaison-modal-container [isOpen]="showModal" [title]="'Confirm Action'" (closeModal)="closeModal()" >
 <div class="w-full h-56 flex flex-col justify-center items-center gap-6 p-4">
-  <!-- Supervised Status -->
-  <span class="text-sm font-medium text-gray-500">
-    Supervised: {{ student.isSupervised }}
-  </span>
 
   <!-- Conditional Message -->
   <h3 class="text-2xl font-semibold text-center text-gray-700">
-    @if (student.status === "SUPERVISED") {
+    @if (student().isSupervised) {
     Do you want to mark this student as <span class="text-red-500">Not Supervised</span>?
     } @else {
     Do you want to mark this student as <span class="text-green-500">Supervised</span>?
@@ -47,8 +41,8 @@
 
   <!-- Student Details -->
   <div class="text-lg text-gray-600 text-center">
-    <h3 class="font-medium text-gray-800">{{ student.name }}</h3>
-    <p>Supervision Status: <span class="font-semibold">{{ student.status | titlecase }}</span></p>
+    <h3 class="font-medium text-gray-800">{{ student().name }}</h3>
+    <p>Supervision Status: <span class="font-semibold">{{ student().status | titlecase }}</span></p>
   </div>
 
   <!-- Action Buttons -->

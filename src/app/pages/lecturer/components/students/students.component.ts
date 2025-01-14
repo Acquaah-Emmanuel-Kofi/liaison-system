@@ -36,7 +36,6 @@ import { MessageService } from 'primeng/api';
 })
 export class StudentsComponent {
   studentService = inject(StudentTableService);
-  checkStatus!: boolean;
   messageService = inject(MessageService);
 
   filteredData = signal<TableData[]>([]);
@@ -46,6 +45,10 @@ export class StudentsComponent {
   totalData = signal<number>(10);
   pageSize = signal<number>(10);
   showModal = false;
+
+  student = signal<IGetStudentForLecturerData>(
+    {} as IGetStudentForLecturerData
+  );
 
   columns: TableColumn[] = [
     { label: 'Student ID', key: 'student_id' },
@@ -57,12 +60,11 @@ export class StudentsComponent {
     { label: 'Status', key: 'status' },
   ];
 
-  student!: IGetStudentForLecturerData;
-
   studentsInternQuery = injectQuery(() => ({
     queryKey: [studentForLectureQuery],
     queryFn: async () => {
       const response = await this.studentService.getStudentsInlectureZone();
+
       this.totalData.set(response.data.student.totalStudents);
 
       return this.destructureStudents(response.data.student.students);
@@ -75,10 +77,8 @@ export class StudentsComponent {
     data.filter((student) => {
       if (student.isSupervised) {
         student.status = 'SUPERVISED';
-        this.checkStatus = true;
       } else {
         student.status = 'NOT SUPERVISED';
-        this.checkStatus = false;
       }
     });
 
@@ -90,6 +90,7 @@ export class StudentsComponent {
       phone: student.phone,
       status: student.status,
       place_of_internships: student.placeOfInternship,
+      isSupervised: student.isSupervised,
     }));
   }
 
@@ -101,8 +102,7 @@ export class StudentsComponent {
 
   openModal(data: any): void {
     this.showModal = true;
-    this.student = data;
-    this.checkStatus = this.student.isSupervised;
+    this.student.set(data);
   }
 
   closeModal(): void {
@@ -136,6 +136,6 @@ export class StudentsComponent {
   }));
 
   changeStatus() {
-    this.changeStatusMutation.mutate(this.student.student_id);
+    this.changeStatusMutation.mutate(this.student().student_id);
   }
 }

@@ -91,6 +91,7 @@ export interface ILecturersData extends IUser {
   department: string;
   faculty: string;
   lecturerId: string;
+  company: string;
 }
 
 export interface IColleagueData {
@@ -179,6 +180,28 @@ export interface ILecturerDashboard {
 
 export interface ILecturerDashboardResponse extends ICommonResponse {
   data: ILecturerDashboard;
+}
+
+export interface CompanyData {
+  companyDetails: CompanyDetails[];
+  companies: Record<string, number>;
+  totalCompanies: number;
+}
+
+export interface DashboardAnalytics {
+  student: {
+    students: IStudentData[];
+    totalStudents: number;
+  };
+  company: CompanyData;
+  lecturer: {
+    lecturers: ILecturersData[];
+    totalLecturers: number;
+  };
+}
+
+export interface DashboardAnalyticsResponse extends ICommonResponse {
+  data: DashboardAnalytics;
 }
 
 export interface AssignedStudentsData {

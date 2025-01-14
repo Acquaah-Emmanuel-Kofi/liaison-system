@@ -1,1 +1,23 @@
-<p>supervisor-colleagues works!</p>
+<section>
+    <liaison-supervisor-colleagues-header (searchValue)="handleSearchTerm($event)" (filterValues)="handleFilterValue($event)"
+        (refetch)="refetchData()" />
+
+    @switch (supervisorsQuery.status()) { @case ('pending') { @if
+    (supervisorsQuery.data()) {
+    <ng-container *ngTemplateOutlet="table" />
+
+    } @else {
+    <liaison-table [columns]="columns" [data]="[]" [dataIsLoading]="true" [HideCheckbox]="HideCheckbox" />
+    } } @case ('error') {
+    <liaison-table [columns]="columns" [data]="[]" [errorOccurred]="true" [HideCheckbox]="HideCheckbox" />
+    } @case ('success') {
+    <ng-container *ngTemplateOutlet="table" />
+
+    } }
+</section>
+
+<ng-template #table>
+    <liaison-table [columns]="columns" [data]="searchTerm() ? filteredData() : supervisorsQuery.data()!" [first]="first()"
+        [pageSize]="pageSize()" [totalData]="pageSize()" [HideCheckbox]="HideCheckbox"
+        (pageChange)="handlePageChange($event)" />
+</ng-template>

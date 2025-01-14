@@ -111,8 +111,8 @@
               type="checkbox"
               class="form-checkbox cursor-pointer accent-[#19337E]"
               [ngClass]="{ hidden: HideCheckbox, 'h-4 w-4': !HideCheckbox }"
-              [checked]="checked"
-              (click)="onCheckboxClick(row)"
+              [checked]="row['isSupervised']"
+              (click)="onActionClick(row)"
             />
           </td>
 

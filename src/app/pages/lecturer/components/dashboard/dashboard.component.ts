@@ -20,7 +20,7 @@ import {
   topIndustriesQueryKey,
 } from '../../../../shared/helpers/query-keys.helper';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
-import { ILecturerDashboard } from '../../../../shared/interfaces/response.interface';
+import { DashboardAnalytics } from '../../../../shared/interfaces/response.interface';
 import { CommonModule } from '@angular/common';
 import { SemesterOptions } from '../../../../shared/helpers/constants.helper';
 
@@ -150,7 +150,7 @@ export class DashboardComponent implements OnInit {
     },
   }));
 
-  updateCountsFromApiResponse(data: ILecturerDashboard) {
+  updateCountsFromApiResponse(data: DashboardAnalytics) {
     this.statCard = this.statCard.map((card) => {
       switch (card.title) {
         case 'Industries':

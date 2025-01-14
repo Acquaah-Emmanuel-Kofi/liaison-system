@@ -3,6 +3,7 @@ import { LocationComponent } from './components/location/location.component';
 import { StudentsComponent } from './components/students/students.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfilePageComponent } from '../../shared/components/profile-page/profile-page.component';
+import { SupervisorColleaguesComponent } from './components/supervisor-colleagues/supervisor-colleagues.component';
 
 export const lecturerRoutes: Routes = [
   {
@@ -21,6 +22,10 @@ export const lecturerRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+  },
+  {
+    path: 'supervisors',
+    component: SupervisorColleaguesComponent,
   },
   {
     path: 'profile',

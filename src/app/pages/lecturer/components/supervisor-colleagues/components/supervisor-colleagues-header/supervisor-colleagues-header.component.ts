@@ -2,24 +2,24 @@ import { Component, OnInit, output } from '@angular/core';
 import { SearchbarComponent } from '../../../../../../shared/components/searchbar/searchbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import { facultiesAndDepartments } from '../../../../../../shared/helpers/constants.helper';
 import { CommonModule } from '@angular/common';
+import { facultiesAndDepartments } from '../../../../../../shared/helpers/constants.helper';
 
 @Component({
-  selector: 'liaison-header',
+  selector: 'liaison-supervisor-colleagues-header',
   standalone: true,
   imports: [
-    SearchbarComponent,
-    ReactiveFormsModule,
-    DropdownModule,
-    FormsModule,
-    CommonModule,
+        SearchbarComponent,
+        ReactiveFormsModule,
+        DropdownModule,
+        FormsModule,
+        CommonModule
   ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+  templateUrl: './supervisor-colleagues-header.component.html',
+  styleUrl: './supervisor-colleagues-header.component.scss'
 })
-export class HeaderComponent implements OnInit {
-  searchValue = output<string>();
+export class SupervisorColleaguesHeaderComponent implements OnInit {
+ searchValue = output<string>();
   filterValues = output<{ faculty: string; department: string }>();
   refetch = output<void>();
 

@@ -125,6 +125,11 @@ export interface CompanyDetails {
   letterTo: string;
   supervisorPhone: string;
   dateCommenced: string;
+  email?: string;
+  exactLocation?: string;
+  name?: string;
+  phone?: string;
+  region?: string;
 }
 
 export interface DutyData {

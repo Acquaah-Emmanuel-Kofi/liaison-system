@@ -67,15 +67,15 @@ export class DashboardComponent implements OnInit {
       title: 'Industries',
       count: 0,
       iconSrc: 'assets/interns.svg',
-      navigateTo: '/admin/internships',
-      show: false,
+      navigateTo: '/lecturer/industries',
+      show: true,
     },
     {
       title: 'Zone Supervisors',
       count: 0,
       iconSrc: 'assets/lectures.svg',
-      navigateTo: '/admin/internships',
-      show: false,
+      navigateTo: '/lecturer/supervisors',
+      show: true,
     },
   ];
 

@@ -1,5 +1,5 @@
 <section>
-    <liaison-lecturer-students-header />
+    <liaison-lecturer-students-header (searchValue)="handleSearchTerm($event)" />
 
   @switch (studentsInternQuery.status()) { @case ('pending') { @if
   (studentsInternQuery.data()) {

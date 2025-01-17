@@ -19,6 +19,7 @@ import { IGetStudentForLecturerData } from '../../../../shared/interfaces/respon
 import { ModalContainerComponent } from '../../../../shared/components/modal-container/modal-container.component';
 import { lastValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { searchArray } from '../../../../shared/helpers/functions.helper';
 
 @Component({
   selector: 'liaison-students',
@@ -54,7 +55,7 @@ export class StudentsComponent {
     { label: 'Student ID', key: 'student_id' },
     { label: 'Name', key: 'name' },
     { label: 'Department', key: 'department' },
-    { label: 'Place of internship', key: 'place_of_internships' },
+    { label: 'Place of internship', key: 'placeOfInternship' },
     { label: 'Faculty', key: 'faculty' },
     { label: 'Phone', key: 'phone' },
     { label: 'Status', key: 'status' },
@@ -89,9 +90,21 @@ export class StudentsComponent {
       department: student.department,
       phone: student.phone,
       status: student.status,
-      place_of_internships: student.placeOfInternship,
+      placeOfInternship: student.placeOfInternship,
       isSupervised: student.isSupervised,
     }));
+  }
+
+  handleSearchTerm(value: string) {
+    this.searchTerm.set(value);
+
+    const filteredStudents = searchArray(
+      this.studentsInternQuery.data()!,
+      value,
+      ['name', 'placeOfInternship', 'student_id']
+    );
+
+    this.filteredData.set(filteredStudents ?? []);
   }
 
   handlePageChange(data: { first: number; rows: number; page: number }) {

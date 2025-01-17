@@ -18,6 +18,7 @@ const routeValueKey: { [key: string]: string } = {
   dashboard: 'Dashboard',
   'duty-details': 'Assumption of Duty Details',
   supervisors: 'Supervisors',
+  industries: 'Industries',
   students: 'Students',
   'students/location': 'Students Location',
   attachment: 'Attachment',

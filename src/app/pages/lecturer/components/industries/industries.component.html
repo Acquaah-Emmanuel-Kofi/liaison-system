@@ -1,0 +1,48 @@
+<section>
+  <header class="flex md:flex-row flex-col items-center justify-between my-6">
+    <div class="flex gap-4">
+      <liaison-searchbar
+        placeholder="Search by name, id"
+        (searchTermValue)="handleSearchTerm($event)"
+      />
+    </div>
+  </header>
+
+  <div class="overflow-x-auto">
+    @switch (industriesQuery.status()) { @case ('pending') { @if
+    (industriesQuery.data()) {
+    <ng-container *ngTemplateOutlet="table" />
+    } @else {
+    <liaison-table
+      [columns]="topIndustriescolumns"
+      [data]="[]"
+      [dataIsLoading]="true"
+      [HideCheckbox]="true"
+    />
+    } } @case ('error') {
+    <liaison-table
+      [columns]="topIndustriescolumns"
+      [data]="[]"
+      [errorOccurred]="true"
+      [HideCheckbox]="true"
+    />
+    } @case ('success') {
+    <ng-container *ngTemplateOutlet="table" />
+
+    } }
+  </div>
+
+  <ng-template #table>
+    <liaison-table
+      [HideCheckbox]="true"
+      [HidePagination]="false"
+      [columns]="topIndustriescolumns"
+      [data]="searchTerm() ? filteredData() : industriesQuery.data()!"
+      [first]="first()"
+      [pageSize]="pageSize()"
+      [totalData]="totalData()"
+      (pageChange)="handlePageChange($event)"
+    >
+    </liaison-table>
+  </ng-template>
+</section>

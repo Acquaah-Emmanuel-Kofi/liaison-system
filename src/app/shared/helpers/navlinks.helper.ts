@@ -55,12 +55,7 @@ export const LECTURER_NAVLINKS: INavLinks[] = [
     title: 'Location',
     defaultIconSrc: '/assets/icons/location.svg',
     routerLink: 'location',
-  },
-  {
-    title: 'Supervisors',
-    defaultIconSrc: '/assets/icons/lecturers.svg',
-    routerLink: 'supervisors',
-  },
+  }
 ];
 
 export const STUDENT_NAVLINKS: INavLinks[] = [

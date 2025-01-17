@@ -4,6 +4,7 @@ import { StudentsComponent } from './components/students/students.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfilePageComponent } from '../../shared/components/profile-page/profile-page.component';
 import { SupervisorColleaguesComponent } from './components/supervisor-colleagues/supervisor-colleagues.component';
+import { IndustriesComponent } from './components/industries/industries.component';
 
 export const lecturerRoutes: Routes = [
   {
@@ -26,6 +27,10 @@ export const lecturerRoutes: Routes = [
   {
     path: 'supervisors',
     component: SupervisorColleaguesComponent,
+  },
+  {
+    path: 'industries',
+    component: IndustriesComponent,
   },
   {
     path: 'profile',
